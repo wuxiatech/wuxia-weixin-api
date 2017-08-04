@@ -29,6 +29,7 @@ import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.card.bean.CardBaseInfoBean;
 import cn.wuxia.wechat.card.bean.CardBaseInfoBean.DateInfo;
 import cn.wuxia.wechat.card.emuns.CardType;
+import cn.wuxia.wechat.sign.util.SignUtil;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
@@ -585,7 +586,7 @@ public class CardUtil extends BaseUtil {
         param.addParam("type", "wx_card");
         param.setUrl(ticketUrl);
         //获取微信api_token认证
-        Map<String, Object> apiToken = TokenUtil.sendUrl(param);
+        Map<String, Object> apiToken = post(param);
         logger.debug("" + apiToken);
         if (!StringUtil.equals("ok", (String) apiToken.get("errmsg"))) {
             throw new WeChatException("获取api_ticket有误:" + apiToken.get("errmsg"));
@@ -604,7 +605,7 @@ public class CardUtil extends BaseUtil {
      */
     public static Map<String, String> sign(BasicAccount account, String cardId, String openId) throws WeChatException {
         String api_ticket = getApiTicket(account);
-        String timestamp = create_timestamp();
+        String timestamp = SignUtil.create_timestamp();
         String card_id = cardId;
         String code = "";
         String openid = StringUtil.isBlank(openId) ? "" : openId;

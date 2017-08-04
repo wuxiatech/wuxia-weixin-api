@@ -26,10 +26,10 @@ public class CDataXMLStreamWriter extends DelegatingXMLStreamWriter {
     @Override
     public void writeCharacters(String text) throws XMLStreamException {
         boolean useCData = XML_CHARS.matcher(text).find();
-        if (useCData) {
+//        if (useCData) {
             super.writeCData(text);
-        } else {
-            super.writeCharacters(text);
-        }
+//        } else {
+//            super.writeCharacters(text);
+//        }
     }
 }

@@ -20,10 +20,8 @@ import org.springframework.util.Assert;
 
 import com.google.common.collect.Maps;
 
-import cn.wuxia.common.util.JsonUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.web.httpclient.HttpClientRequest;
-import cn.wuxia.common.web.httpclient.HttpClientUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.card.bean.CardBaseInfoBean;
@@ -348,7 +346,7 @@ public class CardUtil extends PayUtil {
         param.addParam("type", "wx_card");
         param.setUrl(ticketUrl);
         //获取微信api_token认证
-        Map<String, Object> apiToken = ThirdBaseUtil.sendUrl(param);
+        Map<String, Object> apiToken = post(param);
         logger.info("新的card api token" + apiToken);
         if (!StringUtil.equals("ok", (String) apiToken.get("errmsg"))) {
             throw new WeChatException("获取api_ticket有误:" + apiToken.get("errmsg"));

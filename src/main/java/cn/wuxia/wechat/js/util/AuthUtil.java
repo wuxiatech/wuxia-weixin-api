@@ -7,14 +7,15 @@ import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.util.Assert;
 
 import com.google.common.collect.Maps;
+
 import cn.wuxia.common.util.DateUtil;
 import cn.wuxia.common.util.NumberUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.web.httpclient.HttpClientRequest;
-
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.WeChatException;
+import cn.wuxia.wechat.sign.util.SignUtil;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
@@ -27,10 +28,6 @@ import cn.wuxia.wechat.token.util.TokenUtil;
  * @ Version : V<Ver.No> <2015年4月1日>
  */
 public class AuthUtil extends BaseUtil {
-
-    private static String nonce_str;
-
-    private static String timestamp;
 
     /**
      * 返回认证信息
@@ -102,12 +99,9 @@ public class AuthUtil extends BaseUtil {
     // 生成签名
     public static Map<String, String> sign(String jsapi_ticket, String url) {
         Map<String, String> ret = Maps.newHashMap();
-        if (StringUtil.isBlank(nonce_str)) {
-            nonce_str = create_nonce_str();
-        }
-        if (StringUtil.isBlank(timestamp)) {
-            timestamp = create_timestamp();
-        }
+
+        String nonce_str = SignUtil.create_nonce_str();
+        String timestamp = SignUtil.create_timestamp();
         String string1;
         String signature = "";
 

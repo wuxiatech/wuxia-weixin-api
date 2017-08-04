@@ -76,7 +76,7 @@ public class ProxyOAuthUtil extends ThirdBaseUtil {
      */
     public static String genAccountOAuthUrl(String redirectUri) throws IOException, WeChatException {
         redirectUri = URLEncoder.encode(redirectUri, "UTF-8");
-        String result = "https://mp.weixin.qq.com/cgi-bin/componentloginpage" + "?component_appid=" + ProxyOAuthUtil.OPEN_APPID + "&pre_auth_code="
+        String result = "https://mp.weixin.qq.com/cgi-bin/componentloginpage?component_appid=" + ProxyOAuthUtil.OPEN_APPID + "&pre_auth_code="
                 + ProxyOAuthUtil.getPreAuthCode() + "&redirect_uri=" + redirectUri;
         return result;
     }

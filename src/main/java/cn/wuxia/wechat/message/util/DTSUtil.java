@@ -56,7 +56,9 @@ public class DTSUtil {
         JAXBContext context = JAXBContext.newInstance(reply.getClass());
         Marshaller marshaller = context.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+        // 去掉生成xml的默认报文头  
+//        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
         XMLOutputFactory xof = XMLOutputFactory.newInstance();
         XMLStreamWriter streamWriter = null;
         CDataXMLStreamWriter cdataStreamWriter = null;
@@ -78,7 +80,7 @@ public class DTSUtil {
             }
 
         }
-        return xml;
+        return xml.replace("standalone=\"yes\"", "");
 
     }
 

@@ -29,7 +29,7 @@ import cn.wuxia.wechat.token.util.TokenUtil;
 /**
  * 
  * [ticket id]
- * 新增临时素材
+ * 永久临时素材
  * @author songlin
  * @ Version : V<Ver.No> <7 Apr, 2015>
  */

@@ -1,9 +1,7 @@
 package cn.wuxia.wechat;
 
-import java.util.Formatter;
 import java.util.Map;
 import java.util.Properties;
-import java.util.UUID;
 
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -35,10 +33,11 @@ public class BaseUtil {
     // 获取配置文件
     public static Properties properties;
 
-    public static int expTime = 3600;
+    public final static int expTime = 3600;
 
     private static CacheClient cacheClient;
 
+    private final static String CACHE_NAME_SPACE = "wxcachespace";
     static {
         if (properties == null) {
             properties = PropertiesUtils.loadProperties("classpath*:wechat.config.properties");
@@ -60,41 +59,19 @@ public class BaseUtil {
         }
     }
 
-    // 发送URL请求
-    /**
-     * @see {post, get}
-     * @author songlin
-     * @param httpParam
-     * @return
-     */
-    @Deprecated
-    protected static Map<String, Object> sendUrl(HttpClientRequest httpParam) throws WeChatException {
-        return post(httpParam);
-    }
-
-    // 转码
-    protected static String byteToHex(final byte[] hash) {
-        Formatter formatter = new Formatter();
-        for (byte b : hash) {
-            formatter.format("%02x", b);
-        }
-        String result = formatter.toString();
-        formatter.close();
-        return result;
-    }
-
-    // 随机字符，认证
-    protected static String create_nonce_str() {
-        return UUID.randomUUID().toString();
-    }
-
-    // 时间，认证
-    protected static String create_timestamp() {
-        return Long.toString(System.currentTimeMillis() / 1000);
-    }
+    //    // 转码
+    //    protected static String byteToHex(final byte[] hash) {
+    //        Formatter formatter = new Formatter();
+    //        for (byte b : hash) {
+    //            formatter.format("%02x", b);
+    //        }
+    //        String result = formatter.toString();
+    //        formatter.close();
+    //        return result;
+    //    }
 
     /**
-     * default is baseData
+     * default is in namespace
      * 
      * @author songlin
      * @return
@@ -119,7 +96,7 @@ public class BaseUtil {
         /**
          * 限制key的长度为250个字符
          */
-        Object value = cache.get(key);
+        Object value = cache.get(key, CACHE_NAME_SPACE);
         if (value == null)
             return null;
         logger.debug("getOutCache and key is :" + key + " , value is :" + value.toString());
@@ -135,9 +112,9 @@ public class BaseUtil {
          */
         key = DigestUtils.sha1Hex(StringUtils.getBytesUtf8(key));
         // 将旧的删除再新增
-        cache.delete(key);
-        cache.set(key, value, expTime);
-        Object v = cache.get(key);
+        cache.delete(key, CACHE_NAME_SPACE);
+        cache.set(key, value, expTime, CACHE_NAME_SPACE);
+        Object v = cache.get(key, CACHE_NAME_SPACE);
         if (v == null) {
             logger.error("can't put in cache key[{}], value[{}]", key, value);
         } else {
@@ -158,9 +135,18 @@ public class BaseUtil {
         key += appid;
         CacheClient cache = getCache();
         key = DigestUtils.sha1Hex(StringUtils.getBytesUtf8(key));
-        Object value = cache.get(key);
+        Object value = cache.get(key, CACHE_NAME_SPACE);
         logger.debug("deleteCache and key is :" + key + " , value is :" + value.toString());
-        cache.delete(key);
+        cache.delete(key, CACHE_NAME_SPACE);
+    }
+
+    /**
+     * 清除缓存
+     * @author songlin
+     */
+    protected static void cleanCache() {
+        logger.info("清除微信api缓存，namespace：{}", CACHE_NAME_SPACE);
+        getCache().flush(CACHE_NAME_SPACE);
     }
 
     protected static Map<String, Object> post(HttpClientRequest httpParam) {

@@ -41,7 +41,7 @@ public class TokenUtil extends BaseUtil {
     public static String getAccessToken(BasicAccount account) {
         if (StringUtil.isNotBlank(account.getAppSecret())) {
             return getAccessToken(account.getAppid(), account.getAppSecret());
-        } else if (StringUtil.isNotBlank(account.getAppid())) {
+        } else if (StringUtil.isNotBlank(account.getAuthorizerRefreshToken())) {
             return getAuthorizerAccessToken(account.getAppid(), account.getAuthorizerRefreshToken());
         } else {
             throw new RuntimeException("app_secret或authorizer_refresh_token不能为空");
