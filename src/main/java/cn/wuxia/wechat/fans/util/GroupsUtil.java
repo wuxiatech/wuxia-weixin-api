@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.springframework.util.Assert;
 
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.token.util.TokenUtil;
@@ -36,14 +35,12 @@ public class GroupsUtil extends BaseUtil {
         Assert.hasText(name, "name 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/create?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> group = new HashMap<String, Object>();
         group.put("name", name);
         map.put("group", group);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -58,15 +55,13 @@ public class GroupsUtil extends BaseUtil {
         Assert.hasText(name, "name 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/update?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> group = new HashMap<String, Object>();
         group.put("name", name);
         group.put("id", id);
         map.put("group", group);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -81,13 +76,11 @@ public class GroupsUtil extends BaseUtil {
         Assert.hasText(openid, "openid 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/members/update?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("openid", openid);
         map.put("to_groupid", toGroupid);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -102,13 +95,11 @@ public class GroupsUtil extends BaseUtil {
         Assert.notEmpty(openidList, "openidList 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/members/batchupdate?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("openid_list", openidList);
         map.put("to_groupid", toGroupid);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -121,14 +112,12 @@ public class GroupsUtil extends BaseUtil {
     public static Map<String, Object> delete(BasicAccount account, int groupid) {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/delete?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> group = new HashMap<String, Object>();
         group.put("id", groupid);
         map.put("group", group);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -141,8 +130,7 @@ public class GroupsUtil extends BaseUtil {
     public static Map<String, Object> get(BasicAccount account) {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/get?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest(url);
-        return get(param);
+        return get(url);
 
     }
 }

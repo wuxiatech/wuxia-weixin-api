@@ -12,11 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import cn.wuxia.common.util.JsonUtil;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
-import cn.wuxia.common.web.httpclient.HttpClientResponse;
-import cn.wuxia.common.web.httpclient.HttpClientUtil;
-
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.token.util.TokenUtil;
@@ -38,15 +33,13 @@ public class UserUtil extends BaseUtil {
     * @throws UnsupportedEncodingException
     */
     public static Map<String, Object> getshakeinfo(BasicAccount account, String ticket, Integer needPoi) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(getshakeinfoUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("ticket", ticket);
         map.put("need_poi", needPoi);
 
-        return post(param, map);
+        return post(getshakeinfoUrl + "?access_token=" + access_token, map);
     }
 
 }

@@ -178,10 +178,8 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
 
     }
 
@@ -206,10 +204,8 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -233,10 +229,8 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -264,10 +258,8 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -291,10 +283,8 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -345,10 +335,9 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
+      //发送
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -378,10 +367,9 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
+      //发送
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -407,10 +395,9 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
+      //发送
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -463,10 +450,9 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
+      //发送
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -488,10 +474,9 @@ public class CardUtil extends BaseUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
+      //发送
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -518,11 +503,9 @@ public class CardUtil extends BaseUtil {
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
-        //发送
-        HttpClientRequest param = new HttpClientRequest();
+      //发送
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(createUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -534,16 +517,14 @@ public class CardUtil extends BaseUtil {
      * @throws Exception
      */
     public static Map<String, Object> consume(BasicAccount account, String cardId, String code) {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(resumeUrl + "?access_token=" + access_token);
         Map<String, Object> map = new HashMap<String, Object>();
         if (StringUtils.isNotBlank(cardId)) {
             map.put("card_id", cardId);
         }
         map.put("code", code);
 
-        return post(param, map);
+        return post(resumeUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -554,12 +535,10 @@ public class CardUtil extends BaseUtil {
      * @throws Exception
      */
     public static Map<String, Object> detail(BasicAccount account, String cardId) throws Exception {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(detailUrl + "?access_token=" + access_token);
         Map<String, String> paramMap = Maps.newHashMap();
         paramMap.put("card_id", cardId);
-        return post(param, paramMap);
+        return post(detailUrl + "?access_token=" + access_token, paramMap);
     }
 
     private static String API_TICKET;
@@ -649,9 +628,7 @@ public class CardUtil extends BaseUtil {
      */
     public static Map<String, Object> createQrcode(BasicAccount account, String cardId, String code, String openid, Integer expireSeconds,
             Boolean isUniqueCode, Integer balance, Integer outerId) {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(createQrcodeUrl + "?access_token=" + access_token);
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("action_name", "QR_CARD");
         Map<String, Object> action_info = Maps.newHashMap();
@@ -678,7 +655,7 @@ public class CardUtil extends BaseUtil {
 
         action_info.put("card", card);
         postData.put("action_info", action_info);
-        return post(param, postData);
+        return post(createQrcodeUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -690,9 +667,7 @@ public class CardUtil extends BaseUtil {
      * @throws Exception
      */
     public static Map<String, Object> testwhitelist(BasicAccount account, List<String> openid, List<String> username) throws Exception {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl("https://api.weixin.qq.com/card/testwhitelist/set?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         if (openid != null && openid.size() > 0) {
@@ -701,8 +676,7 @@ public class CardUtil extends BaseUtil {
         if (username != null && username.size() > 0) {
             map.put("username", username);
         }
-
-        return post(param, map);
+        return post("https://api.weixin.qq.com/card/testwhitelist/set?access_token=" + access_token, map);
     }
 
     /**
@@ -714,12 +688,11 @@ public class CardUtil extends BaseUtil {
     public static Map<String, Object> delete(BasicAccount account, String cardId) {
         HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(deleteUrl + "?access_token=" + access_token);
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("card_id", cardId);
 
-        return post(param, postData);
+        return post(deleteUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -730,9 +703,7 @@ public class CardUtil extends BaseUtil {
      * @
      */
     public static Map<String, Object> codeGet(BasicAccount account, String cardId, String code) {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(codeGetUrl + "?access_token=" + access_token);
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("code", code);
@@ -740,7 +711,7 @@ public class CardUtil extends BaseUtil {
             postData.put("card_id", cardId);
         }
 
-        return post(param, postData);
+        return post(codeGetUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -751,15 +722,13 @@ public class CardUtil extends BaseUtil {
      * @
      */
     public static Map<String, Object> batchget(BasicAccount account, Integer offset, Integer count) {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(batchgetUrl + "?access_token=" + access_token);
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("offset", offset);
         postData.put("count", count);
 
-        return post(param, postData);
+        return post(batchgetUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -771,16 +740,14 @@ public class CardUtil extends BaseUtil {
      * @
      */
     public static Map<String, Object> codeUpdate(BasicAccount account, String code, String cardId, String newCode) {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(codeUpdateUrl + "?access_token=" + access_token);
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("code", code);
         postData.put("card_id", cardId);
         postData.put("new_code", newCode);
 
-        return post(param, postData);
+        return post(codeUpdateUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -791,9 +758,7 @@ public class CardUtil extends BaseUtil {
      * @
      */
     public static Map<String, Object> codeUnavailable(BasicAccount account, String code, String cardId) {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(codeUnavailableUrl + "?access_token=" + access_token);
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("code", code);
@@ -801,7 +766,7 @@ public class CardUtil extends BaseUtil {
             postData.put("card_id", cardId);
         }
 
-        return post(param, postData);
+        return post(codeUnavailableUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -893,10 +858,8 @@ public class CardUtil extends BaseUtil {
         map.put(cardType.toString(), generalCoupon);
         map.put("card_id", cardId);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(updateUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(updateUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -932,10 +895,8 @@ public class CardUtil extends BaseUtil {
         map.put("member_card", generalCoupon); //
         map.put("card_id", cardId);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(updateUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(updateUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -963,10 +924,8 @@ public class CardUtil extends BaseUtil {
         map.put("boarding_pass", generalCoupon); //
         map.put("card_id", cardId);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(updateUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(updateUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -989,10 +948,8 @@ public class CardUtil extends BaseUtil {
         map.put("scenic_ticket", generalCoupon); //
         map.put("card_id", cardId);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(updateUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(updateUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -1015,10 +972,8 @@ public class CardUtil extends BaseUtil {
         map.put("movie_ticket", generalCoupon); //
         map.put("card_id", cardId);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(updateUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(updateUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -1041,10 +996,8 @@ public class CardUtil extends BaseUtil {
         map.put("meeting_ticket", generalCoupon); //
         map.put("card_id", cardId);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(updateUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(updateUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -1066,20 +1019,16 @@ public class CardUtil extends BaseUtil {
         }
 
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(modifystockUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(modifystockUrl + "?access_token=" + access_token, map);
     }
 
     public static Map<String, Object> getcolors(BasicAccount account) {
         Map<String, Object> map = new HashMap<String, Object>();
 
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(getcolorsUrl + "?access_token=" + access_token);
-        return post(param, map);
+        return post(getcolorsUrl + "?access_token=" + access_token, map);
     }
 
     public static String getCardLogoUrl() {

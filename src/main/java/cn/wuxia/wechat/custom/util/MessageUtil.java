@@ -14,7 +14,6 @@ import java.util.Map;
 
 import org.springframework.util.Assert;
 
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.custom.bean.Article;
@@ -90,8 +89,6 @@ public class MessageUtil extends BaseUtil {
         Assert.hasText(content, "content 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
 
         Map<String, Object> text = new HashMap<String, Object>();
@@ -106,7 +103,7 @@ public class MessageUtil extends BaseUtil {
             customservice.put("kf_account", kefuAccount.getKf_account());
             map.put("customservice", customservice);
         }
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -127,8 +124,6 @@ public class MessageUtil extends BaseUtil {
         Assert.hasText(mediaId, "mediaId 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
 
         Map<String, Object> image = new HashMap<String, Object>();
@@ -142,7 +137,7 @@ public class MessageUtil extends BaseUtil {
             customservice.put("kf_account", kefuAccount.getKf_account());
             map.put("customservice", customservice);
         }
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -166,8 +161,6 @@ public class MessageUtil extends BaseUtil {
         }
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("touser", touser);
         map.put("msgtype", "news");
@@ -180,7 +173,7 @@ public class MessageUtil extends BaseUtil {
             customservice.put("kf_account", kefuAccount.getKf_account());
             map.put("customservice", customservice);
         }
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -217,8 +210,6 @@ public class MessageUtil extends BaseUtil {
         Assert.hasText(mediaId, "mediaId 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
 
         Map<String, Object> voice = new HashMap<String, Object>();
@@ -232,7 +223,7 @@ public class MessageUtil extends BaseUtil {
             customservice.put("kf_account", kefuAccount.getKf_account());
             map.put("customservice", customservice);
         }
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -270,8 +261,6 @@ public class MessageUtil extends BaseUtil {
         Assert.hasText(mediaId, "mediaId 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
 
         Map<String, Object> video = new HashMap<String, Object>();
@@ -288,7 +277,7 @@ public class MessageUtil extends BaseUtil {
             customservice.put("kf_account", kefuAccount.getKf_account());
             map.put("customservice", customservice);
         }
-        return post(param, map);
+        return post(url, map);
 
     }
 }

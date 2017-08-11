@@ -48,8 +48,7 @@ public class UserUtil extends BaseUtil {
         if (StringUtil.isNotBlank(nextOpenid)) {
             url += "&next_openid=" + nextOpenid;
         }
-        HttpClientRequest param = new HttpClientRequest(url);
-        return get(param);
+        return get(url);
     }
 
     /**
@@ -63,8 +62,7 @@ public class UserUtil extends BaseUtil {
         logger.info("根据openid获取微信用户信息开始");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + access_token + "&openid=" + openid + "&lang=zh_CN";
-        HttpClientRequest param = new HttpClientRequest(url);
-        return get(param);
+        return get(url);
     }
 
     public static List<Map<String, Object>> infos(BasicAccount account, String... openid) {
@@ -76,13 +74,12 @@ public class UserUtil extends BaseUtil {
         int i = 0;
         for (String openid_ : openid) {
             String url_ = String.format(url, openid_);
-            requests[i] = new HttpClientRequest();
-            requests[i].setUrl(url_);
+            requests[i] =  HttpClientRequest.get(url_);
             i++;
         }
         List<HttpClientResponse> respone;
         try {
-            respone = HttpAsyncClientUtil.gets(requests);
+            respone = HttpAsyncClientUtil.call(requests);
         } catch (HttpClientException e1) {
             logger.error("", e1);
             throw new RuntimeException(e1);
@@ -116,11 +113,10 @@ public class UserUtil extends BaseUtil {
         Assert.hasText(remark, "remark 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest(url);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("openid", openid);
         map.put("remark", remark);
-        return post(param, map);
+        return post(url, map);
     }
 
 }

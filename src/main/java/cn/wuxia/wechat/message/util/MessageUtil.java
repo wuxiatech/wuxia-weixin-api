@@ -46,8 +46,6 @@ public class MessageUtil extends BaseUtil {
 		Assert.hasText(content, "content 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=" + access_token;
-		HttpClientRequest param = new HttpClientRequest();
-		param.setUrl(url);
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		Map<String, Object> filter = new HashMap<String, Object>();
@@ -65,7 +63,7 @@ public class MessageUtil extends BaseUtil {
 		map.put("text", text);
 		map.put("msgtype", "text");
 
-		return post(param, map);
+		return post(url, map);
 
 	}
 
@@ -83,8 +81,6 @@ public class MessageUtil extends BaseUtil {
 		Assert.hasText(mediaId, "mediaId 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=" + access_token;
-		HttpClientRequest param = new HttpClientRequest();
-		param.setUrl(url);
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		Map<String, Object> filter = new HashMap<String, Object>();
@@ -102,7 +98,7 @@ public class MessageUtil extends BaseUtil {
 		map.put("image", image);
 		map.put("msgtype", "image");
 
-		return post(param, map);
+		return post(url, map);
 
 	}
 
@@ -120,8 +116,6 @@ public class MessageUtil extends BaseUtil {
 		Assert.hasText(mediaId, "mediaId 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=" + access_token;
-		HttpClientRequest param = new HttpClientRequest();
-		param.setUrl(url);
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		Map<String, Object> filter = new HashMap<String, Object>();
@@ -139,7 +133,7 @@ public class MessageUtil extends BaseUtil {
 		map.put("mpnews", mpnews);
 		map.put("msgtype", "mpnews");
 
-		return post(param, map);
+		return post(url, map);
 
 	}
 
@@ -158,8 +152,6 @@ public class MessageUtil extends BaseUtil {
 		Assert.hasText(content, "content 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=" + access_token;
-		HttpClientRequest param = new HttpClientRequest();
-		param.setUrl(url);
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		Map<String, Object> text = new HashMap<String, Object>();
@@ -169,7 +161,7 @@ public class MessageUtil extends BaseUtil {
 		map.put("text", text);
 		map.put("msgtype", "text");
 
-		return post(param, map);
+		return post(url, map);
 
 	}
 
@@ -188,8 +180,6 @@ public class MessageUtil extends BaseUtil {
 		Assert.hasText(mediaId, "content 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=" + access_token;
-		HttpClientRequest param = new HttpClientRequest();
-		param.setUrl(url);
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		Map<String, Object> image = new HashMap<String, Object>();
@@ -199,7 +189,7 @@ public class MessageUtil extends BaseUtil {
 		map.put("image", image);
 		map.put("msgtype", "image");
 
-		return post(param, map);
+		return post(url, map);
 
 	}
 
@@ -218,8 +208,6 @@ public class MessageUtil extends BaseUtil {
 		Assert.hasText(mediaId, "content 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/mass/send?access_token=" + access_token;
-		HttpClientRequest param = new HttpClientRequest();
-		param.setUrl(url);
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		Map<String, Object> mpnews = new HashMap<String, Object>();
@@ -229,7 +217,7 @@ public class MessageUtil extends BaseUtil {
 		map.put("mpnews", mpnews);
 		map.put("msgtype", "mpnews");
 
-		return post(param, map);
+		return post(url, map);
 
 	}
 

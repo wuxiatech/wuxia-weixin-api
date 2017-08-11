@@ -9,17 +9,10 @@
 package cn.wuxia.wechat.open.util;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.util.Assert;
-
-import cn.wuxia.common.util.DateUtil;
-import cn.wuxia.common.util.NumberUtil;
-import cn.wuxia.common.util.StringUtil;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
 import cn.wuxia.wechat.WeChatException;
 
 /**
@@ -40,13 +33,11 @@ public class ProxyOAuthUtil extends ThirdBaseUtil {
      */
     public static Map<String, Object> apiQueryAuth(String authorizationCode) throws WeChatException {
         String accessToken = getComponentAccessToken();
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl("https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=" + accessToken);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("component_appid", OPEN_APPID);
         map.put("authorization_code", authorizationCode);
 
-        Map<String, Object> result = post(param, map);
+        Map<String, Object> result = post("https://api.weixin.qq.com/cgi-bin/component/api_query_auth?component_access_token=" + accessToken, map);
         return result;
     }
 
@@ -59,13 +50,11 @@ public class ProxyOAuthUtil extends ThirdBaseUtil {
      */
     public static Map<String, Object> apiGetAuthorizerInfo(String authorizerAppid) throws WeChatException {
         String accessToken = getComponentAccessToken();
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl("https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_info?component_access_token=" + accessToken);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("component_appid", OPEN_APPID);
         map.put("authorizer_appid", authorizerAppid);
 
-        Map<String, Object> result = post(param, map);
+        Map<String, Object> result = post("https://api.weixin.qq.com/cgi-bin/component/api_get_authorizer_info?component_access_token=" + accessToken, map);
         return result;
     }
 

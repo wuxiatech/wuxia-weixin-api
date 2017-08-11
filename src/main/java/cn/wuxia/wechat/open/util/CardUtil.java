@@ -166,9 +166,8 @@ public class CardUtil extends PayUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(createUrl + "?access_token=" + authorizerAccessToken);
-        return post(param, map);
+        
+        return post(createUrl + "?access_token=" + authorizerAccessToken, map);
 
     }
 
@@ -181,15 +180,13 @@ public class CardUtil extends PayUtil {
      * @throws Exception
      */
     public static Map<String, Object> consume(String authorizerAccessToken, String cardId, String code) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(resumeUrl + "?access_token=" + authorizerAccessToken);
         Map<String, Object> map = new HashMap<String, Object>();
         if (StringUtils.isNotBlank(cardId)) {
             map.put("card_id", cardId);
         }
         map.put("code", code);
 
-        return post(param, map);
+        return post(resumeUrl + "?access_token=" + authorizerAccessToken, map);
     }
 
     /**
@@ -200,11 +197,9 @@ public class CardUtil extends PayUtil {
      * @throws Exception
      */
     public static Map<String, Object> detail(String authorizerAccessToken, String cardId) throws Exception {
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(detailUrl + "?access_token=" + authorizerAccessToken);
         Map<String, String> map = Maps.newHashMap();
         map.put("card_id", cardId);
-        return post(param, map);
+        return post(detailUrl + "?access_token=" + authorizerAccessToken, map);
     }
 
     /**
@@ -221,8 +216,6 @@ public class CardUtil extends PayUtil {
      */
     public static Map<String, Object> createQrcode(String authorizerAccessToken, String cardId, String code, String openid, Integer expireSeconds,
             Boolean isUniqueCode, Integer balance, Integer outerId) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(createQrcodeUrl + "?access_token=" + authorizerAccessToken);
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("action_name", "QR_CARD");
         Map<String, Object> action_info = Maps.newHashMap();
@@ -249,7 +242,7 @@ public class CardUtil extends PayUtil {
 
         action_info.put("card", card);
         postData.put("action_info", action_info);
-        return post(param, postData);
+        return post(createQrcodeUrl + "?access_token=" + authorizerAccessToken, postData);
     }
 
     /**
@@ -261,8 +254,6 @@ public class CardUtil extends PayUtil {
      * @throws Exception
      */
     public static Map<String, Object> testwhitelist(String authorizerAccessToken, List<String> openid, List<String> username) throws Exception {
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl("https://api.weixin.qq.com/card/testwhitelist/set?access_token=" + authorizerAccessToken);
 
         Map<String, Object> map = new HashMap<String, Object>();
         if (openid != null && openid.size() > 0) {
@@ -272,20 +263,18 @@ public class CardUtil extends PayUtil {
             map.put("username", username);
         }
 
-        return post(param, map);
+        return post("https://api.weixin.qq.com/card/testwhitelist/set?access_token=" + authorizerAccessToken, map);
     }
 
     /**
      * 删除卡券
      */
     public static Map<String, Object> delete(BasicAccount account, String cardId) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(deleteUrl + "?access_token=" + TokenUtil.getAccessToken(account));
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("card_id", cardId);
 
-        return post(param, postData);
+        return post(deleteUrl + "?access_token=" + TokenUtil.getAccessToken(account), postData);
     }
 
     /**
@@ -296,14 +285,12 @@ public class CardUtil extends PayUtil {
      * @throws UnsupportedEncodingException
      */
     public static Map<String, Object> batchget(String authorizerAccessToken, Integer offset, Integer count) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(batchgetUrl + "?access_token=" + authorizerAccessToken);
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("offset", offset);
         postData.put("count", count);
 
-        return post(param, postData);
+        return post(batchgetUrl + "?access_token=" + authorizerAccessToken, postData);
     }
 
     /**
@@ -326,9 +313,7 @@ public class CardUtil extends PayUtil {
         }
 
         //发送
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(modifystockUrl + "?access_token=" + TokenUtil.getAccessToken(account));
-        return post(param, map);
+        return post(modifystockUrl + "?access_token=" + TokenUtil.getAccessToken(account), map);
     }
 
     /**
@@ -419,7 +404,7 @@ public class CardUtil extends PayUtil {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card", card);
         //发送
-        return post(new HttpClientRequest(url), map);
+        return post(url, map);
     }
 
 }

@@ -12,14 +12,13 @@ import org.jdom2.JDOMException;
 import org.springframework.util.Assert;
 
 import com.google.common.collect.Maps;
+
 import cn.wuxia.common.util.NumberUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.util.XMLUtil;
 import cn.wuxia.common.web.httpclient.HttpClientException;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
 import cn.wuxia.common.web.httpclient.HttpClientResponse;
 import cn.wuxia.common.web.httpclient.HttpClientUtil;
-
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.PayAccount;
 
@@ -152,10 +151,9 @@ public class PayUtil extends BaseUtil {
         // 将数据提交给统一支付接口
         String xml = parseXML(wxparam);
         logger.info(xml);
-        HttpClientRequest param1 = new HttpClientRequest(wxurl);
         HttpClientResponse httpUrl;
         try {
-            httpUrl = HttpClientUtil.postXML(param1, xml);
+            httpUrl = HttpClientUtil.postXml(wxurl, xml);
         } catch (HttpClientException e) {
             logger.error("", e);
             throw new RuntimeException(e);
@@ -320,10 +318,9 @@ public class PayUtil extends BaseUtil {
         // 将数据提交给统一支付接口
         String xml = parseXML(wxparam);
         logger.info(xml);
-        HttpClientRequest param1 = new HttpClientRequest(wxurl);
         HttpClientResponse httpUrl;
         try {
-            httpUrl = HttpClientUtil.postXML(param1, xml);
+            httpUrl = HttpClientUtil.postXml(wxurl, xml);
         } catch (HttpClientException e) {
             logger.error("", e);
             throw new RuntimeException(e);
@@ -401,11 +398,9 @@ public class PayUtil extends BaseUtil {
         String xml = PayUtil.parseXML(map);
         //发送请求
         logger.info("请求报文:" + xml);
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl("https://api.mch.weixin.qq.com/pay/orderquery");
         HttpClientResponse httpUrl;
         try {
-            httpUrl = HttpClientUtil.postXML(param, xml);
+            httpUrl = HttpClientUtil.postXml("https://api.mch.weixin.qq.com/pay/orderquery", xml);
         } catch (HttpClientException e) {
             logger.error("", e);
             throw new RuntimeException(e);

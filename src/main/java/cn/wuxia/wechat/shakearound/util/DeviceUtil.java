@@ -17,11 +17,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
-import cn.wuxia.common.util.JsonUtil;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
-import cn.wuxia.common.web.httpclient.HttpClientResponse;
-import cn.wuxia.common.web.httpclient.HttpClientUtil;
-
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.shakearound.bean.DeviceBean;
@@ -59,9 +54,7 @@ public class DeviceUtil extends BaseUtil {
         Assert.hasText(applyReason, "applyReason为必填");
         Assert.isTrue(applyReason.length() <= 100, "applyReason 超过100个字");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(applyUrl + "?access_token=" + access_token);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("quantity", quantity);
         map.put("apply_reason", applyReason);
@@ -72,7 +65,7 @@ public class DeviceUtil extends BaseUtil {
         if (StringUtils.isNotEmpty(poiId)) {
             map.put("poi_id", poiId);
         }
-        return post(param, map);
+        return post(applyUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -94,9 +87,7 @@ public class DeviceUtil extends BaseUtil {
             Assert.notNull(minor, "minor 不能为空或填写deviceId");
         }
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(updateUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> device_identifier = new HashMap<String, Object>();
@@ -107,7 +98,7 @@ public class DeviceUtil extends BaseUtil {
         map.put("device_identifier", device_identifier);
         map.put("comment", comment);
 
-        return post(param, map);
+        return post(updateUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -129,9 +120,7 @@ public class DeviceUtil extends BaseUtil {
         }
         Assert.notNull(poiId, "poiId 不能为空");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(bindlocationUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> device_identifier = new HashMap<String, Object>();
@@ -141,7 +130,7 @@ public class DeviceUtil extends BaseUtil {
         device_identifier.put("minor", minor);
         map.put("device_identifier", device_identifier);
         map.put("poi_id", poiId);
-        return post(param, map);
+        return post(bindlocationUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -153,9 +142,7 @@ public class DeviceUtil extends BaseUtil {
     public static Map<String, Object> search(BasicAccount account, List<DeviceBean> deviceList) throws UnsupportedEncodingException {
         Assert.notEmpty(deviceList, "deviceList 不能为空");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(searchUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         List<Object> device_identifiers = new ArrayList<Object>();
@@ -170,7 +157,7 @@ public class DeviceUtil extends BaseUtil {
 
         map.put("type", 1);
         map.put("device_identifiers", device_identifiers);
-        return post(param, map);
+        return post(searchUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -184,15 +171,13 @@ public class DeviceUtil extends BaseUtil {
         Assert.isTrue(begin >= 0, "begin必须大于等于0");
         Assert.isTrue(count > 0 && count <= 50, "count必须大于0,小于等于50");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(searchUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("type", 2);
         map.put("begin", begin);
         map.put("count", count);
-        return post(param, map);
+        return post(searchUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -207,16 +192,14 @@ public class DeviceUtil extends BaseUtil {
         Assert.isTrue(begin >= 0, "begin必须大于等于0");
         Assert.isTrue(count > 0 && count <= 50, "count必须大于0,小于等于50");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(searchUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("type", 3);
         map.put("begin", begin);
         map.put("count", count);
         map.put("apply_id", applyId);
-        return post(param, map);
+        return post(searchUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -235,9 +218,7 @@ public class DeviceUtil extends BaseUtil {
         Assert.isTrue(bind == 0 || bind == 1, "bind 只能为0或1");
         Assert.isTrue(append == 0 || append == 1, "append 只能为0或1");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(bindpageUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> device_identifier = new HashMap<String, Object>();
@@ -256,7 +237,7 @@ public class DeviceUtil extends BaseUtil {
         map.put("bind", bind);
         map.put("append", append);
 
-        return post(param, map);
+        return post(bindpageUrl + "?access_token=" + access_token, map);
     }
 
 }

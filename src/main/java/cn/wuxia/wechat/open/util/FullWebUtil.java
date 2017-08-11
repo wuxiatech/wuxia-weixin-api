@@ -110,15 +110,13 @@ public class FullWebUtil extends ThirdBaseUtil {
                 Map<String, Object> authorization_info = (Map<String, Object>) map.get("authorization_info");
                 String authorizerAccessToken = (String) authorization_info.get("authorizer_access_token");
 
-                HttpClientRequest param = new HttpClientRequest();
-                param.setUrl("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + authorizerAccessToken);
                 Map<String, Object> pmap = Maps.newHashMap();
                 pmap.put("touser", openid);
                 pmap.put("msgtype", "text");
                 Map<String, String> contentm = Maps.newHashMap();
                 contentm.put("content", queryAuthCode + "_from_api");
                 pmap.put("text", contentm);
-                Map<String, Object> result = post(param, pmap);
+                Map<String, Object> result = post("https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=" + authorizerAccessToken, pmap);
                 logger.info("微信返回" + result);
                 return "";
             }

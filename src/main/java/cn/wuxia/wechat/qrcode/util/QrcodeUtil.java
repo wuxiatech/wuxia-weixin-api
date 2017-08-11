@@ -16,13 +16,10 @@ import java.util.Map;
 
 import org.springframework.util.Assert;
 
-import cn.wuxia.common.util.JsonUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.util.img.ImageUtil;
 import cn.wuxia.common.web.httpclient.HttpClientRequest;
-import cn.wuxia.common.web.httpclient.HttpClientResponse;
 import cn.wuxia.common.web.httpclient.HttpClientUtil;
-
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.token.util.TokenUtil;
@@ -83,10 +80,8 @@ public class QrcodeUtil extends BaseUtil {
         action_info.put("scene", scene);
         map.put("action_info", action_info);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + access_token);
-        return post(param, map);
+        return post("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + access_token, map);
     }
 
     /**
@@ -106,10 +101,8 @@ public class QrcodeUtil extends BaseUtil {
         action_info.put("scene", scene);
         map.put("action_info", action_info);
         //发送
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + access_token);
-        return post(param, map);
+        return post("https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=" + access_token, map);
     }
 
 }

@@ -40,12 +40,10 @@ public class MenuUtil extends BaseUtil {
         Assert.notEmpty(buttonList, "buttonList 参数有误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, List<Button>> map = new HashMap<>();
         map.put("button", buttonList);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -61,11 +59,10 @@ public class MenuUtil extends BaseUtil {
         Assert.notEmpty(buttonList, "buttonList 参数有误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/menu/addconditional?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest(url);
         Map<String, Object> map = new HashMap<>();
         map.put("button", buttonList);
         map.put("matchrule", rule);
-        return post(param, map);
+        return post(url, map);
     }
 
     /**
@@ -78,10 +75,9 @@ public class MenuUtil extends BaseUtil {
         Assert.notNull(openid, "openid 参数有误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/menu/trymatch?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest(url);
         Map<String, Object> map = new HashMap<>();
         map.put("user_id", openid);
-        return post(param, map);
+        return post(url, map);
     }
 
     /**
@@ -93,8 +89,7 @@ public class MenuUtil extends BaseUtil {
         Assert.notNull(account, "openid 参数有误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest(url);
-        return get(param);
+        return get(url);
     }
 
     /**
@@ -106,8 +101,7 @@ public class MenuUtil extends BaseUtil {
         Assert.notNull(account, "openid 参数有误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest(url);
-        return get(param);
+        return get(url);
     }
 
 }

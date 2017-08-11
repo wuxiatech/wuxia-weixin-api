@@ -106,8 +106,6 @@ public class MediaUtil extends BaseUtil {
         Assert.notEmpty(articles, "articles 参数有误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
 
         List<Map<String, Object>> list = new ArrayList<>();
@@ -133,7 +131,7 @@ public class MediaUtil extends BaseUtil {
         }
         map.put("articles", list);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 

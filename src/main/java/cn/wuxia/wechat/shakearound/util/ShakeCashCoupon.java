@@ -28,6 +28,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.tencent.common.HttpsAsyncRequest;
 import com.tencent.common.HttpsRequest;
+
 import cn.wuxia.common.util.DateUtil;
 import cn.wuxia.common.util.JsonUtil;
 import cn.wuxia.common.util.MD5Util;
@@ -38,7 +39,6 @@ import cn.wuxia.common.util.XMLUtil;
 import cn.wuxia.common.util.reflection.BeanUtil;
 import cn.wuxia.common.web.httpclient.HttpClientException;
 import cn.wuxia.common.web.httpclient.HttpClientUtil;
-
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.PayAccount;
 import cn.wuxia.wechat.WeChatException;
@@ -264,7 +264,8 @@ public class ShakeCashCoupon extends PayUtil {
             HttpsAsyncRequest param1 = new HttpsAsyncRequest();
             Object[] b = list.toArray();
             result = param1.sendPost(CREATE_PACKAGE, b);
-        } catch (UnrecoverableKeyException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException | IOException| HttpClientException e) {
+        } catch (UnrecoverableKeyException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException | IOException
+                | HttpClientException e) {
             throw new WeChatException("", e);
         }
         List<String[]> rtn = Lists.newArrayList();
@@ -313,14 +314,7 @@ public class ShakeCashCoupon extends PayUtil {
         prams.put("jump_url", jumpUrl);
         prams.put("key", key);
         String url = String.format(CREATE_ACTIVITY, TokenUtil.getAccessToken(account), logo);
-        String postPrams = JsonUtil.toFullJson(prams);
-        String resp;
-        try {
-            resp = HttpClientUtil.post(url, postPrams);
-        } catch (HttpClientException e) {
-            throw new WeChatException(e);
-        }
-        Map<String, Object> result = JsonUtil.fromJson(resp);
+        Map<String, Object> result = post(url, prams);
         if (NumberUtil.equals(0, NumberUtil.toInteger(result.get("errcode")))) {
             return new Object[] { result.get("lottery_id"), result.get("page_id") };
         } else {
@@ -350,15 +344,9 @@ public class ShakeCashCoupon extends PayUtil {
             tick.add(m);
         }
         prams.put("prize_info_list", tick);
-        String postPrams = JsonUtil.toFullJson(prams);
-        String resp;
-        try {
-            resp = HttpClientUtil.post(url, postPrams);
-        } catch (HttpClientException e) {
-            throw new WeChatException(e);
-        }
-        Map<String, Object> result = JsonUtil.fromJson(resp);
-        logger.debug(resp);
+
+        Map<String, Object> result = post(url, prams);
+        logger.debug("{}", result);
         if (NumberUtil.equals(0, NumberUtil.toInteger(result.get("errcode")))) {
 
         } else {

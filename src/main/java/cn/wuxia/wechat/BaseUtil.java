@@ -5,7 +5,6 @@ import java.util.Properties;
 
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -149,21 +148,32 @@ public class BaseUtil {
         getCache().flush(CACHE_NAME_SPACE);
     }
 
+    @Deprecated
     protected static Map<String, Object> post(HttpClientRequest httpParam) {
-        return post(httpParam, null);
+        return post(httpParam.getUrl() + (StringUtil.indexOf(httpParam.getUrl(), "?") > 0 ? "" : "?") + httpParam.getQueryString(), null);
     }
 
-    // 发送URL请求
-    protected static Map<String, Object> post(HttpClientRequest httpParam, Map param) {
+    protected static Map<String, Object> post(String url) {
+        return post(url, null);
+    }
+
+    /**
+     *  发送URL请求Description of the method
+     * @author songlin
+     * @param url
+     * @param param
+     * @return
+     */
+    protected static Map<String, Object> post(String url, Object param) {
         // 缓存请求微信返回JSON
         Map<String, Object> map = Maps.newHashMap();
         // 获取微信返回结果
         try {
             HttpClientResponse resp = null;
-            if (MapUtils.isEmpty(param)) {
-                resp = HttpClientUtil.post(httpParam);
+            if (param == null) {
+                resp = HttpClientUtil.post(new HttpClientRequest(url));
             } else {
-                resp = HttpClientUtil.postJSON(httpParam, JsonUtil.toJson(param));
+                resp = HttpClientUtil.postJson(url, JsonUtil.toJson(param));
             }
             resp.setCharset("UTF-8");
             map = JsonUtil.fromJson(resp.getStringResult());
@@ -179,6 +189,13 @@ public class BaseUtil {
         return map;
     }
 
+    /**
+     * @see {@link BaseUtil#get(String)}
+     * @author songlin
+     * @param httpParam
+     * @return
+     */
+    @Deprecated
     // 发送URL请求
     protected static Map<String, Object> get(HttpClientRequest httpParam) {
         // 缓存请求微信返回JSON
@@ -199,4 +216,28 @@ public class BaseUtil {
         return map;
     }
 
+    /**
+     *  发送URL请求Description of the method
+     * @author songlin
+     * @param httpParam
+     * @return
+     */
+    protected static Map<String, Object> get(String url) {
+        // 缓存请求微信返回JSON
+        Map<String, Object> map = Maps.newHashMap();
+        // 获取微信返回结果
+        try {
+            HttpClientResponse httpUrl = HttpClientUtil.get(new HttpClientRequest(url));
+            httpUrl.setCharset("UTF-8");
+            map = JsonUtil.fromJson(httpUrl.getStringResult());
+            logger.info("微信返回结果：{}", map);
+        } catch (Exception e) {
+            logger.error("请求微信 API有误！", e);
+        }
+        if (org.apache.commons.collections4.MapUtils.isNotEmpty(map) && StringUtil.isNotBlank(map.get("errcode"))
+                && !StringUtil.equals(map.get("errcode") + "", "0")) {
+            logger.error(map.get("errmsg").toString());
+        }
+        return map;
+    }
 }

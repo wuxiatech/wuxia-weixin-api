@@ -34,14 +34,12 @@ public class ProxyAuthorizerTokenUtil extends ThirdBaseUtil {
      */
     public static Map<String, Object> getAuthorizerAccessToken(String authorizerAppid, String authorizerRefreshToken) throws WeChatException {
         String accessToken = getComponentAccessToken();
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl("https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=" + accessToken);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("component_appid", OPEN_APPID);
         map.put("authorizer_appid", authorizerAppid);
         map.put("authorizer_refresh_token", authorizerRefreshToken);
 
-        Map<String, Object> result = post(param, map);
+        Map<String, Object> result = post("https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=" + accessToken, map);
         return result;
     }
 

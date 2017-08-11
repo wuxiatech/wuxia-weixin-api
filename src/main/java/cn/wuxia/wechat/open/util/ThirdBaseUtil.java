@@ -89,13 +89,12 @@ public class ThirdBaseUtil extends cn.wuxia.wechat.BaseUtil {
         }
 
         HttpClientRequest param = new HttpClientRequest();
-        param.setUrl("https://api.weixin.qq.com/cgi-bin/component/api_component_token");
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("component_appid", OPEN_APPID);
         map.put("component_appsecret", OPEN_APP_SECRET);
         map.put("component_verify_ticket", verifyTicket);
 
-        Map<String, Object> result = post(param, map);
+        Map<String, Object> result = post("https://api.weixin.qq.com/cgi-bin/component/api_component_token", map);
         if (result.get("errcode") != null && (Integer) result.get("errcode") != 0) {
             logger.error("获取access_token有误:" + result);
             throw new WeChatException("获取access_token有误:" + result.get("errmsg"));
@@ -134,13 +133,11 @@ public class ThirdBaseUtil extends cn.wuxia.wechat.BaseUtil {
             return preAuthCode;
         }
 
-        HttpClientRequest param = new HttpClientRequest();
         String accessToken = getComponentAccessToken();
-        param.setUrl("https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode?component_access_token=" + accessToken);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("component_appid", OPEN_APPID);
 
-        Map<String, Object> result = post(param, map);
+        Map<String, Object> result = post("https://api.weixin.qq.com/cgi-bin/component/api_create_preauthcode?component_access_token=" + accessToken, map);
         if (result.get("errcode") != null && (Integer) result.get("errcode") != 0) {
             logger.error("获取pre_auth_code有误:" + result);
             throw new WeChatException("获取pre_auth_code有误:" + result.get("errmsg"));

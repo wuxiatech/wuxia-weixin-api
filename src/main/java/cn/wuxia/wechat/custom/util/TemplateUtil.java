@@ -15,7 +15,6 @@ import java.util.Map;
 import org.springframework.util.Assert;
 
 import cn.wuxia.common.util.StringUtil;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.custom.bean.TemplateDataBean;
@@ -47,9 +46,7 @@ public class TemplateUtil extends BaseUtil {
         Assert.hasText(topcolor, "参数错误 - topcolor");
         Assert.notEmpty(dataList, "参数错误 - dataList不能为空");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(sendUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("touser", touser);
@@ -69,7 +66,7 @@ public class TemplateUtil extends BaseUtil {
         }
         map.put("data", data);
 
-        return post(param, map);
+        return post(sendUrl + "?access_token=" + access_token, map);
     }
 
 }

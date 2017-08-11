@@ -9,7 +9,6 @@ import com.google.common.collect.Lists;
 import cn.wuxia.common.util.MapUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.util.reflection.BeanUtil;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
 import cn.wuxia.wechat.Account;
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.custom.bean.KefuAccount;
@@ -32,8 +31,7 @@ public class KefuUtil extends BaseUtil {
     public static List<KefuAccount> getAllKefu(Account account) {
         String url = "https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token=" + TokenUtil.getAccessToken(account);
 
-        HttpClientRequest param = new HttpClientRequest(url);
-        Map<String, Object> result = get(param);
+        Map<String, Object> result = get(url);
         List<KefuAccount> accounts = Lists.newArrayList();
         if (MapUtil.isNotEmpty(result)) {
             List<Map> list = (List) result.get("kf_list");
@@ -55,11 +53,10 @@ public class KefuUtil extends BaseUtil {
     public static boolean createSession(Account account, KefuAccount kfAccount, String openid) {
         String url = "https://api.weixin.qq.com/customservice/kfsession/create?access_token=" + TokenUtil.getAccessToken(account);
 
-        HttpClientRequest request = new HttpClientRequest(url);
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("openid", openid);
         param.put("kf_account", kfAccount.getKf_account());
-        Map<String, Object> result = post(request, param);
+        Map<String, Object> result = post(url, param);
         if (MapUtil.isNotEmpty(result)) {
             if (StringUtil.equalsIgnoreCase("ok", (String) result.get("errmsg"))) {
                 return true;
@@ -79,11 +76,10 @@ public class KefuUtil extends BaseUtil {
     public static boolean closeSession(Account account, KefuAccount kfAccount, String openid) {
         String url = "https://api.weixin.qq.com/customservice/kfsession/close?access_token=" + TokenUtil.getAccessToken(account);
 
-        HttpClientRequest request = new HttpClientRequest(url);
         Map<String, Object> param = new HashMap<String, Object>();
         param.put("openid", openid);
         param.put("kf_account", kfAccount.getKf_account());
-        Map<String, Object> result = post(request, param);
+        Map<String, Object> result = post(url, param);
         if (MapUtil.isNotEmpty(result)) {
             if (StringUtil.equalsIgnoreCase("ok", (String) result.get("errmsg"))) {
                 return true;
@@ -104,8 +100,7 @@ public class KefuUtil extends BaseUtil {
         String url = "https://api.weixin.qq.com/customservice/kfsession/getsession?access_token=" + TokenUtil.getAccessToken(account) + "&openid="
                 + openid;
 
-        HttpClientRequest request = new HttpClientRequest(url);
-        Map<String, Object> result = get(request);
+        Map<String, Object> result = get(url);
         /**
          * 返回数据示例（正确时的JSON返回结果）： { "createtime" : 123456789, "kf_account" :
          * "test1@test" }
@@ -121,8 +116,7 @@ public class KefuUtil extends BaseUtil {
         String url = "https://api.weixin.qq.com/customservice/kfsession/getsessionlist?access_token=" + TokenUtil.getAccessToken(account)
                 + "&kf_account=" + kefuAccount.getKf_account();
 
-        HttpClientRequest request = new HttpClientRequest(url);
-        Map<String, Object> result = get(request);
+        Map<String, Object> result = get(url);
         /**
          * { "sessionlist" : [ { "createtime" : 123456789, "openid" : "OPENID"
          * }, { "createtime" : 123456789, "openid" : "OPENID" } ] }

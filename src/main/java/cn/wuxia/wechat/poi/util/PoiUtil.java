@@ -17,10 +17,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.collect.Maps;
-import cn.wuxia.common.util.JsonUtil;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
-import cn.wuxia.common.web.httpclient.HttpClientResponse;
-import cn.wuxia.common.web.httpclient.HttpClientUtil;
 
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
@@ -51,9 +47,7 @@ public class PoiUtil extends BaseUtil {
      * @throws UnsupportedEncodingException
      */
     public static Map<String, Object> addpoi(BasicAccount account, PoiBaseInfoBean baseInfo) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(addpoiUrl + "?access_token=" + access_token);
 
         Map<String, Object> base_info = new HashMap<String, Object>();
         if (!StringUtils.isBlank(baseInfo.getSid())) {
@@ -102,7 +96,7 @@ public class PoiUtil extends BaseUtil {
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("business", business);
 
-        return post(param, postData);
+        return post(addpoiUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -112,14 +106,12 @@ public class PoiUtil extends BaseUtil {
      * @throws UnsupportedEncodingException
      */
     public static Map<String, Object> getpoi(BasicAccount account, String poiId) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(getpoiUrl + "?access_token=" + access_token);
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("poi_id", poiId);
 
-        return post(param, postData);
+        return post(getpoiUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -130,15 +122,13 @@ public class PoiUtil extends BaseUtil {
      * @throws UnsupportedEncodingException
      */
     public static Map<String, Object> getpoilist(BasicAccount account, Integer begin, Integer limit) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(getpoilistUrl + "?access_token=" + access_token);
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("begin", begin);
         postData.put("limit", limit);
 
-        return post(param, postData);
+        return post(getpoilistUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -148,14 +138,12 @@ public class PoiUtil extends BaseUtil {
      * @throws UnsupportedEncodingException
      */
     public static Map<String, Object> delpoi(BasicAccount account, String poiId) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(delpoiUrl + "?access_token=" + access_token);
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("poi_id", poiId);
 
-        return post(param, postData);
+        return post(delpoiUrl + "?access_token=" + access_token, postData);
     }
 
     /**
@@ -165,9 +153,7 @@ public class PoiUtil extends BaseUtil {
      * @throws UnsupportedEncodingException
      */
     public static Map<String, Object> updatepoi(BasicAccount account, PoiBaseInfoBean baseInfo) throws UnsupportedEncodingException {
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(updatepoiUrl + "?access_token=" + access_token);
 
         Map<String, Object> base_info = new HashMap<String, Object>();
         base_info.put("poi_id", baseInfo.getPoiId());
@@ -206,7 +192,7 @@ public class PoiUtil extends BaseUtil {
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("business", business);
 
-        return post(param, postData);
+        return post(updatepoiUrl + "?access_token=" + access_token, postData);
     }
 
 }

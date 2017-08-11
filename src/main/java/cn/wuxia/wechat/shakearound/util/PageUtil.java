@@ -17,11 +17,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.Assert;
 
-import cn.wuxia.common.util.JsonUtil;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
-import cn.wuxia.common.web.httpclient.HttpClientResponse;
-import cn.wuxia.common.web.httpclient.HttpClientUtil;
-
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.token.util.TokenUtil;
@@ -60,9 +55,7 @@ public class PageUtil extends BaseUtil {
         Assert.isTrue(pageUrl.startsWith("http"), "pageUrl 格式不正确");
         Assert.isTrue(iconUrl.startsWith("http"), "iconUrl 格式不正确");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(addUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("title", title);
@@ -74,7 +67,7 @@ public class PageUtil extends BaseUtil {
             map.put("comment", comment);
         }
 
-        return post(param, map);
+        return post(addUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -98,9 +91,7 @@ public class PageUtil extends BaseUtil {
         Assert.isTrue(pageUrl.startsWith("http"), "pageUrl 格式不正确");
         Assert.isTrue(iconUrl.startsWith("http"), "iconUrl 格式不正确");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(updateUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page_id", pageId);
@@ -113,7 +104,7 @@ public class PageUtil extends BaseUtil {
             map.put("comment", comment);
         }
 
-        return post(param, map);
+        return post(updateUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -125,9 +116,7 @@ public class PageUtil extends BaseUtil {
     public static Map<String, Object> search(BasicAccount account, List<Integer> pageIds) throws UnsupportedEncodingException {
         Assert.notEmpty(pageIds, "pageIds 不能为空");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(searchUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         List<Object> page_ids = new ArrayList<Object>();
@@ -136,7 +125,7 @@ public class PageUtil extends BaseUtil {
         }
         map.put("page_ids", page_ids);
 
-        return post(param, map);
+        return post(searchUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -150,15 +139,13 @@ public class PageUtil extends BaseUtil {
         Assert.isTrue(begin >= 0, "begin必须大于等于0");
         Assert.isTrue(count > 0 && count <= 50, "count必须大于0,小于等于50");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(searchUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("begin", begin);
         map.put("count", count);
 
-        return post(param, map);
+        return post(searchUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -170,14 +157,12 @@ public class PageUtil extends BaseUtil {
     public static Map<String, Object> delete(BasicAccount account, Integer pageId) {
         Assert.notNull(pageId, "pageIds 不能为空");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(deleteUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page_id", pageId);
 
-        return post(param, map);
+        return post(deleteUrl + "?access_token=" + access_token, map);
     }
 
 }

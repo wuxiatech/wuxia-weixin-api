@@ -53,11 +53,9 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
 
         authToke.setCode(code);
         // 接收返回json
-        HttpClientRequest wxparam = new HttpClientRequest();
         url = String.format(url, account.getAppid(), code, OPEN_APPID, getComponentAccessToken());
-        wxparam.setUrl(url);
         // 把json转换成MAP对象
-        Map<String, Object> jsonMap = post(wxparam);
+        Map<String, Object> jsonMap = post(url);
         // 如果请求正确则赋值
         logger.info("第一个JSON数据：" + jsonMap);
         if (StringUtil.isNotBlank(jsonMap.get("errcode"))) {

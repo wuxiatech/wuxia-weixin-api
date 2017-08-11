@@ -14,11 +14,6 @@ import java.util.Map;
 
 import org.springframework.util.Assert;
 
-import cn.wuxia.common.util.JsonUtil;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
-import cn.wuxia.common.web.httpclient.HttpClientResponse;
-import cn.wuxia.common.web.httpclient.HttpClientUtil;
-
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.shakearound.bean.DeviceBean;
@@ -52,9 +47,7 @@ public class StatisticsUtil extends BaseUtil {
             Assert.notNull(device.getMinor(), "minor 不能为空或填写deviceId");
         }
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(deviceUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> device_identifier = new HashMap<String, Object>();
@@ -67,7 +60,7 @@ public class StatisticsUtil extends BaseUtil {
         map.put("begin_date", beginDate);
         map.put("end_date", endDate);
 
-        return post(param, map);
+        return post(deviceUrl + "?access_token=" + access_token, map);
     }
 
     /**
@@ -81,16 +74,14 @@ public class StatisticsUtil extends BaseUtil {
     public static Map<String, Object> page(BasicAccount account, Integer pageId, long beginDate, long endDate) throws UnsupportedEncodingException {
         Assert.notNull(pageId, "pageId 不能为空");
 
-        HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
-        param.setUrl(pageUrl + "?access_token=" + access_token);
 
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("page_id", pageId);
         map.put("begin_date", beginDate);
         map.put("end_date", endDate);
 
-        return post(param, map);
+        return post(pageUrl + "?access_token=" + access_token, map);
     }
 
 }

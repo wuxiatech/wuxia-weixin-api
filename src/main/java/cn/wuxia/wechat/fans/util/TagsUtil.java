@@ -15,7 +15,6 @@ import java.util.Map;
 import org.springframework.util.Assert;
 
 import com.google.common.collect.Maps;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
 
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
@@ -38,14 +37,12 @@ public class TagsUtil extends BaseUtil {
         Assert.hasText(name, "name 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/create?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> group = new HashMap<String, Object>();
         group.put("name", name);
         map.put("tag", group);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -60,15 +57,13 @@ public class TagsUtil extends BaseUtil {
         Assert.hasText(name, "name 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/update?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> group = new HashMap<String, Object>();
         group.put("name", name);
         group.put("id", id);
         map.put("tag", group);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -83,12 +78,10 @@ public class TagsUtil extends BaseUtil {
         Assert.hasText(openid, "openid 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/getidlist?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("openid", openid);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -103,13 +96,11 @@ public class TagsUtil extends BaseUtil {
         Assert.notEmpty(openidList, "openidList 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/members/batchtagging?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("openid_list", openidList);
         map.put("tagid", tagid);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -124,13 +115,11 @@ public class TagsUtil extends BaseUtil {
         Assert.notEmpty(openidList, "openidList 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/members/batchuntagging?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("openid_list", openidList);
         map.put("tagid", tagid);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -143,14 +132,12 @@ public class TagsUtil extends BaseUtil {
     public static Map<String, Object> delete(BasicAccount account, int tagid) {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/delete?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest();
-        param.setUrl(url);
         Map<String, Object> map = new HashMap<String, Object>();
         Map<String, Object> group = new HashMap<String, Object>();
         group.put("id", tagid);
         map.put("tag", group);
 
-        return post(param, map);
+        return post(url, map);
 
     }
 
@@ -163,8 +150,7 @@ public class TagsUtil extends BaseUtil {
     public static Map<String, Object> get(BasicAccount account) {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/get?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest(url);
-        return get(param);
+        return get(url);
 
     }
 
@@ -177,10 +163,9 @@ public class TagsUtil extends BaseUtil {
     public static Map<String, Object> get(BasicAccount account, int tagid) {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/user/tag/get?access_token=" + access_token;
-        HttpClientRequest param = new HttpClientRequest(url);
         Map<String, Object> map = Maps.newHashMap();
         map.put("tagid", tagid);
-        return post(param, map);
+        return post(url, map);
 
     }
 }
