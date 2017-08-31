@@ -42,7 +42,7 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
     public static OAuthTokeVo authUser(BasicAccount account, String code) throws WeChatException {
         // 第一个URL是用于获取code后，获取access_token 
         logger.info("进入请求地址：");
-        String url = "https://api.weixin.qq.com/sns/oauth2/component/access_token?appid=%s&code=%s&grant_type=authorization_code&component_appid=$s&component_access_token=%s";
+        String url = "https://api.weixin.qq.com/sns/oauth2/component/access_token?appid=%s&code=%s&grant_type=authorization_code&component_appid=%s&component_access_token=%s";
         // 获取toke
         OAuthTokeVo authToke = new OAuthTokeVo();
         authToke.setWxAccount(account);
@@ -81,17 +81,9 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
     public static AuthUserInfoBean getAuthUserInfo(OAuthTokeVo oauthToken) throws WeChatException {
         // 用于抽取微信用户信息
         String url = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN";
-        HttpClientRequest wxparam = new HttpClientRequest();
-        wxparam.setUrl(url);
-        // 网页授权接口调用凭证,注意：此access_token与基础支持的access_token不同
-        wxparam.addParam("access_token", oauthToken.getAccessToken());
-        // 用户的唯一标识
-        wxparam.addParam("openid", oauthToken.getOpenId());
-        // 语言
-        wxparam.addParam("lang", "zh_CN");
-        // end 
+        url = String.format(url, oauthToken.getAccessToken(), oauthToken.getOpenId());
         // 把json转换成MAP对象
-        Map<String, Object> json = post(wxparam);
+        Map<String, Object> json = post(url);
         logger.info("第二个JSON数据：" + json);
         if (StringUtil.isNotBlank(json.get("errcode"))) {
             if (!rightAccessToken(oauthToken)) {
@@ -122,11 +114,9 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
     private static OAuthTokeVo refreshAccessToken(OAuthTokeVo oauthToken) throws WeChatException {
         String url = "https://api.weixin.qq.com/sns/oauth2/component/refresh_token?appid=%s&grant_type=refresh_token&component_appid=%s&component_access_token=%s&refresh_token=%s";
         url = String.format(url, oauthToken.getWxAccount().getAppid(), OPEN_APPID, getComponentAccessToken(), oauthToken.getRefreshToken());
-        HttpClientRequest wxparam = new HttpClientRequest();
-        wxparam.setUrl(url);
 
         // 把json转换成MAP对象
-        Map<String, Object> json = post(wxparam);
+        Map<String, Object> json = post(url);
         logger.info("返回JSON数据{}", json);
         if (StringUtil.isNotBlank(json.get("errcode"))) {
             logger.error("无效:[" + json.get("errmsg") + "]");
@@ -168,11 +158,12 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
      * @param scope true为非静默授权，需要用户确认；false为静默授权
      * @throws UnsupportedEncodingException 
      */
-    public static String oauth2(String appid, String url, boolean scope) throws UnsupportedEncodingException {
+    public static String oauth2(String appid, String openThirdAppid, String url, boolean scope) throws UnsupportedEncodingException {
         url = URLEncoder.encode(url, "UTF-8");
+        openThirdAppid = StringUtil.isBlank(openThirdAppid) ? ProxyOAuthUtil.OPEN_APPID : openThirdAppid;
         String oauthurl = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&component_appid=%s#wechat_redirect";
-        oauthurl = String.format(oauthurl, appid, url, (scope ? "snsapi_userinfo" : "snsapi_base"), ProxyOAuthUtil.OPEN_APPID);
-        logger.info("开始微信{}授权url:{}", (scope ? "非静默" : "静默"), oauthurl);
+        oauthurl = String.format(oauthurl, appid, url, (scope ? "snsapi_userinfo" : "snsapi_base"), openThirdAppid);
+        logger.info("开始微信{}第三方{}代授权url:{}", (scope ? "非静默" : "静默"), openThirdAppid, oauthurl);
         return oauthurl;
     }
 
