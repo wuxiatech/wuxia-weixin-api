@@ -3,6 +3,7 @@ package cn.wuxia.wechat;
 import java.util.Map;
 import java.util.Properties;
 
+import cn.wuxia.common.util.reflection.ReflectionUtil;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
@@ -20,15 +21,13 @@ import cn.wuxia.common.web.httpclient.HttpClientResponse;
 import cn.wuxia.common.web.httpclient.HttpClientUtil;
 
 /**
- * 
  * [ticket id] 微信工具类
- * 
+ *
  * @author wuwenhao @ Version : V<Ver.No> <2015年4月1日>
  */
-public class BaseUtil {
+public abstract class BaseUtil {
 
     protected static Logger logger = LoggerFactory.getLogger(BaseUtil.class);
-
     // 获取配置文件
     public static Properties properties;
 
@@ -37,6 +36,7 @@ public class BaseUtil {
     private static CacheClient cacheClient;
 
     private final static String CACHE_NAME_SPACE = "wxcachespace";
+
     static {
         if (properties == null) {
             properties = PropertiesUtils.loadProperties("classpath*:wechat.config.properties");
@@ -71,9 +71,9 @@ public class BaseUtil {
 
     /**
      * default is in namespace
-     * 
-     * @author songlin
+     *
      * @return
+     * @author songlin
      */
     protected static CacheClient getCache() {
         if (cacheClient == null) {
@@ -124,10 +124,10 @@ public class BaseUtil {
 
     /**
      * 移除某个缓存
-     * 
-     * @author songlin
+     *
      * @param key
      * @throws WeChatException
+     * @author songlin
      */
     protected static void removeCache(String appid, String key) {
         // 增加不同公众号的不同cache
@@ -141,6 +141,7 @@ public class BaseUtil {
 
     /**
      * 清除缓存
+     *
      * @author songlin
      */
     protected static void cleanCache() {
@@ -158,11 +159,12 @@ public class BaseUtil {
     }
 
     /**
-     *  发送URL请求Description of the method
-     * @author songlin
+     * 发送URL请求Description of the method
+     *
      * @param url
      * @param param
      * @return
+     * @author songlin
      */
     protected static Map<String, Object> post(String url, Object param) {
         // 缓存请求微信返回JSON
@@ -190,10 +192,10 @@ public class BaseUtil {
     }
 
     /**
-     * @see {@link BaseUtil#get(String)}
-     * @author songlin
      * @param httpParam
      * @return
+     * @author songlin
+     * @see {@link BaseUtil#get(String)}
      */
     @Deprecated
     // 发送URL请求
@@ -217,10 +219,11 @@ public class BaseUtil {
     }
 
     /**
-     *  发送URL请求Description of the method
-     * @author songlin
+     * 发送URL请求Description of the method
+     *
      * @param httpParam
      * @return
+     * @author songlin
      */
     protected static Map<String, Object> get(String url) {
         // 缓存请求微信返回JSON

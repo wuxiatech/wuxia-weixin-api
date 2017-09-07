@@ -5,7 +5,8 @@
 	<parent>
 		<groupId>cn.wuxia.parent</groupId>
 		<artifactId>parent2017</artifactId>
-		<version>1.4.1</version>
+		<version>1.5.0</version>
+		<relativePath>../wuxia-parent</relativePath>
 	</parent>
 	<artifactId>wuxia-weixin-api</artifactId>
 	<name>WUXIA Weixin API</name>
@@ -109,5 +110,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	<groupId>cn.wuxia.weixin</groupId>
+	<groupId>cn.wuxia.common</groupId>
 </project>

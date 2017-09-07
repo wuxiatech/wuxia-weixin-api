@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import cn.wuxia.common.util.MapUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.util.reflection.BeanUtil;
 import cn.wuxia.common.web.httpclient.HttpClientRequest;
@@ -68,12 +69,12 @@ public class LoginUtil extends BaseUtil {
         if (StringUtil.isNotBlank(jsonMap.get("errcode"))) {
             throw new WeChatException("无效:" + code + "[" + jsonMap.get("errmsg") + "]");
         }
-        authToke.setAccessToken("" + jsonMap.get("access_token"));
-        authToke.setExpiresIn("" + jsonMap.get("expires_in"));
-        authToke.setOpenId((String) jsonMap.get("openid"));
-        authToke.setRefreshToken("" + jsonMap.get("refresh_token"));
-        authToke.setScope("" + jsonMap.get("scope"));
-        authToke.setUnionId("" + jsonMap.get("unionid"));
+        authToke.setAccessToken(MapUtil.getString(jsonMap, "access_token"));
+        authToke.setExpiresIn(MapUtil.getString(jsonMap, "expires_in"));
+        authToke.setOpenId(MapUtil.getString(jsonMap, "openid"));
+        authToke.setRefreshToken(MapUtil.getString(jsonMap, "refresh_token"));
+        authToke.setScope(MapUtil.getString(jsonMap, "scope"));
+        authToke.setUnionId(MapUtil.getString(jsonMap, "unionid"));
         return authToke;
     }
 
