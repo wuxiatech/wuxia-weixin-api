@@ -2,6 +2,8 @@ package cn.wuxia.wechat;
 
 import cn.wuxia.common.util.StringUtil;
 
+import java.io.Serializable;
+
 /**
  * 微信账号  开发者配置
  * [ticket id]
@@ -9,8 +11,9 @@ import cn.wuxia.common.util.StringUtil;
  * @author songlin.li
  * @ Version : V<Ver.No> <2016年3月31日>
  */
-public class BasicAccount {
+public class BasicAccount implements Serializable{
 
+    private static final long serialVersionUID = 1834589309019514450L;
     private String appid;
 
     private String appSecret;

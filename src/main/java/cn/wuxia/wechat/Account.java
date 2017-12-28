@@ -4,6 +4,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import cn.wuxia.common.util.StringUtil;
 
+import java.io.Serializable;
+
 /**
  * 微信账号  开发者配置
  * [ticket id]
@@ -11,7 +13,8 @@ import cn.wuxia.common.util.StringUtil;
  * @author songlin.li
  * @ Version : V<Ver.No> <2016年3月31日>
  */
-public class Account extends BasicAccount {
+public class Account extends BasicAccount implements Serializable{
+    private static final long serialVersionUID = 3708714346608087242L;
     private String token;
 
     /**

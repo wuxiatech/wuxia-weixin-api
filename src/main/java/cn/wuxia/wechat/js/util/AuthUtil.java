@@ -39,6 +39,7 @@ public class AuthUtil extends BaseUtil {
      */
     public static Map<String, String> authentication(BasicAccount account, String url) throws WeChatException {
         // 缓存微信 js 认证
+
         logger.debug("authentication {}", url);
         Assert.notNull(url, "authentication URL 参数不能为空");
         Map<String, String> authentication = (Map<String, String>) BaseUtil.getOutCache(account.getAppid(), url);

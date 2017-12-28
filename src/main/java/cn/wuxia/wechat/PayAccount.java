@@ -2,6 +2,8 @@ package cn.wuxia.wechat;
 
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
+
 /**
  * 微信账号  开发者配置
  * [ticket id]
@@ -9,8 +11,9 @@ import org.springframework.util.Assert;
  * @author guwen
  * @ Version : V<Ver.No> <2016年3月31日>
  */
-public class PayAccount extends Account {
+public class PayAccount extends Account implements Serializable{
 
+    private static final long serialVersionUID = -2770311997608823845L;
     private String partner;
 
     private String appKey;

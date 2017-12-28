@@ -1,18 +1,17 @@
 package cn.wuxia.wechat.message.bean;
 
-import java.util.ArrayList;
-import java.util.List;
+import cn.wuxia.common.util.ListUtil;
+import cn.wuxia.wechat.message.enums.ReplyMsgType;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
-import cn.wuxia.wechat.message.enums.ReplyMsgType;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 回复给微信的报文
- *
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "xml")
@@ -116,6 +115,9 @@ public class ReplyMessage extends Reply {
     }
 
     public Integer getArticleCount() {
+        if (articles != null && ListUtil.isNotEmpty(articles.articles)) {
+            return articles.articles.size();
+        }
         return articleCount;
     }
 
@@ -149,7 +151,7 @@ public class ReplyMessage extends Reply {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class Voice {
+    public class Voice {
 
         @XmlElement(name = "MediaId")
         private String mediaId;
@@ -165,7 +167,7 @@ public class ReplyMessage extends Reply {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class Video {
+    public class Video {
 
         @XmlElement(name = "MediaId")
         private String mediaId;
@@ -203,7 +205,7 @@ public class ReplyMessage extends Reply {
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)
-    public static class Music {
+    public class Music {
 
         @XmlElement(name = "Title")
         private String title;

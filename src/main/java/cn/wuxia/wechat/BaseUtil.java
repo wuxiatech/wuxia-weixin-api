@@ -3,7 +3,6 @@ package cn.wuxia.wechat;
 import java.util.Map;
 import java.util.Properties;
 
-import cn.wuxia.common.util.reflection.ReflectionUtil;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;

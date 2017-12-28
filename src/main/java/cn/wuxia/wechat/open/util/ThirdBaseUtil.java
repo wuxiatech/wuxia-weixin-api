@@ -40,6 +40,8 @@ public class ThirdBaseUtil extends cn.wuxia.wechat.BaseUtil {
     private static void init() {
         OPEN_APPID = properties.getProperty("OPEN.APPID");
         OPEN_APP_SECRET = properties.getProperty("OPEN.APPSECRET");
+        Assert.notNull(OPEN_APPID, "OPEN.APPID不能为空");
+        Assert.notNull(OPEN_APP_SECRET, "OPEN_APP_SECRET不能为空");
         OPEN_TOKEN = properties.getProperty("OPEN.TOKEN");
         OPEN_ENCODING_AES_KEY = properties.getProperty("OPEN.ENCODINGAESKEY");
     }
