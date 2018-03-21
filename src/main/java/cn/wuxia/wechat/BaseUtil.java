@@ -3,18 +3,18 @@ package cn.wuxia.wechat;
 import java.util.Map;
 import java.util.Properties;
 
+import cn.wuxia.common.util.*;
+import cn.wuxia.common.util.reflection.ReflectionUtil;
+import cn.wuxia.common.web.httpclient.HttpClientException;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.nutz.json.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 
 import cn.wuxia.common.cached.CacheClient;
-import cn.wuxia.common.util.ClassLoaderUtil;
-import cn.wuxia.common.util.JsonUtil;
-import cn.wuxia.common.util.PropertiesUtils;
-import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.web.httpclient.HttpClientRequest;
 import cn.wuxia.common.web.httpclient.HttpClientResponse;
 import cn.wuxia.common.web.httpclient.HttpClientUtil;
@@ -26,7 +26,8 @@ import cn.wuxia.common.web.httpclient.HttpClientUtil;
  */
 public abstract class BaseUtil {
 
-    protected static Logger logger = LoggerFactory.getLogger(BaseUtil.class);
+    protected static Logger logger = LoggerFactory.getLogger(ReflectionUtil.getSuperClassGenricType(BaseUtil.class));
+
     // 获取配置文件
     public static Properties properties;
 
@@ -149,23 +150,23 @@ public abstract class BaseUtil {
     }
 
     @Deprecated
-    protected static Map<String, Object> post(HttpClientRequest httpParam) {
+    protected static Map<String, Object> post(HttpClientRequest httpParam) throws WeChatException {
         return post(httpParam.getUrl() + (StringUtil.indexOf(httpParam.getUrl(), "?") > 0 ? "" : "?") + httpParam.getQueryString(), null);
     }
 
-    protected static Map<String, Object> post(String url) {
+    protected static Map<String, Object> post(String url) throws WeChatException {
         return post(url, null);
     }
 
     /**
-     * 发送URL请求Description of the method
+     * 发送URL请求
      *
      * @param url
      * @param param
      * @return
      * @author songlin
      */
-    protected static Map<String, Object> post(String url, Object param) {
+    protected static Map<String, Object> post(String url, Object param) throws WeChatException {
         // 缓存请求微信返回JSON
         Map<String, Object> map = Maps.newHashMap();
         // 获取微信返回结果
@@ -174,10 +175,11 @@ public abstract class BaseUtil {
             if (param == null) {
                 resp = HttpClientUtil.post(new HttpClientRequest(url));
             } else {
-                resp = HttpClientUtil.postJson(url, JsonUtil.toJson(param));
+                resp = HttpClientUtil.postJson(url, Json.toJson(param));
             }
             resp.setCharset("UTF-8");
-            map = JsonUtil.fromJson(resp.getStringResult());
+
+            map = Json.fromJson(Map.class, resp.getStringResult());
             logger.info("微信返回结果：{}", map);
         } catch (Exception e) {
             logger.error("请求微信 API有误！", e);
@@ -205,7 +207,7 @@ public abstract class BaseUtil {
         try {
             HttpClientResponse httpUrl = HttpClientUtil.get(httpParam);
             httpUrl.setCharset("UTF-8");
-            map = JsonUtil.fromJson(httpUrl.getStringResult());
+            map = Json.fromJson(Map.class, httpUrl.getStringResult());
             logger.info("微信返回结果：{}", map);
         } catch (Exception e) {
             logger.error("请求微信 API有误！", e);
@@ -224,21 +226,24 @@ public abstract class BaseUtil {
      * @return
      * @author songlin
      */
-    protected static Map<String, Object> get(String url) {
+    protected static Map<String, Object> get(String url) throws WeChatException {
         // 缓存请求微信返回JSON
         Map<String, Object> map = Maps.newHashMap();
         // 获取微信返回结果
         try {
             HttpClientResponse httpUrl = HttpClientUtil.get(new HttpClientRequest(url));
             httpUrl.setCharset("UTF-8");
-            map = JsonUtil.fromJson(httpUrl.getStringResult());
+            map = Json.fromJson(Map.class, httpUrl.getStringResult());
             logger.info("微信返回结果：{}", map);
-        } catch (Exception e) {
+        } catch (HttpClientException e) {
             logger.error("请求微信 API有误！", e);
+            throw new WeChatException(e);
         }
-        if (org.apache.commons.collections4.MapUtils.isNotEmpty(map) && StringUtil.isNotBlank(map.get("errcode"))
-                && !StringUtil.equals(map.get("errcode") + "", "0")) {
+        String errmsg = MapUtil.getString(map, "errmsg");
+        Integer errcode = MapUtil.getInteger(map, "errcode");
+        if ((StringUtil.isNotBlank(errmsg) && !StringUtil.equals("ok", errmsg)) || (errcode != null && errcode != 0)) {
             logger.error(map.get("errmsg").toString());
+            throw new WeChatException(MapUtil.getString(map, "errmsg"));
         }
         return map;
     }

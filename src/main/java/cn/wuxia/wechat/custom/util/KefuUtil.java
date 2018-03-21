@@ -11,6 +11,7 @@ import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.util.reflection.BeanUtil;
 import cn.wuxia.wechat.Account;
 import cn.wuxia.wechat.BaseUtil;
+import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.custom.bean.KefuAccount;
 import cn.wuxia.wechat.custom.bean.KefuSession;
 import cn.wuxia.wechat.token.util.TokenUtil;
@@ -27,8 +28,9 @@ public class KefuUtil extends BaseUtil {
      * 获取所有的客服账号
      * 
      * @return
+     * @throws WeChatException 
      */
-    public static List<KefuAccount> getAllKefu(Account account) {
+    public static List<KefuAccount> getAllKefu(Account account) throws WeChatException {
         String url = "https://api.weixin.qq.com/cgi-bin/customservice/getkflist?access_token=" + TokenUtil.getAccessToken(account);
 
         Map<String, Object> result = get(url);
@@ -49,8 +51,9 @@ public class KefuUtil extends BaseUtil {
      * @param kfAccount
      * @param openid
      * @return
+     * @throws WeChatException 
      */
-    public static boolean createSession(Account account, KefuAccount kfAccount, String openid) {
+    public static boolean createSession(Account account, KefuAccount kfAccount, String openid) throws WeChatException {
         String url = "https://api.weixin.qq.com/customservice/kfsession/create?access_token=" + TokenUtil.getAccessToken(account);
 
         Map<String, Object> param = new HashMap<String, Object>();
@@ -72,8 +75,9 @@ public class KefuUtil extends BaseUtil {
      * @param kfAccount
      * @param openid
      * @return
+     * @throws WeChatException 
      */
-    public static boolean closeSession(Account account, KefuAccount kfAccount, String openid) {
+    public static boolean closeSession(Account account, KefuAccount kfAccount, String openid) throws WeChatException {
         String url = "https://api.weixin.qq.com/customservice/kfsession/close?access_token=" + TokenUtil.getAccessToken(account);
 
         Map<String, Object> param = new HashMap<String, Object>();
@@ -95,8 +99,9 @@ public class KefuUtil extends BaseUtil {
      * @param account
      * @param openid
      * @return
+     * @throws WeChatException 
      */
-    public static KefuSession getSession(Account account, String openid) {
+    public static KefuSession getSession(Account account, String openid) throws WeChatException {
         String url = "https://api.weixin.qq.com/customservice/kfsession/getsession?access_token=" + TokenUtil.getAccessToken(account) + "&openid="
                 + openid;
 
@@ -112,7 +117,7 @@ public class KefuUtil extends BaseUtil {
         return null;
     }
 
-    public static KefuSession getSession(Account account, KefuAccount kefuAccount) {
+    public static KefuSession getSession(Account account, KefuAccount kefuAccount) throws WeChatException {
         String url = "https://api.weixin.qq.com/customservice/kfsession/getsessionlist?access_token=" + TokenUtil.getAccessToken(account)
                 + "&kf_account=" + kefuAccount.getKf_account();
 

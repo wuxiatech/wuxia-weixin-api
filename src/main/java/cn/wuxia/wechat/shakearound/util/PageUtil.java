@@ -19,6 +19,7 @@ import org.springframework.util.Assert;
 
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
+import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
@@ -45,9 +46,10 @@ public class PageUtil extends BaseUtil {
      * @param iconUrl 在摇一摇页面展示的图片。图片需先上传至微信侧服务器，用“素材管理-上传图片素材”接口上传图片，返回的图片URL再配置在此处
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
     public static Map<String, Object> add(BasicAccount account, String title, String description, String pageUrl, String comment, String iconUrl)
-            throws UnsupportedEncodingException {
+            throws UnsupportedEncodingException, WeChatException {
         Assert.hasText(title, "title 为必填 !");
         Assert.isTrue(title.length() <= 6, "title 长度必须小于等于6");
         Assert.hasText(description, "description 为必填 !");
@@ -80,9 +82,10 @@ public class PageUtil extends BaseUtil {
      * @param iconUrl 页面的备注信息，不超过15个字
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
     public static Map<String, Object> update(BasicAccount account, Integer pageId, String title, String description, String pageUrl, String comment,
-            String iconUrl) throws UnsupportedEncodingException {
+            String iconUrl) throws UnsupportedEncodingException, WeChatException {
         Assert.notNull(pageId, "pageId 不能为空");
         Assert.hasText(title, "title 为必填 !");
         Assert.isTrue(title.length() <= 6, "title 长度必须小于等于6");
@@ -112,8 +115,9 @@ public class PageUtil extends BaseUtil {
      * @param pageIds 指定页面的id列表
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
-    public static Map<String, Object> search(BasicAccount account, List<Integer> pageIds) throws UnsupportedEncodingException {
+    public static Map<String, Object> search(BasicAccount account, List<Integer> pageIds) throws UnsupportedEncodingException, WeChatException {
         Assert.notEmpty(pageIds, "pageIds 不能为空");
 
         String access_token = TokenUtil.getAccessToken(account);
@@ -134,8 +138,9 @@ public class PageUtil extends BaseUtil {
      * @param count 待查询的页面个数
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
-    public static Map<String, Object> search(BasicAccount account, int begin, int count) throws UnsupportedEncodingException {
+    public static Map<String, Object> search(BasicAccount account, int begin, int count) throws UnsupportedEncodingException, WeChatException {
         Assert.isTrue(begin >= 0, "begin必须大于等于0");
         Assert.isTrue(count > 0 && count <= 50, "count必须大于0,小于等于50");
 
@@ -153,8 +158,9 @@ public class PageUtil extends BaseUtil {
      * @author guwen
      * @param pageId
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> delete(BasicAccount account, Integer pageId) {
+    public static Map<String, Object> delete(BasicAccount account, Integer pageId) throws WeChatException {
         Assert.notNull(pageId, "pageIds 不能为空");
 
         String access_token = TokenUtil.getAccessToken(account);

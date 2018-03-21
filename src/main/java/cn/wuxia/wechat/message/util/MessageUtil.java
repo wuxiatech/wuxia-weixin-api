@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.wuxia.wechat.WeChatException;
 import org.springframework.util.Assert;
 
 import cn.wuxia.wechat.BasicAccount;
@@ -42,7 +43,7 @@ public class MessageUtil extends BaseUtil {
 	 *            发送的内容
 	 * @return
 	 */
-	public static Map<String, Object> msgSendAllText(BasicAccount account, Integer groupId, String content) {
+	public static Map<String, Object> msgSendAllText(BasicAccount account, Integer groupId, String content) throws WeChatException {
 		Assert.hasText(content, "content 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=" + access_token;
@@ -77,7 +78,7 @@ public class MessageUtil extends BaseUtil {
 	 *            media_id需通过基础支持中的上传下载多媒体文件来得到
 	 * @return
 	 */
-	public static Map<String, Object> msgSendAllImage(BasicAccount account, Integer groupId, String mediaId) {
+	public static Map<String, Object> msgSendAllImage(BasicAccount account, Integer groupId, String mediaId) throws WeChatException {
 		Assert.hasText(mediaId, "mediaId 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=" + access_token;
@@ -112,7 +113,7 @@ public class MessageUtil extends BaseUtil {
 	 *            media_id需通过基础支持中的uploadnews方法来得到
 	 * @return
 	 */
-	public static Map<String, Object> msgSendAllNews(BasicAccount account, Integer groupId, String mediaId) {
+	public static Map<String, Object> msgSendAllNews(BasicAccount account, Integer groupId, String mediaId) throws WeChatException {
 		Assert.hasText(mediaId, "mediaId 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
 		String url = "https://api.weixin.qq.com/cgi-bin/message/mass/sendall?access_token=" + access_token;
@@ -147,7 +148,7 @@ public class MessageUtil extends BaseUtil {
 	 *            文本内容
 	 * @return
 	 */
-	public static Map<String, Object> msgSendText(BasicAccount account, List<String> touser, String content) {
+	public static Map<String, Object> msgSendText(BasicAccount account, List<String> touser, String content) throws WeChatException {
 		Assert.notEmpty(touser, "openid 参数错误");
 		Assert.hasText(content, "content 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
@@ -175,7 +176,7 @@ public class MessageUtil extends BaseUtil {
 	 *            media_id需通过基础支持中的上传下载多媒体文件来得到
 	 * @return
 	 */
-	public static Map<String, Object> msgSendImage(BasicAccount account, List<String> touser, String mediaId) {
+	public static Map<String, Object> msgSendImage(BasicAccount account, List<String> touser, String mediaId) throws WeChatException {
 		Assert.notEmpty(touser, "openid 参数错误");
 		Assert.hasText(mediaId, "content 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);
@@ -203,7 +204,7 @@ public class MessageUtil extends BaseUtil {
 	 *            media_id需通过基础支持中的uploadnews方法来得到
 	 * @return
 	 */
-	public static Map<String, Object> msgSendNews(BasicAccount account, List<String> touser, String mediaId) {
+	public static Map<String, Object> msgSendNews(BasicAccount account, List<String> touser, String mediaId) throws WeChatException {
 		Assert.notEmpty(touser, "openid 参数错误");
 		Assert.hasText(mediaId, "content 参数错误");
 		String access_token = TokenUtil.getAccessToken(account);

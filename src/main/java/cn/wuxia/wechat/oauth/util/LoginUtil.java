@@ -125,8 +125,9 @@ public class LoginUtil extends BaseUtil {
      * @author songlin
      * @param oauthToken
      * @return
+     * @throws WeChatException 
      */
-    private static OAuthTokeVo refreshAccessToken(OAuthTokeVo oauthToken) {
+    private static OAuthTokeVo refreshAccessToken(OAuthTokeVo oauthToken) throws WeChatException {
         String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token";
         HttpClientRequest wxparam = new HttpClientRequest();
         wxparam.setUrl(url);
@@ -154,8 +155,9 @@ public class LoginUtil extends BaseUtil {
      * @author songlin
      * @param oauthToken
      * @return
+     * @throws WeChatException 
      */
-    private static boolean rightAccessToken(OAuthTokeVo oauthToken) {
+    private static boolean rightAccessToken(OAuthTokeVo oauthToken) throws WeChatException {
         String url = "https://api.weixin.qq.com/sns/auth";
         HttpClientRequest wxparam = new HttpClientRequest();
         wxparam.setUrl(url);

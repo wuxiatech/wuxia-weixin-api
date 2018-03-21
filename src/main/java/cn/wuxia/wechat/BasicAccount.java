@@ -31,6 +31,7 @@ public class BasicAccount implements Serializable{
             this.appSecret = secretOrRefreshToken;
             isAuthorizedToThird = false;
         }
+
     }
 
     public String getAppid() {

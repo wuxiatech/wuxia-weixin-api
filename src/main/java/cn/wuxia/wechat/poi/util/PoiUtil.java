@@ -20,6 +20,7 @@ import com.google.common.collect.Maps;
 
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
+import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.poi.bean.PoiBaseInfoBean;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
@@ -45,8 +46,9 @@ public class PoiUtil extends BaseUtil {
      * @param baseInfo 基本的门店信息
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
-    public static Map<String, Object> addpoi(BasicAccount account, PoiBaseInfoBean baseInfo) throws UnsupportedEncodingException {
+    public static Map<String, Object> addpoi(BasicAccount account, PoiBaseInfoBean baseInfo) throws UnsupportedEncodingException, WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> base_info = new HashMap<String, Object>();
@@ -104,8 +106,9 @@ public class PoiUtil extends BaseUtil {
      * @param poiId  poi_id
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
-    public static Map<String, Object> getpoi(BasicAccount account, String poiId) throws UnsupportedEncodingException {
+    public static Map<String, Object> getpoi(BasicAccount account, String poiId) throws UnsupportedEncodingException, WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> postData = Maps.newHashMap();
@@ -120,8 +123,9 @@ public class PoiUtil extends BaseUtil {
      * @param limit 返回数据条数，最大允许50，默认为20
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
-    public static Map<String, Object> getpoilist(BasicAccount account, Integer begin, Integer limit) throws UnsupportedEncodingException {
+    public static Map<String, Object> getpoilist(BasicAccount account, Integer begin, Integer limit) throws UnsupportedEncodingException, WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> postData = Maps.newHashMap();
@@ -136,8 +140,9 @@ public class PoiUtil extends BaseUtil {
      * @param poiId 门店ID
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
-    public static Map<String, Object> delpoi(BasicAccount account, String poiId) throws UnsupportedEncodingException {
+    public static Map<String, Object> delpoi(BasicAccount account, String poiId) throws UnsupportedEncodingException, WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> postData = Maps.newHashMap();
@@ -151,8 +156,9 @@ public class PoiUtil extends BaseUtil {
      * @param baseInfo   基本的门店信息
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
-    public static Map<String, Object> updatepoi(BasicAccount account, PoiBaseInfoBean baseInfo) throws UnsupportedEncodingException {
+    public static Map<String, Object> updatepoi(BasicAccount account, PoiBaseInfoBean baseInfo) throws UnsupportedEncodingException, WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> base_info = new HashMap<String, Object>();

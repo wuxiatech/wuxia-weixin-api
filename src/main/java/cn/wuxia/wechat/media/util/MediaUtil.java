@@ -101,8 +101,9 @@ public class MediaUtil extends BaseUtil {
      * @author guwen
      * @param articles 图文列表
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> uploadnews(BasicAccount account, List<Article> articles) {
+    public static Map<String, Object> uploadnews(BasicAccount account, List<Article> articles) throws WeChatException {
         Assert.notEmpty(articles, "articles 参数有误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token=" + access_token;

@@ -68,8 +68,9 @@ public enum ReceiveEvent {
     /** 红包 **/
     ShakearoundLotteryBind("摇一摇红包"),
 
-    TEMPLATESENDJOBFINISH("模板消息发送完成");
+    TEMPLATESENDJOBFINISH("模板消息发送完成"),
 
+    merchant_order("微店小程序订单付款");
     private String desc;
 
     private ReceiveEvent(String desc) {

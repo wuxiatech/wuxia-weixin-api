@@ -8,7 +8,6 @@
 */
 package cn.wuxia.wechat.shakearound.util;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,6 +18,7 @@ import org.springframework.util.Assert;
 
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
+import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.shakearound.bean.DeviceBean;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
@@ -46,10 +46,10 @@ public class DeviceUtil extends BaseUtil {
      * @param comment 备注，不超过15个汉字或30个英文字母 可空
      * @param poiId 设备关联的门店ID 可空
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws WeChatException
      */
     public static Map<String, Object> apply(BasicAccount account, int quantity, String applyReason, String comment, String poiId)
-            throws UnsupportedEncodingException {
+            throws WeChatException {
         Assert.isTrue(quantity > 0 && quantity <= 500, "quantity必须大于0并且小于等于500");
         Assert.hasText(applyReason, "applyReason为必填");
         Assert.isTrue(applyReason.length() <= 100, "applyReason 超过100个字");
@@ -76,10 +76,10 @@ public class DeviceUtil extends BaseUtil {
      * @param minor UUID、major、minor，三个信息需填写完整，若填了设备编号，则可不填此信息。
      * @param comment 设备的备注信息，不超过15个汉字或30个英文字母。
      * @return
-     * @throws UnsupportedEncodingException
+     * @throws WeChatException
      */
     public static Map<String, Object> udpate(BasicAccount account, Integer deviceId, String uuid, Integer major, Integer minor, String comment)
-            throws UnsupportedEncodingException {
+            throws WeChatException {
         Assert.hasText(comment, "comment 为必填");
         if (deviceId == null) {
             Assert.notNull(uuid, "uuid 不能为空或填写deviceId");
@@ -109,10 +109,10 @@ public class DeviceUtil extends BaseUtil {
      * @param minor UUID、major、minor，三个信息需填写完整，若填了设备编号，则可不填此信息
      * @param poiId 设备关联的门店ID
      * @return
-     * @throws UnsupportedEncodingException
+     * @throws WeChatException
      */
     public static Map<String, Object> bindlocation(BasicAccount account, Integer deviceId, String uuid, Integer major, Integer minor, Integer poiId)
-            throws UnsupportedEncodingException {
+            throws WeChatException {
         if (deviceId == null) {
             Assert.notNull(uuid, "uuid 不能为空或填写deviceId");
             Assert.notNull(major, "major 不能为空或填写deviceId");
@@ -137,9 +137,9 @@ public class DeviceUtil extends BaseUtil {
      * 查询设备列表  -- 查询指定设备时
      * @param deviceList 要查询的设备列表，可同时查询多个
      * @return
-     * @throws UnsupportedEncodingException
+     * @throws WeChatException
      */
-    public static Map<String, Object> search(BasicAccount account, List<DeviceBean> deviceList) throws UnsupportedEncodingException {
+    public static Map<String, Object> search(BasicAccount account, List<DeviceBean> deviceList) throws WeChatException {
         Assert.notEmpty(deviceList, "deviceList 不能为空");
 
         String access_token = TokenUtil.getAccessToken(account);
@@ -165,9 +165,9 @@ public class DeviceUtil extends BaseUtil {
      * @param begin 设备列表的起始索引值
      * @param count 待查询的设备个数
      * @return
-     * @throws UnsupportedEncodingException
+     * @throws WeChatException
      */
-    public static Map<String, Object> search(BasicAccount account, int begin, int count) throws UnsupportedEncodingException {
+    public static Map<String, Object> search(BasicAccount account, int begin, int count) throws WeChatException {
         Assert.isTrue(begin >= 0, "begin必须大于等于0");
         Assert.isTrue(count > 0 && count <= 50, "count必须大于0,小于等于50");
 
@@ -186,9 +186,9 @@ public class DeviceUtil extends BaseUtil {
      * @param begin 设备列表的起始索引值
      * @param count 待查询的设备个数
      * @return
-     * @throws UnsupportedEncodingException
+     * @throws WeChatException
      */
-    public static Map<String, Object> search(BasicAccount account, int applyId, int begin, int count) throws UnsupportedEncodingException {
+    public static Map<String, Object> search(BasicAccount account, int applyId, int begin, int count) throws WeChatException {
         Assert.isTrue(begin >= 0, "begin必须大于等于0");
         Assert.isTrue(count > 0 && count <= 50, "count必须大于0,小于等于50");
 
@@ -210,9 +210,10 @@ public class DeviceUtil extends BaseUtil {
      * @param bind 关联操作标志位， 0为解除关联关系，1为建立关联关系
      * @param append 新增操作标志位， 0为覆盖，1为新增
      * @return
-     * @throws UnsupportedEncodingException
+     * @throws WeChatException
      */
-    public static Map<String, Object> bindpage(BasicAccount account, DeviceBean device, List<Integer> pageIds, Integer bind, Integer append) {
+    public static Map<String, Object> bindpage(BasicAccount account, DeviceBean device, List<Integer> pageIds, Integer bind, Integer append)
+            throws WeChatException {
         Assert.notNull(device, "device 不能为空");
         Assert.notEmpty(pageIds, "pageIds 不能为空");
         Assert.isTrue(bind == 0 || bind == 1, "bind 只能为0或1");

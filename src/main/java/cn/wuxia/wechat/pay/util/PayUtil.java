@@ -39,7 +39,8 @@ public class PayUtil extends BaseUtil {
     }
 
     public static SortedMap<String, Object> buildPayment(PayAccount account, String orderNo, String body, String amount, String createIp,
-            String openId, String callbackUrl) throws Exception {
+            String openId, String callbackUrl, String attach) throws Exception {
+        Assert.notNull(account, "PayAccount不能为空");
         Assert.notNull(orderNo, "订单号不能为空");
         Assert.notNull(body, "标题不能为空");
         Assert.notNull(amount, "金额不能为空");
@@ -66,9 +67,10 @@ public class PayUtil extends BaseUtil {
         packageParams.put("nonce_str", "" + nonceStr);// 随便字符
         packageParams.put("openid", openId); // 微信授权登录后唯一标识 
         packageParams.put("out_trade_no", orderNo); // 订单号
-        packageParams.put("total_fee", amount); // 支付总金额
+        packageParams.put("total_fee", changeY2F(amount)); // 支付总金额
         packageParams.put("notify_url", callbackUrl); // 申请成功后跳转页面
         packageParams.put("trade_type", "JSAPI"); // 微信支付类型
+        packageParams.put("attach", attach); //自定义参数
         //生成支付签名，要采用URLENCODER的原始值进行MD5算法！
         String sign = null;
         // 第一次签名，用于换取预支ID(preapay_id)
@@ -130,7 +132,7 @@ public class PayUtil extends BaseUtil {
         wxparam.put("appid", account.getAppid());
         // 商户号
         wxparam.put("mch_id", account.getPartner());
-        // 终端ip      
+        // 终端ip
         wxparam.put("spbill_create_ip", packageParams.get("spbill_create_ip"));
         // 随机字符串
         wxparam.put("nonce_str", packageParams.get("nonce_str"));
@@ -140,14 +142,15 @@ public class PayUtil extends BaseUtil {
         wxparam.put("openid", "" + packageParams.get("openid"));
         // 商品描述
         wxparam.put("body", "" + packageParams.get("body"));
-        // 商户订单号 
+        // 商户订单号
         wxparam.put("out_trade_no", "" + packageParams.get("out_trade_no"));
         // 总金额
         wxparam.put("total_fee", "" + packageParams.get("total_fee"));
-        // 通知地址 
+        // 通知地址
         wxparam.put("notify_url", "" + packageParams.get("notify_url")); //是
         // 交易类型
         wxparam.put("trade_type", "JSAPI");
+        wxparam.put("attach", "" + packageParams.get("attach")); //自定义参数)
         // 将数据提交给统一支付接口
         String xml = parseXML(wxparam);
         logger.info(xml);
@@ -314,6 +317,7 @@ public class PayUtil extends BaseUtil {
         wxparam.put("product_id", "" + packageParams.get("product_id"));
         // 交易类型
         wxparam.put("trade_type", "" + packageParams.get("trade_type")); //是
+
         wxparam.put("attach", "" + packageParams.get("attach")); //自定义参数)
         // 将数据提交给统一支付接口
         String xml = parseXML(wxparam);

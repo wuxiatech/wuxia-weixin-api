@@ -33,6 +33,11 @@ public enum ButtonType {
     /** 下发消息（除文本消息）*/
     media_id,
     /** 跳转图文消息URL */
-    view_limited;
+    view_limited,
+
+    /**
+     * 跳转到小程序
+     */
+    miniprogram;
 
 }

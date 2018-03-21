@@ -28,6 +28,16 @@ public class Button {
 
     private String media_id;
 
+    /**
+     * 当type为miniparogram时
+     */
+    private String appid;
+
+    /**
+     * 当type为miniparogram时
+     */
+    private String pagepath;
+
     private List<Button> sub_button = new ArrayList<>();
 
     public Button(String name, List<Button> sub_button) {
@@ -104,4 +114,19 @@ public class Button {
         this.media_id = media_id;
     }
 
+    public String getAppid() {
+        return appid;
+    }
+
+    public void setAppid(String appid) {
+        this.appid = appid;
+    }
+
+    public String getPagepath() {
+        return pagepath;
+    }
+
+    public void setPagepath(String pagepath) {
+        this.pagepath = pagepath;
+    }
 }

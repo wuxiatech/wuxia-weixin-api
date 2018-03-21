@@ -12,6 +12,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.wuxia.wechat.WeChatException;
 import org.springframework.util.Assert;
 
 import cn.wuxia.wechat.BaseUtil;
@@ -39,7 +40,7 @@ public class StatisticsUtil extends BaseUtil {
      * @throws UnsupportedEncodingException
      */
     public static Map<String, Object> device(BasicAccount account, DeviceBean device, long beginDate, long endDate)
-            throws UnsupportedEncodingException {
+            throws  WeChatException {
         Assert.notNull(device, "device 不能为空");
         if (device.getDeviceId() == null) {
             Assert.notNull(device.getUuid(), "uuid 不能为空或填写deviceId");
@@ -71,7 +72,7 @@ public class StatisticsUtil extends BaseUtil {
      * @return
      * @throws UnsupportedEncodingException
      */
-    public static Map<String, Object> page(BasicAccount account, Integer pageId, long beginDate, long endDate) throws UnsupportedEncodingException {
+    public static Map<String, Object> page(BasicAccount account, Integer pageId, long beginDate, long endDate) throws WeChatException {
         Assert.notNull(pageId, "pageId 不能为空");
 
         String access_token = TokenUtil.getAccessToken(account);

@@ -162,9 +162,10 @@ public class CardUtil extends BaseUtil {
      * @param baseInfo 基本的卡券数据
      * @param defaultDetail 描述文本
      * @return
+     * @throws WeChatException 
      * @ 
      */
-    public static Map<String, Object> createGeneralCoupon(BasicAccount account, CardBaseInfoBean baseInfo, String defaultDetail) {
+    public static Map<String, Object> createGeneralCoupon(BasicAccount account, CardBaseInfoBean baseInfo, String defaultDetail) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -188,9 +189,10 @@ public class CardUtil extends BaseUtil {
      * @param baseInfo 基本的卡券数据
      * @param dealDetail 团购详情
      * @return
+     * @throws WeChatException 
      * @ 
      */
-    public static Map<String, Object> createGroupon(BasicAccount account, CardBaseInfoBean baseInfo, String dealDetail) {
+    public static Map<String, Object> createGroupon(BasicAccount account, CardBaseInfoBean baseInfo, String dealDetail) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -213,9 +215,10 @@ public class CardUtil extends BaseUtil {
      * @param baseInfo 基本的卡券数据
      * @param gift 礼品券专用，表示礼品名字
      * @return
+     * @throws WeChatException 
      * @ 
      */
-    public static Map<String, Object> createGift(BasicAccount account, CardBaseInfoBean baseInfo, String gift) {
+    public static Map<String, Object> createGift(BasicAccount account, CardBaseInfoBean baseInfo, String gift) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -239,9 +242,10 @@ public class CardUtil extends BaseUtil {
      * @param leastCost 代金券专用，表示起用金额（单位为分）
      * @param reduceCost 代金券专用，表示减免金额（单位为分）
      * @return
+     * @throws WeChatException 
      * @ 
      */
-    public static Map<String, Object> createCash(BasicAccount account, CardBaseInfoBean baseInfo, Integer leastCost, Integer reduceCost) {
+    public static Map<String, Object> createCash(BasicAccount account, CardBaseInfoBean baseInfo, Integer leastCost, Integer reduceCost) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -267,9 +271,10 @@ public class CardUtil extends BaseUtil {
      * @param baseInfo  基本的卡券数据
      * @param discount 折扣券专用，表示打折额度（百分比）。填30 就是七折。
      * @return 
+     * @throws WeChatException 
      * @ 
      */
-    public static Map<String, Object> createDiscount(BasicAccount account, CardBaseInfoBean baseInfo, Integer discount) {
+    public static Map<String, Object> createDiscount(BasicAccount account, CardBaseInfoBean baseInfo, Integer discount) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -300,11 +305,12 @@ public class CardUtil extends BaseUtil {
      * @param activateUrl 激活会员卡的url，与“bind_old_card_url”字段二选一必填。
      * @param needPushOnView true 为用户点击进入会员卡时是否推送事件。
      * @return
+     * @throws WeChatException 
      * @ 
      */
     public static Map<String, Object> createMemberCard(BasicAccount account, CardBaseInfoBean baseInfo, Boolean supplyBonus, Boolean supplyBalance,
             String bonusCleared, String bonusRules, String balanceRules, String prerogative, String bindOldCardUrl, String activateUrl,
-            Boolean needPushOnView) {
+            Boolean needPushOnView) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -346,9 +352,10 @@ public class CardUtil extends BaseUtil {
      * @param ticketClass 票类型，例如平日全票，套票等
      * @param guideUrl  导览图url
      * @return
+     * @throws WeChatException 
      * @ 
      */
-    public static Map<String, Object> createScenicTicket(BasicAccount account, CardBaseInfoBean baseInfo, String ticketClass, String guideUrl) {
+    public static Map<String, Object> createScenicTicket(BasicAccount account, CardBaseInfoBean baseInfo, String ticketClass, String guideUrl) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -377,9 +384,10 @@ public class CardUtil extends BaseUtil {
      * @param baseInfo  基本的卡券数据
      * @param detail 电影票详情
      * @return
+     * @throws WeChatException 
      * @ 
      */
-    public static Map<String, Object> createMovieTicket(BasicAccount account, CardBaseInfoBean baseInfo, String detail) {
+    public static Map<String, Object> createMovieTicket(BasicAccount account, CardBaseInfoBean baseInfo, String detail) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -413,10 +421,11 @@ public class CardUtil extends BaseUtil {
      * @param boardingTime 登机时间，只显示“时分”不显示日期，按时间戳格式填写。如发生登机时间变更，建议商家实时调用该接口变更。
      * @param airModel 机型，上限为8 个汉字
      * @return
+     * @throws WeChatException 
      * @ 
      */
     public static Map<String, Object> createBoardingPass(BasicAccount account, CardBaseInfoBean baseInfo, String from, String to, String flight,
-            Long departureTime, Long landingTime, String checkInUrl, String gate, Long boardingTime, String airModel) {
+            Long departureTime, Long landingTime, String checkInUrl, String gate, Long boardingTime, String airModel) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -459,9 +468,10 @@ public class CardUtil extends BaseUtil {
      * 创建红包
      * @param baseInfo 基本的卡券数据
      * @return
+     * @throws WeChatException 
      * @ 
      */
-    public static Map<String, Object> createLuckyMoney(BasicAccount account, CardBaseInfoBean baseInfo) {
+    public static Map<String, Object> createLuckyMoney(BasicAccount account, CardBaseInfoBean baseInfo) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -485,9 +495,10 @@ public class CardUtil extends BaseUtil {
      * @param meetingDetail 会议详情
      * @param mapUrl 会场导览图
      * @return
+     * @throws WeChatException 
      * @ 
      */
-    public static Map<String, Object> createMeetingTicket(BasicAccount account, CardBaseInfoBean baseInfo, String meetingDetail, String mapUrl) {
+    public static Map<String, Object> createMeetingTicket(BasicAccount account, CardBaseInfoBean baseInfo, String meetingDetail, String mapUrl) throws WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -513,10 +524,11 @@ public class CardUtil extends BaseUtil {
      * @param cardId 卡券ID。创建卡券时use_custom_code 填写true时必填。非自定义code 不必填写。
      * @param code 要消耗序列号 必填
      * @return
+     * @throws WeChatException 
      * @ 
      * @throws Exception
      */
-    public static Map<String, Object> consume(BasicAccount account, String cardId, String code) {
+    public static Map<String, Object> consume(BasicAccount account, String cardId, String code) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
         Map<String, Object> map = new HashMap<String, Object>();
         if (StringUtils.isNotBlank(cardId)) {
@@ -624,10 +636,11 @@ public class CardUtil extends BaseUtil {
      * @param balance 红包余额，以分为单位。红包类型必填（LUCKY_MONEY），其他卡券类型不填。
      * @param outerId 领取场景值，用于领取渠道的数据统计，默认值为0，字段类型为整型。用户领取卡券后触发的事件推送中会带上此自定义场景值。
      * @return
+     * @throws WeChatException 
      * @ 
      */
     public static Map<String, Object> createQrcode(BasicAccount account, String cardId, String code, String openid, Integer expireSeconds,
-            Boolean isUniqueCode, Integer balance, Integer outerId) {
+            Boolean isUniqueCode, Integer balance, Integer outerId) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("action_name", "QR_CARD");
@@ -664,9 +677,9 @@ public class CardUtil extends BaseUtil {
      * @param openId
      * @param username
      * @return
-     * @throws Exception
+     * @throws WeChatException 
      */
-    public static Map<String, Object> testwhitelist(BasicAccount account, List<String> openid, List<String> username) throws Exception {
+    public static Map<String, Object> testwhitelist(BasicAccount account, List<String> openid, List<String> username) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> map = new HashMap<String, Object>();
@@ -683,9 +696,10 @@ public class CardUtil extends BaseUtil {
      * 删除卡券
      * @param cardId 卡券ID
      * @return
+     * @throws WeChatException 
      * @
      */
-    public static Map<String, Object> delete(BasicAccount account, String cardId) {
+    public static Map<String, Object> delete(BasicAccount account, String cardId) throws WeChatException {
         HttpClientRequest param = new HttpClientRequest();
         String access_token = TokenUtil.getAccessToken(account);
 
@@ -700,9 +714,10 @@ public class CardUtil extends BaseUtil {
      * @param cardId 要消耗序列号所述的card_id， 生成券时use_custom_code 填写true 时必填。非自定义code 不必填写。
      * @param code 要查询的序列号
      * @return
+     * @throws WeChatException 
      * @
      */
-    public static Map<String, Object> codeGet(BasicAccount account, String cardId, String code) {
+    public static Map<String, Object> codeGet(BasicAccount account, String cardId, String code) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> postData = Maps.newHashMap();
@@ -719,9 +734,10 @@ public class CardUtil extends BaseUtil {
      * @param offset 查询卡列表的起始偏移量
      * @param count 需要查询的卡片的数量（数量最大50）
      * @return
+     * @throws WeChatException 
      * @
      */
-    public static Map<String, Object> batchget(BasicAccount account, Integer offset, Integer count) {
+    public static Map<String, Object> batchget(BasicAccount account, Integer offset, Integer count) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> postData = Maps.newHashMap();
@@ -737,9 +753,10 @@ public class CardUtil extends BaseUtil {
      * @param cardId 卡券ID
      * @param newCode 新的卡券code 编码
      * @return
+     * @throws WeChatException 
      * @
      */
-    public static Map<String, Object> codeUpdate(BasicAccount account, String code, String cardId, String newCode) {
+    public static Map<String, Object> codeUpdate(BasicAccount account, String code, String cardId, String newCode) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> postData = Maps.newHashMap();
@@ -755,9 +772,10 @@ public class CardUtil extends BaseUtil {
      * @param code 需要设置为失效的code
      * @param cardId 自定义code 的卡券必填。非自定义code的卡券不填。
      * @return
+     * @throws WeChatException 
      * @
      */
-    public static Map<String, Object> codeUnavailable(BasicAccount account, String code, String cardId) {
+    public static Map<String, Object> codeUnavailable(BasicAccount account, String code, String cardId) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> postData = Maps.newHashMap();
@@ -845,9 +863,10 @@ public class CardUtil extends BaseUtil {
      * @param baseInfo 基本的卡券数据
      * @param cardType 卡券类型
      * @return
+     * @throws WeChatException 
      * @  
      */
-    public static Map<String, Object> update(BasicAccount account, String cardId, CardType cardType, CardBaseInfoBean baseInfo) {
+    public static Map<String, Object> update(BasicAccount account, String cardId, CardType cardType, CardBaseInfoBean baseInfo) throws WeChatException {
         System.out.println(cardType);
         Map<String, Object> base_info = CardUtil.updateBaseInfo(baseInfo);
 
@@ -870,10 +889,11 @@ public class CardUtil extends BaseUtil {
      * @param balanceRules 储值说明
      * @param prerogative 特权说明
      * @return
+     * @throws WeChatException 
      * @
      */
     public static Map<String, Object> updateMemberCard(BasicAccount account, String cardId, CardBaseInfoBean baseInfo, String bonusCleared,
-            String bonusRules, String balanceRules, String prerogative) {
+            String bonusRules, String balanceRules, String prerogative) throws WeChatException {
         Map<String, Object> base_info = CardUtil.updateBaseInfo(baseInfo);
 
         Map<String, Object> generalCoupon = new HashMap<String, Object>();
@@ -905,10 +925,11 @@ public class CardUtil extends BaseUtil {
      * @param gate 登机口。
      * @param boardingTime 登机时间，只显示“时分”不显示日期，按时间戳格式填写。
      * @return
+     * @throws WeChatException 
      * @
      */
     public static Map<String, Object> updateBoardingPass(BasicAccount account, String cardId, CardBaseInfoBean baseInfo, String gate,
-            Long boardingTime) {
+            Long boardingTime) throws WeChatException {
         Map<String, Object> base_info = CardUtil.updateBaseInfo(baseInfo);
 
         Map<String, Object> generalCoupon = new HashMap<String, Object>();
@@ -933,9 +954,10 @@ public class CardUtil extends BaseUtil {
      * @param baseInfo 基本的卡券数据
      * @param guideUrl 导览图url
      * @return
+     * @throws WeChatException 
      * @
      */
-    public static Map<String, Object> updateScenicTicket(BasicAccount account, String cardId, CardBaseInfoBean baseInfo, String guideUrl) {
+    public static Map<String, Object> updateScenicTicket(BasicAccount account, String cardId, CardBaseInfoBean baseInfo, String guideUrl) throws WeChatException {
         Map<String, Object> base_info = CardUtil.updateBaseInfo(baseInfo);
 
         Map<String, Object> generalCoupon = new HashMap<String, Object>();
@@ -957,9 +979,10 @@ public class CardUtil extends BaseUtil {
      * @param baseInfo 基本的卡券数据
      * @param detail 电影票详情
      * @return
+     * @throws WeChatException 
      * @
      */
-    public static Map<String, Object> updateMovieTicket(BasicAccount account, String cardId, CardBaseInfoBean baseInfo, String detail) {
+    public static Map<String, Object> updateMovieTicket(BasicAccount account, String cardId, CardBaseInfoBean baseInfo, String detail) throws WeChatException {
         Map<String, Object> base_info = CardUtil.updateBaseInfo(baseInfo);
 
         Map<String, Object> generalCoupon = new HashMap<String, Object>();
@@ -981,9 +1004,10 @@ public class CardUtil extends BaseUtil {
      * @param baseInfo 基本的卡券数据
      * @param mapUrl 会场导览图
      * @return
+     * @throws WeChatException 
      * @
      */
-    public static Map<String, Object> updateMeetingTicket(BasicAccount account, String cardId, CardBaseInfoBean baseInfo, String mapUrl) {
+    public static Map<String, Object> updateMeetingTicket(BasicAccount account, String cardId, CardBaseInfoBean baseInfo, String mapUrl) throws WeChatException {
         Map<String, Object> base_info = CardUtil.updateBaseInfo(baseInfo);
 
         Map<String, Object> generalCoupon = new HashMap<String, Object>();
@@ -1006,9 +1030,10 @@ public class CardUtil extends BaseUtil {
      * @param increaseStockValue 增加多少库存，可以不填或填0
      * @param reduceStockValue 减少多少库存，可以不填或填0
      * @return
+     * @throws WeChatException 
      * @
      */
-    public static Map<String, Object> modifystock(BasicAccount account, String cardId, Integer increaseStockValue, Integer reduceStockValue) {
+    public static Map<String, Object> modifystock(BasicAccount account, String cardId, Integer increaseStockValue, Integer reduceStockValue) throws WeChatException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card_id", cardId);
         if (increaseStockValue != null) {
@@ -1023,7 +1048,7 @@ public class CardUtil extends BaseUtil {
         return post(modifystockUrl + "?access_token=" + access_token, map);
     }
 
-    public static Map<String, Object> getcolors(BasicAccount account) {
+    public static Map<String, Object> getcolors(BasicAccount account) throws WeChatException {
         Map<String, Object> map = new HashMap<String, Object>();
 
         //发送

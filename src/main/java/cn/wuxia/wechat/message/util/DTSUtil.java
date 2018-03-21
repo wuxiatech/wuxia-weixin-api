@@ -117,6 +117,6 @@ public class DTSUtil {
                 break;
 
         }
-        System.out.println("hhh");
+        System.out.println("发送完成！");
     }
 }

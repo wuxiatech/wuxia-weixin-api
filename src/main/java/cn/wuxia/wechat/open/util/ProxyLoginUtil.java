@@ -147,9 +147,12 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
         // 用户的唯一标识
         wxparam.addParam("openid", oauthToken.getOpenId());
         // 把json转换成MAP对象
-        Map<String, Object> json = post(wxparam);
-        logger.info("返回JSON数据{}", json);
-        return StringUtil.equals("0", "" + json.get("errcode"));
+        try {
+            Map<String, Object> json = post(wxparam);
+            return true;
+        }catch (WeChatException e){
+            return false;
+        }
     }
 
     /**

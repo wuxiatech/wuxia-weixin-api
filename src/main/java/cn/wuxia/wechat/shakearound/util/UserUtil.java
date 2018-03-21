@@ -14,6 +14,7 @@ import java.util.Map;
 
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
+import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
@@ -31,8 +32,9 @@ public class UserUtil extends BaseUtil {
     * @param needPoi 是否需要返回门店poi_id，传1则返回，否则不返回
     * @return
     * @throws UnsupportedEncodingException
+     * @throws WeChatException 
     */
-    public static Map<String, Object> getshakeinfo(BasicAccount account, String ticket, Integer needPoi) throws UnsupportedEncodingException {
+    public static Map<String, Object> getshakeinfo(BasicAccount account, String ticket, Integer needPoi) throws UnsupportedEncodingException, WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
 
         Map<String, Object> map = new HashMap<String, Object>();

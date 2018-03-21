@@ -26,6 +26,7 @@ import cn.wuxia.common.web.httpclient.HttpClientRequest;
 import cn.wuxia.common.web.httpclient.HttpClientResponse;
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
+import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
@@ -41,8 +42,9 @@ public class UserUtil extends BaseUtil {
      * @author guwen
      * @param nextOpenid 第一个拉取的OPENID，不填默认从头开始拉取
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> userGet(BasicAccount account, String nextOpenid) {
+    public static Map<String, Object> userGet(BasicAccount account, String nextOpenid) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/user/get?access_token=" + access_token;
         if (StringUtil.isNotBlank(nextOpenid)) {
@@ -56,8 +58,9 @@ public class UserUtil extends BaseUtil {
      * @author guwen
      * @param openid
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> info(BasicAccount account, String openid) {
+    public static Map<String, Object> info(BasicAccount account, String openid) throws WeChatException {
         Assert.notNull(openid);
         logger.info("根据openid获取微信用户信息开始");
         String access_token = TokenUtil.getAccessToken(account);
@@ -107,8 +110,9 @@ public class UserUtil extends BaseUtil {
      * @param openid 粉丝openid
      * @param remark 备注名
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> updateremark(BasicAccount account, String openid, String remark) {
+    public static Map<String, Object> updateremark(BasicAccount account, String openid, String remark) throws WeChatException {
         Assert.hasText(openid, "openid 参数错误");
         Assert.hasText(remark, "remark 参数错误");
         String access_token = TokenUtil.getAccessToken(account);

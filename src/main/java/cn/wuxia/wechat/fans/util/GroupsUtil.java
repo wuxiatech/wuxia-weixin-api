@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
+import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
@@ -30,8 +31,9 @@ public class GroupsUtil extends BaseUtil {
      * @author guwen
      * @param name 分组名
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> create(BasicAccount account, String name){
+    public static Map<String, Object> create(BasicAccount account, String name) throws WeChatException{
         Assert.hasText(name, "name 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/create?access_token=" + access_token;
@@ -50,8 +52,9 @@ public class GroupsUtil extends BaseUtil {
      * @param id 分组id
      * @param name 新的组名
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> update(BasicAccount account, int id, String name) {
+    public static Map<String, Object> update(BasicAccount account, int id, String name) throws WeChatException {
         Assert.hasText(name, "name 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/update?access_token=" + access_token;
@@ -71,8 +74,9 @@ public class GroupsUtil extends BaseUtil {
      * @param openid 粉丝openid 
      * @param toGroupid 所到组id
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> membersUpdate(BasicAccount account, String openid, Integer toGroupid) {
+    public static Map<String, Object> membersUpdate(BasicAccount account, String openid, Integer toGroupid) throws WeChatException {
         Assert.hasText(openid, "openid 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/members/update?access_token=" + access_token;
@@ -90,8 +94,9 @@ public class GroupsUtil extends BaseUtil {
      * @param openidList 粉丝列表
      * @param toGroupid 所到组id
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> membersBatchupdate(BasicAccount account, List<String> openidList, Integer toGroupid) {
+    public static Map<String, Object> membersBatchupdate(BasicAccount account, List<String> openidList, Integer toGroupid) throws WeChatException {
         Assert.notEmpty(openidList, "openidList 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/members/batchupdate?access_token=" + access_token;
@@ -108,8 +113,9 @@ public class GroupsUtil extends BaseUtil {
      * @author guwen
      * @param groupid  分组id
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> delete(BasicAccount account, int groupid) {
+    public static Map<String, Object> delete(BasicAccount account, int groupid) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/delete?access_token=" + access_token;
         Map<String, Object> map = new HashMap<String, Object>();
@@ -126,8 +132,9 @@ public class GroupsUtil extends BaseUtil {
      * @author songlin.li
      * @param name 分组名
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> get(BasicAccount account) {
+    public static Map<String, Object> get(BasicAccount account) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/groups/get?access_token=" + access_token;
         return get(url);

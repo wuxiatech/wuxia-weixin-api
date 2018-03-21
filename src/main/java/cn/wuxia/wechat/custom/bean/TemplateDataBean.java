@@ -8,6 +8,12 @@
 */
 package cn.wuxia.wechat.custom.bean;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import com.google.common.collect.Maps;
+
 /**
  * 
  * 微信 模版信息Data 详见
@@ -59,4 +65,15 @@ public class TemplateDataBean {
         this.color = color;
     }
 
+    public Map<String, String> getValueData() {
+        Map<String, String> valueMap = Maps.newHashMap();
+        valueMap.put("value", getValue());
+        valueMap.put("color", getColor() == null ? "" : getColor());
+        return valueMap;
+    }
+
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 }

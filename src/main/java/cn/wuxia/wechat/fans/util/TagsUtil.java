@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.wuxia.wechat.WeChatException;
 import org.springframework.util.Assert;
 
 import com.google.common.collect.Maps;
@@ -33,7 +34,7 @@ public class TagsUtil extends BaseUtil {
      * @param name 分组名
      * @return
      */
-    public static Map<String, Object> create(BasicAccount account, String name) {
+    public static Map<String, Object> create(BasicAccount account, String name) throws WeChatException {
         Assert.hasText(name, "name 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/create?access_token=" + access_token;
@@ -53,7 +54,7 @@ public class TagsUtil extends BaseUtil {
      * @param name 新的组名
      * @return
      */
-    public static Map<String, Object> update(BasicAccount account, int id, String name) {
+    public static Map<String, Object> update(BasicAccount account, int id, String name) throws WeChatException {
         Assert.hasText(name, "name 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/update?access_token=" + access_token;
@@ -74,7 +75,7 @@ public class TagsUtil extends BaseUtil {
      * @param toGroupid 所到组id
      * @return
      */
-    public static Map<String, Object> getUsertags(BasicAccount account, String openid) {
+    public static Map<String, Object> getUsertags(BasicAccount account, String openid) throws WeChatException {
         Assert.hasText(openid, "openid 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/getidlist?access_token=" + access_token;
@@ -92,7 +93,7 @@ public class TagsUtil extends BaseUtil {
      * @param tagid 所到组id
      * @return
      */
-    public static Map<String, Object> membersBatchtagging(BasicAccount account, List<String> openidList, Integer tagid) {
+    public static Map<String, Object> membersBatchtagging(BasicAccount account, List<String> openidList, Integer tagid) throws WeChatException {
         Assert.notEmpty(openidList, "openidList 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/members/batchtagging?access_token=" + access_token;
@@ -111,7 +112,7 @@ public class TagsUtil extends BaseUtil {
      * @param tagid 所到组id
      * @return
      */
-    public static Map<String, Object> membersBatchuntaging(BasicAccount account, List<String> openidList, Integer tagid) {
+    public static Map<String, Object> membersBatchuntaging(BasicAccount account, List<String> openidList, Integer tagid) throws WeChatException {
         Assert.notEmpty(openidList, "openidList 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/members/batchuntagging?access_token=" + access_token;
@@ -129,7 +130,7 @@ public class TagsUtil extends BaseUtil {
      * @param tagid  标签id
      * @return
      */
-    public static Map<String, Object> delete(BasicAccount account, int tagid) {
+    public static Map<String, Object> delete(BasicAccount account, int tagid) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/delete?access_token=" + access_token;
         Map<String, Object> map = new HashMap<String, Object>();
@@ -147,7 +148,7 @@ public class TagsUtil extends BaseUtil {
      * @param name 分组名
      * @return
      */
-    public static Map<String, Object> get(BasicAccount account) {
+    public static Map<String, Object> get(BasicAccount account) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/tags/get?access_token=" + access_token;
         return get(url);
@@ -160,7 +161,7 @@ public class TagsUtil extends BaseUtil {
      * @param tagid
      * @return
      */
-    public static Map<String, Object> get(BasicAccount account, int tagid) {
+    public static Map<String, Object> get(BasicAccount account, int tagid) throws WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/user/tag/get?access_token=" + access_token;
         Map<String, Object> map = Maps.newHashMap();

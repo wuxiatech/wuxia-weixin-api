@@ -12,12 +12,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.wuxia.wechat.WeChatException;
 import org.springframework.util.Assert;
 
 import cn.wuxia.common.util.StringUtil;
+import cn.wuxia.common.util.reflection.BeanUtil;
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.custom.bean.TemplateDataBean;
+import cn.wuxia.wechat.miniprogram.bean.ProgramAccount;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
@@ -27,7 +30,7 @@ import cn.wuxia.wechat.token.util.TokenUtil;
  */
 public class TemplateUtil extends BaseUtil {
 
-    private final static String sendUrl = properties.getProperty("template.send");
+    private final static String sendUrl = "https://api.weixin.qq.com/cgi-bin/message/template/send";
 
     /**
      * 发送模版信息
@@ -35,15 +38,31 @@ public class TemplateUtil extends BaseUtil {
      * @param touser 接收者的openid
      * @param templateId 模版id
      * @param url 点击进入的url
-     * @param topcolor 顶部颜色
      * @param dataList 数据列表
      * @return
      */
-    public static Map<String, Object> send(BasicAccount account, String touser, String templateId, String url, String topcolor,
-            List<TemplateDataBean> dataList) {
+    public static Map<String, Object> send(BasicAccount account, String touser, String templateId, String url, List<TemplateDataBean> dataList) throws WeChatException {
+        return send(account, null, touser, templateId, url, null, dataList) ;
+    }
+
+    /**
+     * 发送模版信息
+     * @author guwen
+     * @param touser 接收者的openid
+     * @param templateId 模版id
+     * @param url 点击进入的url
+     * @param color 模板内容字体颜色，不填默认为黑色
+     * @param dataList 数据列表
+     *                 "miniprogram":{
+    "appid":"xiaochengxuappid12345",
+    "pagepath":"index?foo=bar"
+    },
+     * @return
+     */
+    public static Map<String, Object> send(BasicAccount account, ProgramAccount programAccount, String touser, String templateId, String url,
+            String color, List<TemplateDataBean> dataList) throws WeChatException {
         Assert.hasText(touser, "参数错误 - touser");
         Assert.hasText(templateId, "参数错误 - templateId");
-        Assert.hasText(topcolor, "参数错误 - topcolor");
         Assert.notEmpty(dataList, "参数错误 - dataList不能为空");
 
         String access_token = TokenUtil.getAccessToken(account);
@@ -55,14 +74,16 @@ public class TemplateUtil extends BaseUtil {
             map.put("url", url);
 
         }
-        map.put("topcolor", topcolor);
+        if (StringUtil.isNotBlank(color)) {
+            map.put("color", color);
+        }
 
+        if (programAccount != null) {
+            map.put("miniprogram", BeanUtil.beanToMap(programAccount));
+        }
         Map<String, Map<String, String>> data = new HashMap<>();
         for (TemplateDataBean item : dataList) {
-            Map<String, String> m = new HashMap<>();
-            m.put("value", item.getValue());
-            m.put("color", item.getColor());
-            data.put(item.getName(), m);
+            data.put(item.getName(), item.getValueData());
         }
         map.put("data", data);
 

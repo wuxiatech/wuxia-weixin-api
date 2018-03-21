@@ -150,9 +150,10 @@ public class CardUtil extends PayUtil {
      * @param defaultDetail 描述文本
      * @return
      * @throws UnsupportedEncodingException 
+     * @throws WeChatException 
      */
     public static Map<String, Object> createGeneralCoupon(String authorizerAccessToken, CardBaseInfoBean baseInfo, String defaultDetail)
-            throws UnsupportedEncodingException {
+            throws UnsupportedEncodingException, WeChatException {
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);
 
         Map<String, Object> groupon = new HashMap<String, Object>();
@@ -177,9 +178,10 @@ public class CardUtil extends PayUtil {
      * @param code 要消耗序列号 必填
      * @return
      * @throws UnsupportedEncodingException 
+     * @throws WeChatException 
      * @throws Exception
      */
-    public static Map<String, Object> consume(String authorizerAccessToken, String cardId, String code) throws UnsupportedEncodingException {
+    public static Map<String, Object> consume(String authorizerAccessToken, String cardId, String code) throws UnsupportedEncodingException, WeChatException {
         Map<String, Object> map = new HashMap<String, Object>();
         if (StringUtils.isNotBlank(cardId)) {
             map.put("card_id", cardId);
@@ -213,9 +215,10 @@ public class CardUtil extends PayUtil {
      * @param outerId 领取场景值，用于领取渠道的数据统计，默认值为0，字段类型为整型。用户领取卡券后触发的事件推送中会带上此自定义场景值。
      * @return
      * @throws UnsupportedEncodingException 
+     * @throws WeChatException 
      */
     public static Map<String, Object> createQrcode(String authorizerAccessToken, String cardId, String code, String openid, Integer expireSeconds,
-            Boolean isUniqueCode, Integer balance, Integer outerId) throws UnsupportedEncodingException {
+            Boolean isUniqueCode, Integer balance, Integer outerId) throws UnsupportedEncodingException, WeChatException {
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("action_name", "QR_CARD");
         Map<String, Object> action_info = Maps.newHashMap();
@@ -268,8 +271,9 @@ public class CardUtil extends PayUtil {
 
     /**
      * 删除卡券
+     * @throws WeChatException 
      */
-    public static Map<String, Object> delete(BasicAccount account, String cardId) throws UnsupportedEncodingException {
+    public static Map<String, Object> delete(BasicAccount account, String cardId) throws UnsupportedEncodingException, WeChatException {
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("card_id", cardId);
@@ -283,8 +287,9 @@ public class CardUtil extends PayUtil {
      * @param count 需要查询的卡片的数量（数量最大50）
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
-    public static Map<String, Object> batchget(String authorizerAccessToken, Integer offset, Integer count) throws UnsupportedEncodingException {
+    public static Map<String, Object> batchget(String authorizerAccessToken, Integer offset, Integer count) throws UnsupportedEncodingException, WeChatException {
 
         Map<String, Object> postData = Maps.newHashMap();
         postData.put("offset", offset);
@@ -300,9 +305,10 @@ public class CardUtil extends PayUtil {
      * @param reduceStockValue 减少多少库存，可以不填或填0
      * @return
      * @throws UnsupportedEncodingException
+     * @throws WeChatException 
      */
     public static Map<String, Object> modifystock(BasicAccount account, String cardId, Integer increaseStockValue, Integer reduceStockValue)
-            throws UnsupportedEncodingException {
+            throws UnsupportedEncodingException, WeChatException {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("card_id", cardId);
         if (increaseStockValue != null) {
@@ -388,9 +394,10 @@ public class CardUtil extends PayUtil {
      * @param leastCost
      * @param reduceCost
      * @return
+     * @throws WeChatException 
      * @throws UnsupportedEncodingException
      */
-    public static Map<String, Object> createCash(BasicAccount account, CardBaseInfoBean baseInfo, Integer leastCost, Integer reduceCost) {
+    public static Map<String, Object> createCash(BasicAccount account, CardBaseInfoBean baseInfo, Integer leastCost, Integer reduceCost) throws WeChatException {
         String curl = createUrl + "?access_token=%s";
         String url = String.format(curl, TokenUtil.getAccessToken(account));
         Map<String, Object> base_info = CardUtil.createBaseInfo(baseInfo);

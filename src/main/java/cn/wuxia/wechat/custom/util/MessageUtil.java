@@ -16,6 +16,7 @@ import org.springframework.util.Assert;
 
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
+import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.custom.bean.Article;
 import cn.wuxia.wechat.custom.bean.KefuAccount;
 import cn.wuxia.wechat.token.util.TokenUtil;
@@ -37,8 +38,9 @@ public class MessageUtil extends BaseUtil {
      * @param content
      *            文本内容
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> customSendText(BasicAccount account, String touser, String content) {
+    public static Map<String, Object> customSendText(BasicAccount account, String touser, String content) throws WeChatException {
 
         return customSendText(account, null, touser, content);
     }
@@ -52,8 +54,9 @@ public class MessageUtil extends BaseUtil {
      * @param mediaId
      *            发送的图片/语音/视频的媒体ID
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> customSendImage(BasicAccount account, String touser, String mediaId) {
+    public static Map<String, Object> customSendImage(BasicAccount account, String touser, String mediaId) throws WeChatException {
         return customSendImage(account, null, touser, mediaId);
 
     }
@@ -67,8 +70,9 @@ public class MessageUtil extends BaseUtil {
      * @param articles
      *            发送的图文列表
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> customSendNews(BasicAccount account, String touser, List<Article> articles) {
+    public static Map<String, Object> customSendNews(BasicAccount account, String touser, List<Article> articles) throws WeChatException {
         return customSendNews(account, null, touser, articles);
     }
 
@@ -83,8 +87,9 @@ public class MessageUtil extends BaseUtil {
      * @param content
      *            文本内容
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> customSendText(BasicAccount account, KefuAccount kefuAccount, String touser, String content) {
+    public static Map<String, Object> customSendText(BasicAccount account, KefuAccount kefuAccount, String touser, String content) throws WeChatException {
         Assert.hasText(touser, "touser 参数错误");
         Assert.hasText(content, "content 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
@@ -118,8 +123,9 @@ public class MessageUtil extends BaseUtil {
      * @param mediaId
      *            发送的图片/语音/视频的媒体ID
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> customSendImage(BasicAccount account, KefuAccount kefuAccount, String touser, String mediaId) {
+    public static Map<String, Object> customSendImage(BasicAccount account, KefuAccount kefuAccount, String touser, String mediaId) throws WeChatException {
         Assert.hasText(touser, "touser 参数错误");
         Assert.hasText(mediaId, "mediaId 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
@@ -152,8 +158,9 @@ public class MessageUtil extends BaseUtil {
      * @param articles
      *            发送的图文列表
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> customSendNews(BasicAccount account, KefuAccount kefuAccount, String touser, List<Article> articles) {
+    public static Map<String, Object> customSendNews(BasicAccount account, KefuAccount kefuAccount, String touser, List<Article> articles) throws WeChatException {
         Assert.hasText(touser, "touser 参数错误");
         Assert.notEmpty(articles, "articles 参数错误");
         if (articles.size() > 8) {
@@ -187,8 +194,9 @@ public class MessageUtil extends BaseUtil {
      * @param mediaId
      *            发送的图片/语音/视频的媒体ID
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> customSendVoice(BasicAccount account, String touser, String mediaId) {
+    public static Map<String, Object> customSendVoice(BasicAccount account, String touser, String mediaId) throws WeChatException {
 
         return customSendVoice(account, null, touser, mediaId);
     }
@@ -204,8 +212,9 @@ public class MessageUtil extends BaseUtil {
      * @param mediaId
      *            发送的图片/语音/视频的媒体ID
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> customSendVoice(BasicAccount account, KefuAccount kefuAccount, String touser, String mediaId) {
+    public static Map<String, Object> customSendVoice(BasicAccount account, KefuAccount kefuAccount, String touser, String mediaId) throws WeChatException {
         Assert.hasText(touser, "touser 参数错误");
         Assert.hasText(mediaId, "mediaId 参数错误");
         String access_token = TokenUtil.getAccessToken(account);
@@ -237,9 +246,10 @@ public class MessageUtil extends BaseUtil {
      * @param mediaId
      *            发送的图片/语音/视频的媒体ID
      * @return
+     * @throws WeChatException 
      */
     public static Map<String, Object> customSendVideo(BasicAccount account, String touser, String mediaId, String thumbMediaId, String title,
-            String description) {
+            String description) throws WeChatException {
         return customSendVideo(account, null, touser, mediaId, thumbMediaId, title, description);
     }
 
@@ -254,9 +264,10 @@ public class MessageUtil extends BaseUtil {
      * @param mediaId
      *            发送的图片/语音/视频的媒体ID
      * @return
+     * @throws WeChatException 
      */
     public static Map<String, Object> customSendVideo(BasicAccount account, KefuAccount kefuAccount, String touser, String mediaId,
-            String thumbMediaId, String title, String description) {
+            String thumbMediaId, String title, String description) throws WeChatException {
         Assert.hasText(touser, "touser 参数错误");
         Assert.hasText(mediaId, "mediaId 参数错误");
         String access_token = TokenUtil.getAccessToken(account);

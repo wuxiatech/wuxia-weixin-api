@@ -13,7 +13,6 @@ import java.util.Map;
 import org.springframework.util.Assert;
 
 import cn.wuxia.common.util.DateUtil;
-import cn.wuxia.common.util.MapUtil;
 import cn.wuxia.common.util.NumberUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.web.httpclient.HttpClientRequest;
@@ -78,19 +77,8 @@ public class ProxyJsAuthUtil extends BaseUtil {
         logger.debug("JSAPI_TICKET nowTime:" + nowTime);
         String ticketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket";
         HttpClientRequest param = new HttpClientRequest();
-        // 第三方代微信授权access_token 
-        Map<String, Object> map;
-        try {
-            map = ProxyAuthorizerTokenUtil.getAuthorizerAccessToken(account.getAppid(), account.getAuthorizerRefreshToken());
-        } catch (WeChatException e) {
-            logger.error("", e.getMessage());
-            throw new RuntimeException(e);
-        }
-        if (StringUtil.isBlank(map.get("authorizer_access_token"))) {
-            logger.error("{}", map);
-            throw new RuntimeException("获取authorizer_access_token有误:" + map);
-        }
-        param.addParam("access_token", MapUtil.getString(map, "authorizer_access_token"));
+        // 第三方代微信授权access_token
+        param.addParam("access_token", TokenUtil.getAuthorizerAccessToken(account.getAppid(), account.getAuthorizerRefreshToken()));
         // 授权类型
         param.addParam("type", "jsapi");
         param.setUrl(ticketUrl);

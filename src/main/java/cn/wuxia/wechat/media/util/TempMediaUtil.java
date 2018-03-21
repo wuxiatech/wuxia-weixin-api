@@ -22,13 +22,13 @@ import org.springframework.util.Assert;
 
 import cn.wuxia.common.util.FileUtil;
 import cn.wuxia.common.util.JsonUtil;
+import cn.wuxia.common.util.MapUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.util.reflection.BeanUtil;
 import cn.wuxia.common.web.httpclient.HttpClientException;
 import cn.wuxia.common.web.httpclient.HttpClientRequest;
 import cn.wuxia.common.web.httpclient.HttpClientResponse;
 import cn.wuxia.common.web.httpclient.HttpClientUtil;
-
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.WeChatException;
@@ -144,6 +144,12 @@ public class TempMediaUtil extends BaseUtil {
         } catch (HttpClientException e) {
             throw new WeChatException(e);
         }
+        logger.info("HEADERS:{}", respone.getResponseHeaders());
+        String contenttype = respone.getHeader("contenttype");
+        if (StringUtil.indexOf(contenttype, "application/json") >= 0) {
+            Map map = JsonUtil.fromJson(respone.getStringResult());
+            throw new WeChatException(MapUtil.getString(map, "errmsg"));
+        }
         File file = new File(filePath);
         FileOutputStream output = FileUtils.openOutputStream(file);
         try {
@@ -152,6 +158,7 @@ public class TempMediaUtil extends BaseUtil {
             IOUtils.closeQuietly(output);
             IOUtils.closeQuietly(respone.getContent());
         }
+        logger.info("成功保存录音到{}", filePath);
     }
 
     /**
@@ -176,8 +183,9 @@ public class TempMediaUtil extends BaseUtil {
      * @author guwen
      * @param articles 图文列表
      * @return
+     * @throws WeChatException 
      */
-    public static Map<String, Object> uploadnews(BasicAccount account, List<Article> articles) {
+    public static Map<String, Object> uploadnews(BasicAccount account, List<Article> articles) throws WeChatException {
         Assert.notEmpty(articles, "articles 参数有误");
         String access_token = TokenUtil.getAccessToken(account);
         String url = "https://api.weixin.qq.com/cgi-bin/media/uploadnews?access_token=" + access_token;

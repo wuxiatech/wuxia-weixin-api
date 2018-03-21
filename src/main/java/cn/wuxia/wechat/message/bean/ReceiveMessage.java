@@ -109,6 +109,18 @@ public class ReceiveMessage extends Receive {
     @XmlElement(name = "LotteryId")
     private String lotteryid;
 
+    @XmlElement(name = "OrderId")
+    private String orderId;
+
+    @XmlElement(name = "OrderStatus")
+    private String orderStatus;
+
+    @XmlElement(name = "ProductId")
+    private String productId;
+
+    @XmlElement(name = "SkuInfo")
+    private String skuInfo;
+
     public String getFriendUserName() {
         return friendUserName;
     }
@@ -366,4 +378,35 @@ public class ReceiveMessage extends Receive {
         this.lotteryid = lotteryid;
     }
 
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
+    }
+
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public void setProductId(String productId) {
+        this.productId = productId;
+    }
+
+    public String getSkuInfo() {
+        return skuInfo;
+    }
+
+    public void setSkuInfo(String skuInfo) {
+        this.skuInfo = skuInfo;
+    }
 }

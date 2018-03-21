@@ -39,7 +39,8 @@ public class ProxyAuthorizerTokenUtil extends ThirdBaseUtil {
         map.put("authorizer_appid", authorizerAppid);
         map.put("authorizer_refresh_token", authorizerRefreshToken);
 
-        Map<String, Object> result = post("https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=" + accessToken, map);
+        Map<String, Object> result = post("https://api.weixin.qq.com/cgi-bin/component/api_authorizer_token?component_access_token=" + accessToken,
+                map);
         return result;
     }
 
