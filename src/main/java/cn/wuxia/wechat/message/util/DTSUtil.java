@@ -11,6 +11,7 @@ package cn.wuxia.wechat.message.util;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -58,7 +59,7 @@ public class DTSUtil {
         marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
         // 去掉生成xml的默认报文头  
-//        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
+        //        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
         XMLOutputFactory xof = XMLOutputFactory.newInstance();
         XMLStreamWriter streamWriter = null;
         CDataXMLStreamWriter cdataStreamWriter = null;
@@ -104,7 +105,8 @@ public class DTSUtil {
                     art.setPicurl(article.getPicUrl());
                     lists.add(art);
                 }
-                MessageUtil.customSendNews(account, reply.getToUserName(), lists);
+                Map map = MessageUtil.customSendNews(account, reply.getToUserName(), lists);
+                System.out.println("发送图文结果为：" + map);
                 break;
             case text:
                 MessageUtil.customSendText(account, reply.getToUserName(), reply.getContent());

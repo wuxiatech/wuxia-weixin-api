@@ -1,10 +1,10 @@
 package cn.wuxia.wechat;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import cn.wuxia.common.util.StringUtil;
-
-import java.io.Serializable;
 
 /**
  * 微信账号  开发者配置
@@ -13,8 +13,9 @@ import java.io.Serializable;
  * @author songlin.li
  * @ Version : V<Ver.No> <2016年3月31日>
  */
-public class Account extends BasicAccount implements Serializable{
+public class Account extends BasicAccount implements Serializable {
     private static final long serialVersionUID = 3708714346608087242L;
+
     private String token;
 
     /**
@@ -35,7 +36,9 @@ public class Account extends BasicAccount implements Serializable{
      * @param primitiveid
      */
     public Account(BasicAccount basicAccount, String token, String primitiveid) {
-        this(basicAccount.getAppid(), basicAccount.getAppSecret(), token, primitiveid);
+        this(basicAccount);
+        this.token = token;
+        this.primitiveid = primitiveid;
     }
 
     /**

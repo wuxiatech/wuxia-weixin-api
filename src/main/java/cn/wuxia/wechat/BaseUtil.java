@@ -8,6 +8,7 @@ import cn.wuxia.common.util.reflection.ReflectionUtil;
 import cn.wuxia.common.web.httpclient.HttpClientException;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.collections4.MapUtils;
 import org.nutz.json.Json;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -183,11 +184,13 @@ public abstract class BaseUtil {
             logger.info("微信返回结果：{}", map);
         } catch (Exception e) {
             logger.error("请求微信 API有误！", e);
-            return null;
+            throw new WeChatException(e.getMessage());
         }
-        if (org.apache.commons.collections4.MapUtils.isNotEmpty(map) && StringUtil.isNotBlank(map.get("errcode"))
-                && !StringUtil.equals(map.get("errcode") + "", "0")) {
-            logger.error(map.get("errmsg").toString());
+        if (MapUtils.isNotEmpty(map) && ((StringUtil.isNotBlank(map.get("errcode")) && MapUtils.getIntValue(map, "errcode") != 0))
+                || (StringUtil.isNotBlank(MapUtils.getString(map, "errmsg"))
+                        && !StringUtil.equalsIgnoreCase(MapUtils.getString(map, "errmsg"), "ok"))) {
+            logger.error("errmsg={}", map);
+            throw new WeChatException(MapUtils.getString(map, "errmsg"));
         }
         return map;
     }
@@ -200,7 +203,7 @@ public abstract class BaseUtil {
      */
     @Deprecated
     // 发送URL请求
-    protected static Map<String, Object> get(HttpClientRequest httpParam) {
+    protected static Map<String, Object> get(HttpClientRequest httpParam) throws WeChatException {
         // 缓存请求微信返回JSON
         Map<String, Object> map = Maps.newHashMap();
         // 获取微信返回结果
@@ -211,10 +214,13 @@ public abstract class BaseUtil {
             logger.info("微信返回结果：{}", map);
         } catch (Exception e) {
             logger.error("请求微信 API有误！", e);
+            throw new WeChatException(e.getMessage());
         }
-        if (org.apache.commons.collections4.MapUtils.isNotEmpty(map) && StringUtil.isNotBlank(map.get("errcode"))
-                && !StringUtil.equals(map.get("errcode") + "", "0")) {
-            logger.error(map.get("errmsg").toString());
+        if (MapUtils.isNotEmpty(map) && ((StringUtil.isNotBlank(map.get("errcode")) && MapUtils.getIntValue(map, "errcode") != 0))
+                || (StringUtil.isNotBlank(MapUtils.getString(map, "errmsg"))
+                        && !StringUtil.equalsIgnoreCase(MapUtils.getString(map, "errmsg"), "ok"))) {
+            logger.error("errmsg={}", map);
+            throw new WeChatException(MapUtils.getString(map, "errmsg"));
         }
         return map;
     }
@@ -235,15 +241,15 @@ public abstract class BaseUtil {
             httpUrl.setCharset("UTF-8");
             map = Json.fromJson(Map.class, httpUrl.getStringResult());
             logger.info("微信返回结果：{}", map);
-        } catch (HttpClientException e) {
+        } catch (Exception e) {
             logger.error("请求微信 API有误！", e);
-            throw new WeChatException(e);
+            throw new WeChatException(e.getMessage());
         }
-        String errmsg = MapUtil.getString(map, "errmsg");
-        Integer errcode = MapUtil.getInteger(map, "errcode");
-        if ((StringUtil.isNotBlank(errmsg) && !StringUtil.equals("ok", errmsg)) || (errcode != null && errcode != 0)) {
-            logger.error(map.get("errmsg").toString());
-            throw new WeChatException(MapUtil.getString(map, "errmsg"));
+        if (MapUtils.isNotEmpty(map) && ((StringUtil.isNotBlank(map.get("errcode")) && MapUtils.getIntValue(map, "errcode") != 0))
+                || (StringUtil.isNotBlank(MapUtils.getString(map, "errmsg"))
+                        && !StringUtil.equalsIgnoreCase(MapUtils.getString(map, "errmsg"), "ok"))) {
+            logger.error("errmsg={}", map);
+            throw new WeChatException(MapUtils.getString(map, "errmsg"));
         }
         return map;
     }
