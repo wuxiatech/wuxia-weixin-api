@@ -46,9 +46,9 @@ import cn.wuxia.wechat.token.util.TokenUtil;
  */
 public class TempMediaUtil extends BaseUtil {
 
-    private final static String MEDIA_DOWN_URL = properties.getProperty("MEDIA.DOWN.URL");
+    private final static String MEDIA_DOWN_URL = "http://file.api.weixin.qq.com/cgi-bin/media/get";
 
-    private final static String MEDIA_UPLOAD_URL = properties.getProperty("MEDIA.UPLOAD.URL");
+    private final static String MEDIA_UPLOAD_URL = "http://file.api.weixin.qq.com/cgi-bin/media/upload";
 
     /**
      * 上传多媒体资源
@@ -146,7 +146,7 @@ public class TempMediaUtil extends BaseUtil {
         }
         logger.info("HEADERS:{}", respone.getResponseHeaders());
         String contenttype = respone.getHeader("contenttype");
-        if (StringUtil.indexOf(contenttype, "application/json") >= 0) {
+        if (StringUtil.indexOf(contenttype, "application/json") >= 0||StringUtil.indexOf(contenttype, "text/plain") >= 0) {
             Map map = JsonUtil.fromJson(respone.getStringResult());
             throw new WeChatException(MapUtil.getString(map, "errmsg"));
         }
@@ -160,23 +160,6 @@ public class TempMediaUtil extends BaseUtil {
         }
         logger.info("成功保存录音到{}", filePath);
     }
-
-    /**
-     * 上传LOGO 
-     * 1.上传的图片限制文件大小限制1MB，像素为300*300，支持JPG 格式。    2.调用接口获取的logo_url 进支持在微信相关业务下使用，否则会做相应处理
-     * @param file 图片文件
-     * @return
-     * @throws IOException
-     */
-    /* public static Map<String, Object> uploadimg(File file) throws IOException {
-        HttpRequest param = new HttpRequest();
-        String access_token = AuthenUtil.getAccessToken();
-        param.setUrl(uploadimgUrl + "?access_token=" + access_token);
-        HttpResponse respone = HttpClientUtil.upload(param, file);
-        Map<String, Object> m = JsonUtil.fromJson(respone.getStringResult());
-        return m;
-    
-    }*/
 
     /**
      * 上传图文

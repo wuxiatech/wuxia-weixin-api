@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.wuxia.wechat.WeChatException;
+import org.nutz.json.Json;
 import org.springframework.util.Assert;
 
 import cn.wuxia.common.util.StringUtil;
@@ -41,8 +42,9 @@ public class TemplateUtil extends BaseUtil {
      * @param dataList 数据列表
      * @return
      */
-    public static Map<String, Object> send(BasicAccount account, String touser, String templateId, String url, List<TemplateDataBean> dataList) throws WeChatException {
-        return send(account, null, touser, templateId, url, null, dataList) ;
+    public static Map<String, Object> send(BasicAccount account, String touser, String templateId, String url, List<TemplateDataBean> dataList)
+            throws WeChatException {
+        return send(account, null, touser, templateId, url, null, dataList);
     }
 
     /**
@@ -86,7 +88,8 @@ public class TemplateUtil extends BaseUtil {
             data.put(item.getName(), item.getValueData());
         }
         map.put("data", data);
-
+        System.out.println("data=" + data);
+        System.out.println("json data=" + Json.toJson(data));
         return post(sendUrl + "?access_token=" + access_token, map);
     }
 

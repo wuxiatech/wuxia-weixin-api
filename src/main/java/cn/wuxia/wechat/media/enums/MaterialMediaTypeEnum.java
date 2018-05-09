@@ -18,7 +18,10 @@ public enum MaterialMediaTypeEnum {
     //视频
     video(10240, "10MB，支持MP4格式"),
     //缩略图
-    thumb(64, "64KB，支持JPG格式");
+    thumb(64, "64KB，支持JPG格式"),
+
+    news(0, "");
+
 
     private int size;
 

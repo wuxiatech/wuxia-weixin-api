@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import cn.wuxia.common.util.*;
 import cn.wuxia.common.util.reflection.ReflectionUtil;
-import cn.wuxia.common.web.httpclient.HttpClientException;
+import cn.wuxia.common.web.httpclient.*;
 import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -16,9 +16,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Maps;
 
 import cn.wuxia.common.cached.CacheClient;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
-import cn.wuxia.common.web.httpclient.HttpClientResponse;
-import cn.wuxia.common.web.httpclient.HttpClientUtil;
 
 /**
  * [ticket id] 微信工具类
@@ -27,7 +24,7 @@ import cn.wuxia.common.web.httpclient.HttpClientUtil;
  */
 public abstract class BaseUtil {
 
-    protected static Logger logger = LoggerFactory.getLogger(ReflectionUtil.getSuperClassGenricType(BaseUtil.class));
+    protected static Logger logger = LoggerFactory.getLogger(BaseUtil.class);
 
     // 获取配置文件
     public static Properties properties;
@@ -155,6 +152,7 @@ public abstract class BaseUtil {
         return post(httpParam.getUrl() + (StringUtil.indexOf(httpParam.getUrl(), "?") > 0 ? "" : "?") + httpParam.getQueryString(), null);
     }
 
+    @Deprecated
     protected static Map<String, Object> post(String url) throws WeChatException {
         return post(url, null);
     }
@@ -167,6 +165,7 @@ public abstract class BaseUtil {
      * @return
      * @author songlin
      */
+    @Deprecated
     protected static Map<String, Object> post(String url, Object param) throws WeChatException {
         // 缓存请求微信返回JSON
         Map<String, Object> map = Maps.newHashMap();
@@ -232,6 +231,7 @@ public abstract class BaseUtil {
      * @return
      * @author songlin
      */
+    @Deprecated
     protected static Map<String, Object> get(String url) throws WeChatException {
         // 缓存请求微信返回JSON
         Map<String, Object> map = Maps.newHashMap();
@@ -253,4 +253,7 @@ public abstract class BaseUtil {
         }
         return map;
     }
+
+
+
 }
