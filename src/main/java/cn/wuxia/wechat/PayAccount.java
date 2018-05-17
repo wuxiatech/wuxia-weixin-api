@@ -18,6 +18,11 @@ public class PayAccount extends Account implements Serializable{
 
     private String appKey;
 
+    /**
+     * 商户名字
+     */
+    private String name;
+
     public PayAccount(Account account, String partner, String appKey) {
         this(account.getAppid(), account.getAppSecret(), account.getToken(), account.getPrimitiveid(), partner, appKey);
     }
@@ -38,4 +43,11 @@ public class PayAccount extends Account implements Serializable{
         return appKey;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

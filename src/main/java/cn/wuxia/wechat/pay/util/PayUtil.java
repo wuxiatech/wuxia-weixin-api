@@ -2,11 +2,7 @@ package cn.wuxia.wechat.pay.util;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import org.jdom2.JDOMException;
 import org.springframework.util.Assert;
@@ -31,21 +27,19 @@ import cn.wuxia.wechat.PayAccount;
  */
 public class PayUtil extends BaseUtil {
 
-    public final static String PAY_NOTIFY_URL;
-
     public final static String unifiedorderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
-    static {
-        PAY_NOTIFY_URL = properties.getProperty("PAY_NOTIFY_URL");
-    }
 
     public static SortedMap<String, Object> buildPayment(PayAccount account, String orderNo, String body, String amount, String createIp,
-            String openId, String callbackUrl, String attach) throws Exception {
+            String openId, String notifyUrl, String attach) {
         Assert.notNull(account, "PayAccount不能为空");
-        Assert.notNull(orderNo, "订单号不能为空");
+        Assert.isTrue(StringUtil.isBlank(orderNo) || orderNo.length() > 32, "订单号为空或长度超过32");
         Assert.notNull(body, "标题不能为空");
         Assert.notNull(amount, "金额不能为空");
         Assert.notNull(openId, "openid不能为空");
-
+        Assert.notNull(notifyUrl, "notifyUrl不能为空");
+        if (StringUtil.isNotBlank(attach) && StringUtil.length(attach) > 127) {
+            throw new IllegalArgumentException("attach长度不能超过127");
+        }
         // 第二次签名参数
         SortedMap<String, Object> signParams = new TreeMap<String, Object>();
         logger.info("订单号：" + orderNo);
@@ -68,9 +62,9 @@ public class PayUtil extends BaseUtil {
         packageParams.put("openid", openId); // 微信授权登录后唯一标识 
         packageParams.put("out_trade_no", orderNo); // 订单号
         packageParams.put("total_fee", changeY2F(amount)); // 支付总金额
-        packageParams.put("notify_url", callbackUrl); // 申请成功后跳转页面
+        packageParams.put("notify_url", notifyUrl); // 申请成功后跳转页面
         packageParams.put("trade_type", "JSAPI"); // 微信支付类型
-        packageParams.put("attach", attach); //自定义参数
+        packageParams.put("attach", attach); //自定义参数,127长度
         //生成支付签名，要采用URLENCODER的原始值进行MD5算法！
         String sign = null;
         // 第一次签名，用于换取预支ID(preapay_id)
@@ -219,11 +213,14 @@ public class PayUtil extends BaseUtil {
      * @throws Exception
      */
     public static SortedMap<String, Object> buildNativePayment(PayAccount account, String orderNo, String body, String amount, String createIp,
-            String url, String attach) throws Exception {
-        Assert.notNull(orderNo, "订单号不能为空");
+            String url, String attach) {
+        Assert.isTrue(StringUtil.isBlank(orderNo) || orderNo.length() > 32, "订单号为空或长度超过32");
         Assert.notNull(body, "标题不能为空");
         Assert.notNull(amount, "金额不能为空");
-
+        Assert.notNull(url, "notifyurl不能为空");
+        if (StringUtil.isNotBlank(attach) && StringUtil.length(attach) > 127) {
+            throw new IllegalArgumentException("attach长度不能超过127");
+        }
         // 第二次签名参数
         SortedMap<String, Object> signParams = new TreeMap<String, Object>();
         logger.info("订单号：" + orderNo);

@@ -18,6 +18,7 @@ import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
+import cn.wuxia.common.util.*;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -27,10 +28,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import cn.wuxia.common.hibernate.query.Pages;
-import cn.wuxia.common.util.FileUtil;
-import cn.wuxia.common.util.JsonUtil;
-import cn.wuxia.common.util.MapUtil;
-import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.util.reflection.BeanUtil;
 import cn.wuxia.common.web.httpclient.*;
 import cn.wuxia.wechat.BaseUtil;
@@ -213,6 +210,7 @@ public class MaterialMediaUtil extends BaseUtil {
     }
 
     public static List<Article> getNews(BasicAccount account, String mediaid) throws WeChatException {
+        AssertUtil.isNull(mediaid, "mediaid不能为空");
         Map content = get(account, mediaid, MaterialMediaTypeEnum.news);
         List<Map> newsItem = (List) MapUtils.getObject(content, "news_item");
         List<Article> articles = Lists.newArrayList();
