@@ -32,7 +32,8 @@ public class PayUtil extends BaseUtil {
     public static SortedMap<String, Object> buildPayment(PayAccount account, String orderNo, String body, String amount, String createIp,
             String openId, String notifyUrl, String attach) {
         Assert.notNull(account, "PayAccount不能为空");
-        Assert.isTrue(StringUtil.isBlank(orderNo) || orderNo.length() > 32, "订单号为空或长度超过32");
+        Assert.notNull(orderNo, "订单号为空");
+        Assert.isTrue(orderNo.length() < 32, "订单号" + orderNo + "长度超过32");
         Assert.notNull(body, "标题不能为空");
         Assert.notNull(amount, "金额不能为空");
         Assert.notNull(openId, "openid不能为空");
@@ -214,7 +215,8 @@ public class PayUtil extends BaseUtil {
      */
     public static SortedMap<String, Object> buildNativePayment(PayAccount account, String orderNo, String body, String amount, String createIp,
             String url, String attach) {
-        Assert.isTrue(StringUtil.isBlank(orderNo) || orderNo.length() > 32, "订单号为空或长度超过32");
+        Assert.notNull(orderNo, "订单号为空");
+        Assert.isTrue(orderNo.length() < 32, "订单号" + orderNo + "长度超过32");
         Assert.notNull(body, "标题不能为空");
         Assert.notNull(amount, "金额不能为空");
         Assert.notNull(url, "notifyurl不能为空");
