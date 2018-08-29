@@ -22,6 +22,9 @@ public class BasicAccount implements Serializable{
 
     private boolean isAuthorizedToThird;
 
+    public BasicAccount() {
+    }
+
     public BasicAccount(String appid, String secretOrRefreshToken) {
         this.appid = appid;
         if (StringUtil.startsWith(secretOrRefreshToken, "refreshtoken@")) {
