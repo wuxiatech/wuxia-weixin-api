@@ -22,22 +22,41 @@ import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.PayAccount;
 import cn.wuxia.wechat.WeChatException;
 
+import javax.validation.constraints.NotNull;
+
 public class TransferToUserUtil extends BaseUtil {
     private final static HttpAction transfersUrl = HttpAction.Action("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers",
             HttpClientMethod.POST);
 
-    public static TransferToUserResult cash(PayAccount payAccount, double amount, String openid, String name, String remark) throws WeChatException {
+    /**
+     *
+     * @param payAccount
+     * @param amount
+     * @param openid
+     * @param realname
+     * @param remark
+     * @return
+     * @throws WeChatException
+     */
+    public static TransferToUserResult cash(@NotNull PayAccount payAccount, String orderNo, double amount, @NotNull String openid, String realname,
+            @NotNull String remark) throws WeChatException {
         TransferToUserBean transferToUserBean = new TransferToUserBean();
-        if (StringUtil.isBlank(transferToUserBean.getPartner_trade_no())) {
+        if (StringUtil.isBlank(orderNo)) {
             transferToUserBean.setPartner_trade_no(NoGenerateUtil.generateNo(payAccount.getPartner(), 18));
+        } else {
+            transferToUserBean.setPartner_trade_no(orderNo);
         }
         transferToUserBean.setSpbill_create_ip(SystemUtil.getOSIpAddr());
         transferToUserBean.setNonce_str(PaySignUtil.getNonceStr());
         transferToUserBean.setMchid(payAccount.getPartner());
         transferToUserBean.setMch_appid(payAccount.getAppid());
         transferToUserBean.setOpenid(openid);
-        transferToUserBean.setCheck_name("NO_CHECK");
-        transferToUserBean.setRe_user_name(name);
+        if (StringUtil.isNotBlank(realname)) {
+            transferToUserBean.setCheck_name("FORCE_CHECK");
+            transferToUserBean.setRe_user_name(realname);
+        } else {
+            transferToUserBean.setCheck_name("NO_CHECK");
+        }
         DecimalFormat df = new DecimalFormat("######.##");
         String financingNum = df.format(amount);
         logger.info("amount:{}", financingNum);
