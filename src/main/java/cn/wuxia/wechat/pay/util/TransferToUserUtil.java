@@ -1,5 +1,20 @@
 package cn.wuxia.wechat.pay.util;
 
+import cn.wuxia.common.exception.ValidateException;
+import cn.wuxia.common.util.*;
+import cn.wuxia.common.util.reflection.BeanUtil;
+import cn.wuxia.common.web.httpclient.HttpAction;
+import cn.wuxia.common.web.httpclient.HttpClientMethod;
+import cn.wuxia.common.xml.Dom4jXmlUtil;
+import cn.wuxia.wechat.BaseUtil;
+import cn.wuxia.wechat.PayAccount;
+import cn.wuxia.wechat.WeChatException;
+import cn.wuxia.wechat.pay.bean.TransferToUserBean;
+import cn.wuxia.wechat.pay.bean.TransferToUserResult;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.dom4j.DocumentException;
+
+import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -9,27 +24,11 @@ import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.TreeMap;
 
-import cn.wuxia.wechat.pay.bean.*;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.jdom2.JDOMException;
-
-import cn.wuxia.common.exception.ValidateException;
-import cn.wuxia.common.util.*;
-import cn.wuxia.common.util.reflection.BeanUtil;
-import cn.wuxia.common.web.httpclient.HttpAction;
-import cn.wuxia.common.web.httpclient.HttpClientMethod;
-import cn.wuxia.wechat.BaseUtil;
-import cn.wuxia.wechat.PayAccount;
-import cn.wuxia.wechat.WeChatException;
-
-import javax.validation.constraints.NotNull;
-
 public class TransferToUserUtil extends BaseUtil {
     private final static HttpAction transfersUrl = HttpAction.Action("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers",
             HttpClientMethod.POST);
 
     /**
-     *
      * @param payAccount
      * @param amount
      * @param openid
@@ -39,7 +38,7 @@ public class TransferToUserUtil extends BaseUtil {
      * @throws WeChatException
      */
     public static TransferToUserResult cash(@NotNull PayAccount payAccount, String orderNo, double amount, @NotNull String openid, String realname,
-            @NotNull String remark) throws WeChatException {
+                                            @NotNull String remark) throws WeChatException {
         TransferToUserBean transferToUserBean = new TransferToUserBean();
         if (StringUtil.isBlank(orderNo)) {
             transferToUserBean.setPartner_trade_no(NoGenerateUtil.generateNo(payAccount.getPartner(), 18));
@@ -77,13 +76,13 @@ public class TransferToUserUtil extends BaseUtil {
             throw new WeChatException("参数信息有误。", e1);
         }
         try {
-            Map<String, String> resultMap = XMLUtil.doXMLParse(result);
+            Map<String, Object> resultMap = Dom4jXmlUtil.xml2map(result, false);
             if (StringUtil.equalsIgnoreCase("FAIL", MapUtil.getString(resultMap, "return_code"))
                     || StringUtil.equalsIgnoreCase("FAIL", MapUtil.getString(resultMap, "result_code"))) {
                 throw new WeChatException(MapUtil.getString(resultMap, "return_msg") + "" + MapUtil.getString(resultMap, "err_code_des"));
             }
             return MapUtil.mapToBean(resultMap, TransferToUserResult.class);
-        } catch (JDOMException | IOException e) {
+        } catch (DocumentException e) {
             logger.warn("xml解析有误", e);
             throw new WeChatException("xml解析有误。");
         }

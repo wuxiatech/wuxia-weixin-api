@@ -1,27 +1,27 @@
 package cn.wuxia.wechat.pay.util;
 
+import cn.wuxia.common.util.MapUtil;
+import cn.wuxia.common.util.NumberUtil;
+import cn.wuxia.common.util.StringUtil;
+import cn.wuxia.common.web.httpclient.HttpClientException;
+import cn.wuxia.common.web.httpclient.HttpClientResponse;
+import cn.wuxia.common.web.httpclient.HttpClientUtil;
+import cn.wuxia.common.xml.Dom4jXmlUtil;
+import cn.wuxia.wechat.BaseUtil;
+import cn.wuxia.wechat.PayAccount;
+import cn.wuxia.wechat.WeChatException;
+import com.google.common.collect.Maps;
+import org.dom4j.DocumentException;
+import org.springframework.util.Assert;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
-import org.jdom2.JDOMException;
-import org.springframework.util.Assert;
-
-import com.google.common.collect.Maps;
-
-import cn.wuxia.common.util.NumberUtil;
-import cn.wuxia.common.util.StringUtil;
-import cn.wuxia.common.util.XMLUtil;
-import cn.wuxia.common.web.httpclient.HttpClientException;
-import cn.wuxia.common.web.httpclient.HttpClientResponse;
-import cn.wuxia.common.web.httpclient.HttpClientUtil;
-import cn.wuxia.wechat.BaseUtil;
-import cn.wuxia.wechat.PayAccount;
-
 /**
- * 
  * [ticket id]
  * 微信工具类
+ *
  * @author wuwenhao
  * @ Version : V<Ver.No> <2015年4月1日>
  */
@@ -30,7 +30,7 @@ public class PayUtil extends BaseUtil {
     public final static String unifiedorderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
     public static SortedMap<String, Object> buildPayment(PayAccount account, String orderNo, String body, String amount, String createIp,
-            String openId, String notifyUrl, String attach) {
+                                                         String openId, String notifyUrl, String attach) throws WeChatException {
         Assert.notNull(account, "PayAccount不能为空");
         Assert.notNull(orderNo, "订单号为空");
         Assert.isTrue(orderNo.length() < 32, "订单号" + orderNo + "长度超过32");
@@ -52,8 +52,7 @@ public class PayUtil extends BaseUtil {
             String[] ips = createIp.split(",");
             createIp = ips[0];
         } else {
-            signParams.put("errMsg", "您的IP不正确");
-            return signParams;
+            throw new WeChatException("您的IP不正确");
         }
         packageParams.put("spbill_create_ip", createIp); // 当前地址
         packageParams.put("mch_id", account.getPartner()); // 微信支付商户ID
@@ -75,49 +74,40 @@ public class PayUtil extends BaseUtil {
             logger.debug("第一次签名：" + sign);
         } catch (Exception e1) {
             logger.error("", e1);
-            signParams.put("errMsg", "第一次签名错误：" + e1.getMessage());
-            return signParams;
+            throw new WeChatException("第一次签名错误：" + e1.getMessage());
         }
         packageParams.put("sign", sign);
         // 获取预付付ID
         Map<String, Object> preapyaId = wxPay(account, packageParams);
-        if (null != preapyaId && StringUtil.isNotBlank(preapyaId.get("prepayId"))) {
-            String orderId = "prepay_id=" + preapyaId.get("prepayId");
-            String timestamp = PaySignUtil.getTimeStamp();
-            String nonceStr2 = PaySignUtil.getNonceStr();
-            signParams.put("appId", account.getAppid());
-            signParams.put("timeStamp", timestamp);
-            signParams.put("nonceStr", nonceStr2);
-            signParams.put("package", orderId);
-            signParams.put("signType", "MD5");
-            // 第二次签名，用于换取新的签名
-            String paysign = null;
-            try {
-                paysign = PaySignUtil.createSign(account, signParams);
-                // 保存签名
-                logger.debug("第二次签名：" + paysign);
-                signParams.put("paySign", paysign);
-            } catch (Exception e1) {
-                signParams.put("errMsg", "第二次签名错误：" + e1.getMessage());
-            }
-            logger.info("随机：" + nonceStr2);
-            logger.info("时间：" + timestamp);
-            logger.info("预支付：" + orderId);
+        String orderId = "prepay_id=" + preapyaId.get("prepayId");
+        String timestamp = PaySignUtil.getTimeStamp();
+        String nonceStr2 = PaySignUtil.getNonceStr();
+        signParams.put("appId", account.getAppid());
+        signParams.put("timeStamp", timestamp);
+        signParams.put("nonceStr", nonceStr2);
+        signParams.put("package", orderId);
+        signParams.put("signType", "MD5");
+        // 第二次签名，用于换取新的签名
+        String paysign = null;
+        try {
+            paysign = PaySignUtil.createSign(account, signParams);
+            // 保存签名
+            logger.debug("第二次签名：" + paysign);
+            signParams.put("paySign", paysign);
+            return signParams;
+        } catch (Exception e1) {
+            throw new WeChatException("第二次签名错误：" + e1.getMessage());
         }
-        if (null != preapyaId && (StringUtil.isNotBlank(preapyaId.get("errMsg")) || StringUtil.isNotBlank(preapyaId.get("returnMsg")))) {
-            signParams.put("errMsg", preapyaId.get("errMsg"));
-            signParams.put("returnMsg", preapyaId.get("returnMsg"));
-        }
-        return signParams;
     }
 
     /**
      * 微信JSAPI支付
-     * @author CaRson.Yan
+     *
      * @param packageParams
      * @return
+     * @author CaRson.Yan
      */
-    private static Map<String, Object> wxPay(PayAccount account, SortedMap<String, Object> packageParams) {
+    private static Map<String, Object> wxPay(PayAccount account, SortedMap<String, Object> packageParams) throws WeChatException {
         Map<String, Object> prepayId = Maps.newHashMap();
         // 统一支付接口,用于换取prepay_id
         String wxurl = unifiedorderUrl;
@@ -154,29 +144,21 @@ public class PayUtil extends BaseUtil {
             httpUrl = HttpClientUtil.postXml(wxurl, xml);
         } catch (HttpClientException e) {
             logger.error("", e);
-            throw new RuntimeException(e);
+            throw new WeChatException("无法请求" + wxurl, e);
         }
         try {
             byte[] t = httpUrl.getByteResult();
             String c = new String(t, "utf-8");
             logger.info("返回数据：" + c);
-            if (c.indexOf("prepay_id") > 0) {
-                prepayId.put("prepayId", XMLUtil.getChildTagText(c, "prepay_id"));
-            } else if (c.indexOf("err_code_des") > 0) {
-                prepayId.put("errCode", XMLUtil.getChildTagText(c, "err_code"));
-                prepayId.put("errMsg", XMLUtil.getChildTagText(c, "err_code_des"));
-            } else if (c.indexOf("return_msg") > 0) {
-                prepayId.put("returnMsg", XMLUtil.getChildTagText(c, "return_msg"));
+            Map<String, Object> resultMap = Dom4jXmlUtil.xml2map(c, false);
+            if (StringUtil.equalsIgnoreCase("FAIL", MapUtil.getString(resultMap, "return_code"))
+                    || StringUtil.equalsIgnoreCase("FAIL", MapUtil.getString(resultMap, "result_code"))) {
+                throw new WeChatException(MapUtil.getString(resultMap, "return_msg") + "" + MapUtil.getString(resultMap, "err_code_des"));
             }
-            // 判断是否有数据返回
-            if (null != prepayId) {
-                return prepayId;
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            return resultMap;
+        } catch (UnsupportedEncodingException | DocumentException e) {
+            throw new WeChatException("解析xml有误", e);
         }
-
-        return null;
     }
 
     //输出XML
@@ -203,18 +185,19 @@ public class PayUtil extends BaseUtil {
 
     /**
      * 微信native方式支付
-     * @author CaRson.Yan
+     *
      * @param orderNo
      * @param body
      * @param amount
      * @param createIp
-     * @param openId
-     * @param callbackUrl
+     * @param url
+     * @param attach
      * @return
      * @throws Exception
+     * @author CaRson.Yan
      */
-    public static SortedMap<String, Object> buildNativePayment(PayAccount account, String orderNo, String body, String amount, String createIp,
-            String url, String attach) {
+    public static String buildNativePayment(PayAccount account, String orderNo, String body, String amount, String createIp,
+                                            String url, String attach) throws WeChatException {
         Assert.notNull(orderNo, "订单号为空");
         Assert.isTrue(orderNo.length() < 32, "订单号" + orderNo + "长度超过32");
         Assert.notNull(body, "标题不能为空");
@@ -223,8 +206,7 @@ public class PayUtil extends BaseUtil {
         if (StringUtil.isNotBlank(attach) && StringUtil.length(attach) > 127) {
             throw new IllegalArgumentException("attach长度不能超过127");
         }
-        // 第二次签名参数
-        SortedMap<String, Object> signParams = new TreeMap<String, Object>();
+
         logger.info("订单号：" + orderNo);
         //  保存第一次签名参数,用于申请预支付ID
         SortedMap<String, Object> packageParams = new TreeMap<String, Object>();
@@ -236,8 +218,7 @@ public class PayUtil extends BaseUtil {
             ips = createIp.split(" ");
             createIp = ips[0];
         } else {
-            signParams.put("errMsg", "您的IP不正确");
-            return signParams;
+            throw new WeChatException("您的IP不正确");
         }
         packageParams.put("appid", account.getAppid()); //公众号ID
         packageParams.put("spbill_create_ip", createIp); // 当前地址
@@ -261,34 +242,23 @@ public class PayUtil extends BaseUtil {
             logger.debug("第一次签名：" + sign);
         } catch (Exception e1) {
             logger.error("", e1);
-            signParams.put("errMsg", "第一次签名错误：" + e1.getMessage());
-            return signParams;
+            throw new WeChatException("第一次签名错误：" + e1.getMessage());
         }
         packageParams.put("sign", sign);
 
         // 获取预付付ID
         Map<String, Object> returnInfo = wxNativePay(account, packageParams);
-        if (null != returnInfo && StringUtil.isNotBlank(returnInfo.get("prepayId"))) {
-            String orderId = "prepay_id=" + returnInfo.get("prepayId");
-            String codeUrl = "code_url=" + returnInfo.get("codeUrl");
-            logger.info("生成二维码的链接： " + codeUrl);
-            logger.info("预支付：" + orderId);
-            signParams.put("codeUrl", returnInfo.get("codeUrl").toString());
-        }
-        if (null != returnInfo && (StringUtil.isNotBlank(returnInfo.get("errMsg")) || StringUtil.isNotBlank(returnInfo.get("returnMsg")))) {
-            signParams.put("errMsg", returnInfo.get("errMsg"));
-            signParams.put("returnMsg", returnInfo.get("returnMsg"));
-        }
-        return signParams;
+        return MapUtil.getString(returnInfo, "code_url");
     }
 
     /**
      * 微信Native支付
-     * @author CaRson.Yan
+     *
      * @param packageParams
      * @return
+     * @author CaRson.Yan
      */
-    private static Map<String, Object> wxNativePay(PayAccount account, SortedMap<String, Object> packageParams) {
+    private static Map<String, Object> wxNativePay(PayAccount account, SortedMap<String, Object> packageParams) throws WeChatException {
 
         // 统一支付接口,用于换取prepay_id
         String wxurl = unifiedorderUrl;
@@ -326,40 +296,28 @@ public class PayUtil extends BaseUtil {
             httpUrl = HttpClientUtil.postXml(wxurl, xml);
         } catch (HttpClientException e) {
             logger.error("", e);
-            throw new RuntimeException(e);
+            throw new WeChatException("无法请求" + wxurl, e);
         }
-        Map<String, Object> prepayId = Maps.newHashMap();
         try {
             byte[] t = httpUrl.getByteResult();
             String c = new String(t, "utf-8");
             logger.info("返回数据：" + c);
-            if (c.indexOf("prepay_id") > 0) {
-                prepayId.put("prepayId", XMLUtil.getChildTagText(c, "prepay_id"));
-                if (c.indexOf("code_url") > 0) {
-                    prepayId.put("codeUrl", XMLUtil.getChildTagText(c, "code_url"));
-                }
-            } else if (c.indexOf("err_code_des") > 0) {
-                prepayId.put("errCode", XMLUtil.getChildTagText(c, "err_code"));
-                prepayId.put("errMsg", XMLUtil.getChildTagText(c, "err_code_des"));
-            } else if (c.indexOf("return_msg") > 0) {
-                prepayId.put("returnMsg", XMLUtil.getChildTagText(c, "return_msg"));
+            Map<String, Object> resultMap = Dom4jXmlUtil.xml2map(c, false);
+            if (StringUtil.equalsIgnoreCase("FAIL", MapUtil.getString(resultMap, "return_code"))
+                    || StringUtil.equalsIgnoreCase("FAIL", MapUtil.getString(resultMap, "result_code"))) {
+                throw new WeChatException(MapUtil.getString(resultMap, "return_msg") + "" + MapUtil.getString(resultMap, "err_code_des"));
             }
-            // 判断是否有数据返回
-            if (null != prepayId) {
-                return prepayId;
-            }
-        } catch (UnsupportedEncodingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            return resultMap;
+        } catch (UnsupportedEncodingException | DocumentException e) {
+            throw new WeChatException("解析xml有误", e);
         }
-        return null;
     }
 
-    /**   
-     * 将元为单位的转换为分 替换小数点，支持以逗号区分的金额  
-     *   
-     * @param amount  
-     * @return  
+    /**
+     * 将元为单位的转换为分 替换小数点，支持以逗号区分的金额
+     *
+     * @param amount
+     * @return
      */
     public static String changeY2F(String amount) {
         String currency = amount.replaceAll("\\$|\\￥|\\,", ""); //处理包含, ￥ 或者$的金额    
@@ -380,11 +338,11 @@ public class PayUtil extends BaseUtil {
 
     /**
      * 查询订单接口
+     *
+     * @throws IOException
      * @author guwen
-     * @throws IOException 
-     * @throws JDOMException 
      */
-    public static Map<String, String> orderquery(PayAccount account, String transactionId, String outTradeNo) throws JDOMException, IOException {
+    public static Map<String, Object> orderquery(PayAccount account, String transactionId, String outTradeNo) throws WeChatException {
         SortedMap<String, Object> map = Maps.newTreeMap();
         map.put("appid", account.getAppid());
         map.put("mch_id", account.getPartner());
@@ -409,11 +367,18 @@ public class PayUtil extends BaseUtil {
             throw new RuntimeException(e);
         }
         byte[] t = httpUrl.getByteResult();
-        String resultXml = new String(t, "utf-8");
-        logger.info("结果报文:" + resultXml);
-        Map<String, String> resultMap = XMLUtil.doXMLParse(resultXml);
-
-        return resultMap;
+        try {
+            String resultXml = new String(t, "utf-8");
+            logger.debug("结果报文:" + resultXml);
+            Map<String, Object> resultMap = Dom4jXmlUtil.xml2map(resultXml, false);
+            if (StringUtil.equalsIgnoreCase("FAIL", MapUtil.getString(resultMap, "return_code"))
+                    || StringUtil.equalsIgnoreCase("FAIL", MapUtil.getString(resultMap, "result_code"))) {
+                throw new WeChatException(MapUtil.getString(resultMap, "return_msg") + "" + MapUtil.getString(resultMap, "err_code_des"));
+            }
+            return resultMap;
+        } catch (UnsupportedEncodingException | DocumentException e) {
+            throw new WeChatException("解析结果失败", e);
+        }
     }
 
 }

@@ -8,6 +8,26 @@
 */
 package cn.wuxia.wechat.shakearound.util;
 
+import cn.wuxia.common.util.*;
+import cn.wuxia.common.util.reflection.BeanUtil;
+import cn.wuxia.common.web.httpclient.HttpClientException;
+import cn.wuxia.common.web.httpclient.HttpClientUtil;
+import cn.wuxia.common.xml.Dom4jXmlUtil;
+import cn.wuxia.wechat.BasicAccount;
+import cn.wuxia.wechat.PayAccount;
+import cn.wuxia.wechat.WeChatException;
+import cn.wuxia.wechat.pay.util.PayUtil;
+import cn.wuxia.wechat.shakearound.bean.ShakePackBean;
+import cn.wuxia.wechat.token.util.TokenUtil;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.tencent.common.HttpsAsyncRequest;
+import org.apache.commons.codec.binary.StringUtils;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.dom4j.DocumentException;
+import org.springframework.util.Assert;
+
 import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
@@ -17,35 +37,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import org.apache.commons.codec.binary.StringUtils;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.jdom2.JDOMException;
-import org.springframework.util.Assert;
-
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.tencent.common.HttpsAsyncRequest;
-import com.tencent.common.HttpsRequest;
-
-import cn.wuxia.common.util.DateUtil;
-import cn.wuxia.common.util.JsonUtil;
-import cn.wuxia.common.util.MD5Util;
-import cn.wuxia.common.util.NumberUtil;
-import cn.wuxia.common.util.ServletUtils;
-import cn.wuxia.common.util.StringUtil;
-import cn.wuxia.common.util.XMLUtil;
-import cn.wuxia.common.util.reflection.BeanUtil;
-import cn.wuxia.common.web.httpclient.HttpClientException;
-import cn.wuxia.common.web.httpclient.HttpClientUtil;
-import cn.wuxia.wechat.BasicAccount;
-import cn.wuxia.wechat.PayAccount;
-import cn.wuxia.wechat.WeChatException;
-import cn.wuxia.wechat.pay.util.PayUtil;
-import cn.wuxia.wechat.shakearound.bean.SeachCashCouponBean;
-import cn.wuxia.wechat.shakearound.bean.ShakePackBean;
-import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
  *
@@ -61,10 +52,6 @@ public class ShakeCashCoupon extends PayUtil {
      */
     private final static String CREATE_PACKAGE = "https://api.mch.weixin.qq.com/mmpaymkttransfers/hbpreorder";
 
-    /**
-     * 红包查询接口
-     */
-    private final static String GETHB_INFO = "https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo";
 
     /**
      * 
@@ -183,17 +170,17 @@ public class ShakeCashCoupon extends PayUtil {
         } catch (UnrecoverableKeyException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException | IOException e) {
             throw new WeChatException("", e);
         }
-        Map<String, String> rs = Maps.newHashMap();
+        Map<String, Object> rs = Maps.newHashMap();
         try {
-            rs = XMLUtil.doXMLParse(result);
-        } catch (JDOMException | IOException e) {
+            rs = Dom4jXmlUtil.xml2map(result, false);
+        } catch (DocumentException e) {
             logger.error("", e);
         }
         logger.info("" + rs.get("return_msg"));
-        if (StringUtil.equalsIgnoreCase("SUCCESS", rs.get("return_code"))) {
-            return new String[] { rs.get("sp_ticket"), rs.get("mch_billno"), rs.get("detail_id") };
+        if (StringUtil.equalsIgnoreCase("SUCCESS", MapUtil.getString(rs,"return_code"))) {
+            return new String[] { MapUtil.getString(rs,"sp_ticket"), MapUtil.getString(rs,"mch_billno"), MapUtil.getString(rs,"detail_id") };
         } else {
-            throw new WeChatException(rs.get("return_msg"));
+            throw new WeChatException(MapUtil.getString(rs,"return_msg"));
         }
     }
 
@@ -271,16 +258,16 @@ public class ShakeCashCoupon extends PayUtil {
         List<String[]> rtn = Lists.newArrayList();
         for (String res : result) {
             try {
-                Map<String, String> rs = XMLUtil.doXMLParse(res);
+                Map<String, Object> rs = Dom4jXmlUtil.xml2map(res, false);
                 logger.info("红包返回：" + rs.get("err_code") + "  " + rs.get("return_msg"));
-                if (StringUtil.equalsIgnoreCase("SUCCESS", rs.get("return_code"))) {
-                    rtn.add(new String[] { rs.get("sp_ticket"), rs.get("mch_billno"), rs.get("detail_id"), rs.get("total_amount"),
-                            rs.get("return_msg") });
+                if (StringUtil.equalsIgnoreCase("SUCCESS", MapUtil.getString(rs,"return_code"))) {
+                    rtn.add(new String[] { MapUtil.getString(rs,"sp_ticket"), MapUtil.getString(rs,"mch_billno"), MapUtil.getString(rs,"detail_id"), MapUtil.getString(rs,"total_amount"),
+                            MapUtil.getString(rs,"return_msg") });
                 } else {
-                    logger.warn(rs.get("err_code_des"));
-                    rtn.add(new String[] { null, rs.get("mch_billno"), null, rs.get("total_amount"), rs.get("return_msg") });
+                    logger.warn(MapUtil.getString(rs,"err_code_des"));
+                    rtn.add(new String[] { null, MapUtil.getString(rs,"mch_billno"), null, MapUtil.getString(rs,"total_amount"), MapUtil.getString(rs,"return_msg") });
                 }
-            } catch (JDOMException | IOException e) {
+            } catch (DocumentException e) {
                 logger.error("", e);
             }
         }
@@ -394,51 +381,5 @@ public class ShakeCashCoupon extends PayUtil {
         return ret;
     }
 
-    /**
-     * 红包查询接口，查找当前红包当前状态
-     * @author wuwenhao
-     * @param mchBillno
-     * @param billType
-     * @return
-     */
-    public static String[] gethbinfo(PayAccount account, String mchBillno, String billType) throws WeChatException {
-        Map<String, Object> packageParams = Maps.newHashMap();
-        packageParams.put("mch_billno", mchBillno);
-        packageParams.put("mch_id", account.getPartner());
-        packageParams.put("appid", account.getAppid());
-        packageParams.put("bill_type", billType);
-        packageParams.put("nonce_str", RandomStringUtils.randomAlphanumeric(32));
-        TreeMap<String, Object> orderParms = Maps.newTreeMap();
-        orderParms.putAll(packageParams);
-        String parm = ServletUtils.getUrlParamsByMap(orderParms);
-        parm += "&key=" + key;
-        System.out.println(parm);
-        String sign = MD5Util.MD5HexEncode(parm, "UTF-8").toUpperCase();
-        Map<String, Object> m = Maps.newLinkedHashMap();
-
-        m.put("sign", sign);
-        m.putAll(packageParams);
-        SeachCashCouponBean postXml = (SeachCashCouponBean) BeanUtil.mapToBean(m, SeachCashCouponBean.class);
-        String result = "";
-        try {
-            HttpsRequest param1 = new HttpsRequest();
-            result = param1.sendPost(GETHB_INFO, postXml);
-            System.out.println("返回结果：" + result);
-        } catch (UnrecoverableKeyException | KeyManagementException | NoSuchAlgorithmException | KeyStoreException | IOException e) {
-            throw new WeChatException("", e);
-        }
-        Map<String, String> rs = Maps.newHashMap();
-        try {
-            rs = XMLUtil.doXMLParse(result);
-        } catch (JDOMException | IOException e) {
-            logger.error("", e);
-        }
-        logger.info("" + rs.get("return_msg"));
-        if (StringUtil.equalsIgnoreCase("SUCCESS", rs.get("return_code")) && StringUtil.equalsIgnoreCase("SUCCESS", rs.get("return_code"))) {
-            return new String[] { rs.get("status"), rs.get("detail_id"), rs.get("Send_time") };
-        } else {
-            throw new WeChatException(rs.get("return_msg"));
-        }
-    }
 
 }

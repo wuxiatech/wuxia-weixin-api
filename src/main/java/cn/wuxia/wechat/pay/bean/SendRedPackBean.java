@@ -45,6 +45,7 @@ public class SendRedPackBean {
     int total_amount;//	是	1000	int	付款金额，单位分
     //    红包发放总人数
 
+    @Range(min = 1, max = 32)
     int total_num;//	是	1	int
     //            红包发放总人数
     //

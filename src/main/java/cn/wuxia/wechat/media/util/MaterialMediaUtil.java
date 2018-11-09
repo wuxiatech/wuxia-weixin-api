@@ -27,7 +27,7 @@ import org.springframework.util.Assert;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-import cn.wuxia.common.hibernate.query.Pages;
+import cn.wuxia.common.orm.query.Pages;
 import cn.wuxia.common.util.reflection.BeanUtil;
 import cn.wuxia.common.web.httpclient.*;
 import cn.wuxia.wechat.BaseUtil;
