@@ -264,7 +264,6 @@ public class ReplyMessage extends Reply {
 
     }
 
-
     @XmlAccessorType(XmlAccessType.FIELD)
     public static class Articles {
 
@@ -274,24 +273,11 @@ public class ReplyMessage extends Reply {
         public Articles() {
         }
 
-        /**
-         * 2018-9-30开始不允许多团
-         * @param articles
-         */
-        @Deprecated
         public Articles(List<Article> articles) {
             this.articles = articles;
         }
 
-        @Deprecated
         public Articles(Article... articles) {
-            this.articles = new ArrayList<ReplyMessage.Articles.Article>();
-            for (Article item : articles) {
-                this.articles.add(item);
-            }
-        }
-
-        public Articles(Article article) {
             this.articles = new ArrayList<ReplyMessage.Articles.Article>();
             for (Article item : articles) {
                 this.articles.add(item);

@@ -17,6 +17,6 @@ package cn.wuxia.wechat.message.enums;
  */
 public enum ReplyMsgType {
 
-    text, image, voice, video, music, news;
+    text, image, voice, video, music, news, transfer_customer_service;
 
 }

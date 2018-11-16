@@ -44,7 +44,7 @@ public class RedPackUtil extends BaseUtil {
     }
 
     private static SendRedPackResult send(PayAccount payAccount, HttpAction action, RedPackBean redPack) throws WeChatException {
-        SendGroupRedPackBean sendRedPackBean = new SendGroupRedPackBean();
+        SendRedPackBean sendRedPackBean = action.equals(sendGroupRedpackUrl) ? new SendGroupRedPackBean() : new SendRedPackBean();
         BeanUtil.copyProperties(sendRedPackBean, redPack);
         if (StringUtil.isBlank(sendRedPackBean.getMch_billno())) {
             sendRedPackBean.setMch_billno(NoGenerateUtil.generateNo(payAccount.getPartner(), 18));
@@ -87,7 +87,7 @@ public class RedPackUtil extends BaseUtil {
                 throw new WeChatException(MapUtil.getString(resultMap, "return_msg") + "" + MapUtil.getString(resultMap, "err_code_des"));
             }
             return MapUtil.mapToBean(resultMap, SendRedPackResult.class);
-        } catch (DocumentException  e) {
+        } catch (DocumentException e) {
             logger.warn("xml解析有误", e);
             throw new WeChatException("xml解析有误。");
         }
@@ -129,7 +129,7 @@ public class RedPackUtil extends BaseUtil {
             GetRedPackInfoResult redPackInfoResult = XMLUtil.converyToJavaBean(result, GetRedPackInfoResult.class);
             if (redPackInfoResult.isok()) {
                 return redPackInfoResult;
-            }else{
+            } else {
                 throw new WeChatException(redPackInfoResult.errorMsg());
             }
         } catch (JAXBException e) {

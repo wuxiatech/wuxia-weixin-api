@@ -1,11 +1,11 @@
 /*
-* Created on :2015年7月15日
-* Author     :Administrator
-* Change History
-* Version       Date         Author           Reason
-* <Ver.No>     <date>        <who modify>       <reason>
-* Copyright 2014-2020 www.ibmall.cn All right reserved.
-*/
+ * Created on :2015年7月15日
+ * Author     :Administrator
+ * Change History
+ * Version       Date         Author           Reason
+ * <Ver.No>     <date>        <who modify>       <reason>
+ * Copyright 2014-2020 www.ibmall.cn All right reserved.
+ */
 package cn.wuxia.wechat.message.util;
 
 import java.io.StringReader;
@@ -33,13 +33,12 @@ import cn.wuxia.wechat.message.util.jaxb.CDataXMLStreamWriter;
 
 /**
  * 消息工具
- *
  */
 public class DTSUtil {
 
     /**
      * xml转ReceiveMessage对象
-     * 
+     *
      * @throws JAXBException
      */
     public static Receive xml2receive(String xml, Class<?> clazz) throws JAXBException {
@@ -86,6 +85,7 @@ public class DTSUtil {
     }
 
     /**
+     * 2018-9-30号开始发送图文只允许发送一条
      * 把响应给微信的对象转换为xml
      */
     public static void reply2message(BasicAccount account, ReplyMessage reply) throws Exception {
@@ -96,6 +96,9 @@ public class DTSUtil {
             case music:
                 break;
             case news:
+                /**
+                 * 不允许发多图文，则修改为循环发送多条单图文
+                 */
                 List<cn.wuxia.wechat.custom.bean.Article> lists = Lists.newArrayList();
                 for (Article article : reply.getArticles().getArticles()) {
                     cn.wuxia.wechat.custom.bean.Article art = new cn.wuxia.wechat.custom.bean.Article();
@@ -104,9 +107,9 @@ public class DTSUtil {
                     art.setUrl(article.getUrl());
                     art.setPicurl(article.getPicUrl());
                     lists.add(art);
+                    Map map = MessageUtil.customSendNews(account, reply.getToUserName(), art);
+                    System.out.println("发送图文结果为：" + map);
                 }
-                Map map = MessageUtil.customSendNews(account, reply.getToUserName(), lists);
-                System.out.println("发送图文结果为：" + map);
                 break;
             case text:
                 MessageUtil.customSendText(account, reply.getToUserName(), reply.getContent());

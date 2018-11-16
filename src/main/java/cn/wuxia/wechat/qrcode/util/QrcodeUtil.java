@@ -73,7 +73,7 @@ public class QrcodeUtil extends BaseUtil {
      */
     public static Map<String, Object> createTemp(BasicAccount account, int expireSeconds, int sceneId) throws WeChatException {
         Assert.isTrue(sceneId >= 1 && sceneId <= 100000, "sceneId 必须为1-100000的数字");
-        Assert.isNull(expireSeconds >= 30 && expireSeconds <= 2592000, "expireSeconds必须在30秒到30天之间");
+        Assert.isTrue(expireSeconds >= 30 && expireSeconds <= 2592000, "expireSeconds必须在30秒到30天之间");
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("action_name", "QR_SCENE");
         map.put("expire_seconds", expireSeconds);
