@@ -14,7 +14,7 @@
 	<url>https://github.com/wuxiatech/wuxia-weixin-api</url>
 	<description>WUXIA WECHAT API Project</description>
 	<properties>
-		<wuxia-common.version>2.2.1</wuxia-common.version>
+		<wuxia-common.version>2.2.2-SNAPSHOT</wuxia-common.version>
 	</properties>
 	<dependencies>
 		<dependency>
