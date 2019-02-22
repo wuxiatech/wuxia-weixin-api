@@ -1,11 +1,11 @@
 /*
-* Created on :7 Apr, 2015
-* Author     :songlin
-* Change History
-* Version       Date         Author           Reason
-* <Ver.No>     <date>        <who modify>       <reason>
-* Copyright 2014-2020 www.ibmall.cn All right reserved.
-*/
+ * Created on :7 Apr, 2015
+ * Author     :songlin
+ * Change History
+ * Version       Date         Author           Reason
+ * <Ver.No>     <date>        <who modify>       <reason>
+ * Copyright 2014-2020 www.ibmall.cn All right reserved.
+ */
 package cn.wuxia.wechat.media.util;
 
 import java.io.File;
@@ -41,9 +41,9 @@ import cn.wuxia.wechat.media.enums.MaterialMediaTypeEnum;
 import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
- * 
  * [ticket id]
  * 永久临时素材
+ *
  * @author songlin
  * @ Version : V<Ver.No> <7 Apr, 2015>
  */
@@ -60,9 +60,10 @@ public class MaterialMediaUtil extends BaseUtil {
 
     /**
      * 上传多媒体资源
-     * @author songlin
+     *
      * @param media
      * @param type
+     * @author songlin
      */
     public static MaterialMediaResult upload(BasicAccount account, File media, MaterialMediaTypeEnum type) throws WeChatException {
         /**
@@ -94,8 +95,9 @@ public class MaterialMediaUtil extends BaseUtil {
 
     /**
      * 上传图片1M
-     * @author songlin
+     *
      * @param mediaId
+     * @author songlin
      */
     public static MaterialMediaResult uploadImg(BasicAccount account, File media) throws WeChatException {
         return upload(account, media, MaterialMediaTypeEnum.image);
@@ -103,8 +105,9 @@ public class MaterialMediaUtil extends BaseUtil {
 
     /**
      * 上传语音2M
-     * @author songlin
+     *
      * @param mediaId
+     * @author songlin
      */
     public static MaterialMediaResult uploadVoice(BasicAccount account, File media) throws WeChatException {
         return upload(account, media, MaterialMediaTypeEnum.voice);
@@ -112,8 +115,9 @@ public class MaterialMediaUtil extends BaseUtil {
 
     /**
      * 上传视频10M
-     * @author songlin
+     *
      * @param mediaId
+     * @author songlin
      */
     public static MaterialMediaResult uploadVideo(BasicAccount account, File media) throws WeChatException {
         return upload(account, media, MaterialMediaTypeEnum.video);
@@ -121,10 +125,11 @@ public class MaterialMediaUtil extends BaseUtil {
 
     /**
      * 上传图文
-     * @author songlin
+     *
      * @param articles 图文列表
      * @return
      * @throws WeChatException
+     * @author songlin
      */
     public static MaterialMediaResult uploadNews(@NotNull BasicAccount account, List<Article> articles) throws WeChatException {
         Assert.notEmpty(articles, "articles 参数有误");
@@ -158,10 +163,11 @@ public class MaterialMediaUtil extends BaseUtil {
 
     /**
      * 上传图文
-     * @author songlin
+     *
      * @param articles 图文列表
      * @return
      * @throws WeChatException
+     * @author songlin
      */
     public static void updateNews(@NotNull BasicAccount account, @NotNull String mediaId, Article article, int index) throws WeChatException {
         final HttpAction UPDATE_NEWS = HttpAction.Action("https://api.weixin.qq.com/cgi-bin/material/update_news", HttpClientMethod.POST);
@@ -190,19 +196,21 @@ public class MaterialMediaUtil extends BaseUtil {
     }
 
     /**
-    * 上传缩略图64K
-    * @author songlin
-    * @param mediaId
-    */
+     * 上传缩略图64K
+     *
+     * @param mediaId
+     * @author songlin
+     */
     public static MaterialMediaResult uploadThumb(BasicAccount account, File media) throws WeChatException {
         return upload(account, media, MaterialMediaTypeEnum.thumb);
     }
 
     /**
      * 获取多媒体资源
-     * @author songlin
+     *
      * @param media
      * @param type
+     * @author songlin
      */
     public static Map get(BasicAccount account, String mediaid, MaterialMediaTypeEnum type) throws WeChatException {
         Map<String, Object> m = WechatHttpRequest.build(account).json("{\"media_id\": \"" + mediaid + "\"}").execute(MEDIA_GET);
@@ -231,10 +239,11 @@ public class MaterialMediaUtil extends BaseUtil {
 
     /**
      * 获取多媒体资源
-     * @author songlin
+     *
      * @param mediaId
      * @throws IOException
      * @throws WeChatException
+     * @author songlin
      */
     public static void download(BasicAccount account, String mediaId, String filePath) throws IOException, WeChatException {
         String access_token = TokenUtil.getAccessToken(account);
@@ -263,9 +272,10 @@ public class MaterialMediaUtil extends BaseUtil {
 
     /**
      * 批量多媒体资源列表
-     * @author songlin
+     *
      * @param media
      * @param type
+     * @author songlin
      */
     public static List<MediaContent> batchget(BasicAccount account, MaterialMediaTypeEnum type, Pages pages) throws WeChatException {
         boolean queryall = false;
@@ -278,7 +288,10 @@ public class MaterialMediaUtil extends BaseUtil {
         }
         Map<String, Object> param = Maps.newHashMap();
         param.put("type", type.name());
-        param.put("offset", pages.getFirst());
+        /**
+         * offset从0开始获取
+         */
+        param.put("offset", pages.getFirst() - 1);
         param.put("count", pages.getPageSize());
 
         Map m = WechatHttpRequest.build(account, MEDIA_BATCHGET).json(param).execute();

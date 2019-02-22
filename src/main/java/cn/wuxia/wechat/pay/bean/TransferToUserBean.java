@@ -44,7 +44,6 @@ public class TransferToUserBean {
     //    FORCE_CHECK：强校验真实姓名
     //    收款用户姓名
 
-    @NotBlank
     String re_user_name;//	可选	王小王	String	收款用户真实姓名。
     //    如果check_name设置为FORCE_CHECK，则必填用户真实姓名
     //    金额

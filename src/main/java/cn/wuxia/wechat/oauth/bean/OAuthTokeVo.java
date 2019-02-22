@@ -16,7 +16,7 @@ import cn.wuxia.wechat.BasicAccount;
  * 
  * [ticket id]
  * 微信 token类
- * @author wuwenhao
+ * @author songlin.li
  * @ Version : V<Ver.No> <2015年3月3日>
  */
 public class OAuthTokeVo implements Serializable {
@@ -38,9 +38,7 @@ public class OAuthTokeVo implements Serializable {
 
     private String scope;
 
-    private String unionId;
-
-    private BasicAccount wxAccount;
+    private String appid;
 
     public String getCode() {
         return code;
@@ -90,20 +88,11 @@ public class OAuthTokeVo implements Serializable {
         this.scope = scope;
     }
 
-    public String getUnionId() {
-        return unionId;
+    public String getAppid() {
+        return appid;
     }
 
-    public void setUnionId(String unionId) {
-        this.unionId = unionId;
+    public void setAppid(String appid) {
+        this.appid = appid;
     }
-
-    public BasicAccount getWxAccount() {
-        return wxAccount;
-    }
-
-    public void setWxAccount(BasicAccount wxAccount) {
-        this.wxAccount = wxAccount;
-    }
-
 }

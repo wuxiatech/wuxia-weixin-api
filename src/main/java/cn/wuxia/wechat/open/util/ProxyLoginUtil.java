@@ -46,7 +46,7 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
         String url = "https://api.weixin.qq.com/sns/oauth2/component/access_token?appid=%s&code=%s&grant_type=authorization_code&component_appid=%s&component_access_token=%s";
         // 获取toke
         OAuthTokeVo authToke = new OAuthTokeVo();
-        authToke.setWxAccount(account);
+        authToke.setAppid(account.getAppid());
         /**
          * songlin.li
          *  code 在auth2授权后redirect url中返回，要获取授权信息要先调用oauth2(url)
@@ -67,7 +67,6 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
         authToke.setOpenId(MapUtil.getString(jsonMap, "openid"));
         authToke.setRefreshToken(MapUtil.getString(jsonMap, "refresh_token"));
         authToke.setScope(MapUtil.getString(jsonMap, "scope"));
-        authToke.setUnionId(MapUtil.getString(jsonMap, "unionid"));
         return authToke;
     }
 
@@ -114,7 +113,7 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
      */
     private static OAuthTokeVo refreshAccessToken(OAuthTokeVo oauthToken) throws WeChatException {
         String url = "https://api.weixin.qq.com/sns/oauth2/component/refresh_token?appid=%s&grant_type=refresh_token&component_appid=%s&component_access_token=%s&refresh_token=%s";
-        url = String.format(url, oauthToken.getWxAccount().getAppid(), OPEN_APPID, getComponentAccessToken(), oauthToken.getRefreshToken());
+        url = String.format(url, oauthToken.getAppid(), OPEN_APPID, getComponentAccessToken(), oauthToken.getRefreshToken());
 
         // 把json转换成MAP对象
         Map<String, Object> json = post(url);
@@ -128,7 +127,6 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
         oauthToken.setOpenId((String) json.get("openid"));
         oauthToken.setRefreshToken("" + json.get("refresh_token"));
         oauthToken.setScope("" + json.get("scope"));
-        oauthToken.setUnionId("" + json.get("unionid"));
         return oauthToken;
     }
 

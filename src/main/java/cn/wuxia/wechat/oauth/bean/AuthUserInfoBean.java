@@ -19,6 +19,7 @@ public class AuthUserInfoBean implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
+    private String appid;
     /**
      * 普通用户个人资料填写的城市
      */
@@ -57,6 +58,14 @@ public class AuthUserInfoBean implements Serializable {
     private String headimgurl;
 
     private String unionid; //微信联合id，用于统一用户在每个微信应用唯一标识
+
+    public String getAppid() {
+        return appid;
+    }
+
+    public void setAppid(String appid) {
+        this.appid = appid;
+    }
 
     public String getCity() {
         return city;

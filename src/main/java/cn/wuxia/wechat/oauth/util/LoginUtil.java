@@ -43,7 +43,7 @@ public class LoginUtil extends BaseUtil {
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token";
         // 获取toke
         OAuthTokeVo authToke = new OAuthTokeVo();
-        authToke.setWxAccount(account);
+        authToke.setAppid(account.getAppid());
         /**
          * songlin.li
          *  code 在auth2授权后redirect url中返回，要获取授权信息要先调用oauth2(url)
@@ -74,7 +74,6 @@ public class LoginUtil extends BaseUtil {
         authToke.setOpenId(MapUtil.getString(jsonMap, "openid"));
         authToke.setRefreshToken(MapUtil.getString(jsonMap, "refresh_token"));
         authToke.setScope(MapUtil.getString(jsonMap, "scope"));
-        authToke.setUnionId(MapUtil.getString(jsonMap, "unionid"));
         return authToke;
     }
 
@@ -131,7 +130,7 @@ public class LoginUtil extends BaseUtil {
         String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token";
         HttpClientRequest wxparam = new HttpClientRequest();
         wxparam.setUrl(url);
-        wxparam.addParam("appid", oauthToken.getWxAccount().getAppid());
+        wxparam.addParam("appid", oauthToken.getAppid());
         wxparam.addParam("grant_type", "refresh_token");
         wxparam.addParam("refresh_token", oauthToken.getRefreshToken());
         // 把json转换成MAP对象
@@ -146,7 +145,6 @@ public class LoginUtil extends BaseUtil {
         oauthToken.setOpenId((String) json.get("openid"));
         oauthToken.setRefreshToken("" + json.get("refresh_token"));
         oauthToken.setScope("" + json.get("scope"));
-        oauthToken.setUnionId("" + json.get("unionid"));
         return oauthToken;
     }
 
