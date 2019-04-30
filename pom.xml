@@ -5,23 +5,27 @@
 	<parent>
 		<groupId>cn.wuxia.parent</groupId>
 		<artifactId>parent2019</artifactId>
-		<version>2.3.2</version>
-		<relativePath>../wuxia-parent</relativePath>
+		<version>2.3.3</version>
 	</parent>
 	<artifactId>wuxia.weixin-api</artifactId>
 	<name>WUXIA Weixin API</name>
-	<version>2.3.2</version>
+	<version>2.3.3.1</version>
 	<url>https://github.com/wuxiatech/wuxia-weixin-api</url>
 	<description>WUXIA WECHAT API Project</description>
 	<properties>
-		<wuxia-common.version>2.3.2</wuxia-common.version>
+		<wuxia-common.version>${project.parent.version}</wuxia-common.version>
+		<wuxia-cache.version>${project.parent.version}</wuxia-cache.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>cn.wuxia.common</groupId>
 			<artifactId>wuxia.common</artifactId>
 			<version>${wuxia-common.version}</version>
-			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>cn.wuxia.component</groupId>
+			<artifactId>wuxia.cache-component</artifactId>
+			<version>${wuxia-cache.version}</version>
 		</dependency>
 		<!-- LOGGING begin -->
 		<dependency>
@@ -77,7 +81,11 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+		<!-- 免写getset -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
