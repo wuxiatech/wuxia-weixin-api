@@ -1,11 +1,11 @@
 /*
-* Created on :7 Apr, 2015
-* Author     :songlin
-* Change History
-* Version       Date         Author           Reason
-* <Ver.No>     <date>        <who modify>       <reason>
-* Copyright 2014-2020 www.ibmall.cn All right reserved.
-*/
+ * Created on :7 Apr, 2015
+ * Author     :songlin
+ * Change History
+ * Version       Date         Author           Reason
+ * <Ver.No>     <date>        <who modify>       <reason>
+ * Copyright 2014-2020 songlin.li All right reserved.
+ */
 package cn.wuxia.wechat.custom.util;
 
 import java.util.HashMap;
@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import cn.wuxia.wechat.WeChatException;
+import cn.wuxia.wechat.custom.bean.ProgramInfo;
 import org.nutz.json.Json;
 import org.springframework.util.Assert;
 
@@ -26,8 +27,8 @@ import cn.wuxia.wechat.token.util.TokenUtil;
 
 /**
  * 模版信息功能
- * @author guwen
  *
+ * @author guwen
  */
 public class TemplateUtil extends BaseUtil {
 
@@ -35,12 +36,13 @@ public class TemplateUtil extends BaseUtil {
 
     /**
      * 发送模版信息
-     * @author guwen
-     * @param touser 接收者的openid
+     *
+     * @param touser     接收者的openid
      * @param templateId 模版id
-     * @param url 点击进入的url
-     * @param dataList 数据列表
+     * @param url        点击进入的url
+     * @param dataList   数据列表
      * @return
+     * @author guwen
      */
     public static Map<String, Object> send(BasicAccount account, String touser, String templateId, String url, List<TemplateDataBean> dataList)
             throws WeChatException {
@@ -49,20 +51,36 @@ public class TemplateUtil extends BaseUtil {
 
     /**
      * 发送模版信息
-     * @author guwen
-     * @param touser 接收者的openid
-     * @param templateId 模版id
-     * @param url 点击进入的url
-     * @param color 模板内容字体颜色，不填默认为黑色
-     * @param dataList 数据列表
-     *                 "miniprogram":{
-    "appid":"xiaochengxuappid12345",
-    "pagepath":"index?foo=bar"
-    },
+     *
+     * @param touser      接收者的openid
+     * @param templateId  模版id
+     * @param programInfo 点击进入的小程序路径
+     * @param dataList    数据列表
      * @return
+     * @author songlin
      */
-    public static Map<String, Object> send(BasicAccount account, ProgramAccount programAccount, String touser, String templateId, String url,
-            String color, List<TemplateDataBean> dataList) throws WeChatException {
+    public static Map<String, Object> send(BasicAccount account, String touser, String templateId, ProgramInfo programInfo, List<TemplateDataBean> dataList)
+            throws WeChatException {
+        return send(account, programInfo, touser, templateId, null, null, dataList);
+    }
+
+    /**
+     * 发送模版信息
+     *
+     * @param touser     接收者的openid
+     * @param templateId 模版id
+     * @param url        点击进入的url
+     * @param color      模板内容字体颜色，不填默认为黑色
+     * @param dataList   数据列表
+     *                   "miniprogram":{
+     *                   "appid":"xiaochengxuappid12345",
+     *                   "pagepath":"index?foo=bar"
+     *                   },
+     * @return
+     * @author guwen
+     */
+    private static Map<String, Object> send(BasicAccount account, ProgramInfo programInfo, String touser, String templateId, String url,
+                                            String color, List<TemplateDataBean> dataList) throws WeChatException {
         Assert.hasText(touser, "参数错误 - touser");
         Assert.hasText(templateId, "参数错误 - templateId");
         Assert.notEmpty(dataList, "参数错误 - dataList不能为空");
@@ -80,8 +98,8 @@ public class TemplateUtil extends BaseUtil {
             map.put("color", color);
         }
 
-        if (programAccount != null) {
-            map.put("miniprogram", BeanUtil.beanToMap(programAccount));
+        if (programInfo != null) {
+            map.put("miniprogram", BeanUtil.beanToMap(programInfo));
         }
         Map<String, Map<String, String>> data = new HashMap<>();
         for (TemplateDataBean item : dataList) {

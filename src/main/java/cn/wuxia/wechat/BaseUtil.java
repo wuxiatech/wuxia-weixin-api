@@ -3,6 +3,7 @@ package cn.wuxia.wechat;
 import java.util.Map;
 import java.util.Properties;
 
+import cn.wuxia.common.cached.memcached.XMemcachedClient;
 import cn.wuxia.common.util.*;
 import cn.wuxia.common.util.reflection.ReflectionUtil;
 import cn.wuxia.common.web.httpclient.*;
@@ -84,12 +85,14 @@ public abstract class BaseUtil {
 
     protected static Object getOutCache(String appid, String key) {
         // 增加不同公众号的不同cache
-        key += appid;
+        key += appid + ":";
         CacheClient cache = getCache();
-        /**
-         * sha1加密,返回40位十六进制字符串
-         */
-        key = DigestUtils.sha1Hex(StringUtils.getBytesUtf8(key));
+        if (cacheClient instanceof XMemcachedClient) {
+            /**
+             * sha1加密,返回40位十六进制字符串
+             */
+            key = DigestUtils.sha1Hex(StringUtils.getBytesUtf8(key));
+        }
         /**
          * 限制key的长度为250个字符
          */
@@ -102,12 +105,14 @@ public abstract class BaseUtil {
 
     protected static void putInCache(String appid, String key, Object value) {
         // 增加不同公众号的不同cache
-        key += appid;
+        key += appid + ":";
         CacheClient cache = getCache();
-        /**
-         * sha1加密,返回40位十六进制字符串
-         */
-        key = DigestUtils.sha1Hex(StringUtils.getBytesUtf8(key));
+        if (cacheClient instanceof XMemcachedClient) {
+            /**
+             * sha1加密,返回40位十六进制字符串
+             */
+            key = DigestUtils.sha1Hex(StringUtils.getBytesUtf8(key));
+        }
         // 将旧的删除再新增
         cache.delete(key, CACHE_NAME_SPACE);
         cache.set(key, value, expTime, CACHE_NAME_SPACE);
@@ -129,9 +134,11 @@ public abstract class BaseUtil {
      */
     protected static void removeCache(String appid, String key) {
         // 增加不同公众号的不同cache
-        key += appid;
+        key += appid + ":";
         CacheClient cache = getCache();
-        key = DigestUtils.sha1Hex(StringUtils.getBytesUtf8(key));
+        if (cacheClient instanceof XMemcachedClient) {
+            key = DigestUtils.sha1Hex(StringUtils.getBytesUtf8(key));
+        }
         Object value = cache.get(key, CACHE_NAME_SPACE);
         logger.debug("deleteCache and key is :" + key + " , value is :" + value.toString());
         cache.delete(key, CACHE_NAME_SPACE);
@@ -187,7 +194,7 @@ public abstract class BaseUtil {
         }
         if (MapUtils.isNotEmpty(map) && ((StringUtil.isNotBlank(map.get("errcode")) && MapUtils.getIntValue(map, "errcode") != 0))
                 || (StringUtil.isNotBlank(MapUtils.getString(map, "errmsg"))
-                        && !StringUtil.equalsIgnoreCase(MapUtils.getString(map, "errmsg"), "ok"))) {
+                && !StringUtil.equalsIgnoreCase(MapUtils.getString(map, "errmsg"), "ok"))) {
             logger.error("errmsg={}", map);
             throw new WeChatException(MapUtils.getString(map, "errmsg"));
         }
@@ -217,7 +224,7 @@ public abstract class BaseUtil {
         }
         if (MapUtils.isNotEmpty(map) && ((StringUtil.isNotBlank(map.get("errcode")) && MapUtils.getIntValue(map, "errcode") != 0))
                 || (StringUtil.isNotBlank(MapUtils.getString(map, "errmsg"))
-                        && !StringUtil.equalsIgnoreCase(MapUtils.getString(map, "errmsg"), "ok"))) {
+                && !StringUtil.equalsIgnoreCase(MapUtils.getString(map, "errmsg"), "ok"))) {
             logger.error("errmsg={}", map);
             throw new WeChatException(MapUtils.getString(map, "errmsg"));
         }
@@ -247,13 +254,12 @@ public abstract class BaseUtil {
         }
         if (MapUtils.isNotEmpty(map) && ((StringUtil.isNotBlank(map.get("errcode")) && MapUtils.getIntValue(map, "errcode") != 0))
                 || (StringUtil.isNotBlank(MapUtils.getString(map, "errmsg"))
-                        && !StringUtil.equalsIgnoreCase(MapUtils.getString(map, "errmsg"), "ok"))) {
+                && !StringUtil.equalsIgnoreCase(MapUtils.getString(map, "errmsg"), "ok"))) {
             logger.error("errmsg={}", map);
             throw new WeChatException(MapUtils.getString(map, "errmsg"));
         }
         return map;
     }
-
 
 
 }
