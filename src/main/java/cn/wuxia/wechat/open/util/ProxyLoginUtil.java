@@ -1,16 +1,12 @@
 /*
-* Created on :2017年7月31日
-* Author     :songlin
-* Change History
-* Version       Date         Author           Reason
-* <Ver.No>     <date>        <who modify>       <reason>
-* Copyright 2014-2020 wuxia.gd.cn All right reserved.
-*/
+ * Created on :2017年7月31日
+ * Author     :songlin
+ * Change History
+ * Version       Date         Author           Reason
+ * <Ver.No>     <date>        <who modify>       <reason>
+ * Copyright 2014-2020 wuxia.gd.cn All right reserved.
+ */
 package cn.wuxia.wechat.open.util;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Map;
 
 import cn.wuxia.common.util.MapUtil;
 import cn.wuxia.common.util.StringUtil;
@@ -21,38 +17,40 @@ import cn.wuxia.wechat.WeChatException;
 import cn.wuxia.wechat.oauth.bean.AuthUserInfoBean;
 import cn.wuxia.wechat.oauth.bean.OAuthTokeVo;
 import cn.wuxia.wechat.oauth.enums.SexEnum;
+import org.springframework.util.Assert;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
 
 /**
- * 
  * [ticket id]
  * 代授权相关
+ *
  * @author songlin
  * @ Version : V<Ver.No> <2017年7月31日>
  */
 public class ProxyLoginUtil extends ThirdBaseUtil {
     /**
-     *  第二步：获取用户信息
-     * @author Wind.Zhao
+     * 第二步：获取用户信息
+     *
+     * @param account
      * @param code
-     * @param OPEN_APPID
-     * @param appSecret
-     * @param request
      * @return
-     * @throws WeChatException 
+     * @throws WeChatException
      */
     public static OAuthTokeVo authUser(BasicAccount account, String code) throws WeChatException {
         // 第一个URL是用于获取code后，获取access_token 
-        logger.info("进入请求地址：");
-        String url = "https://api.weixin.qq.com/sns/oauth2/component/access_token?appid=%s&code=%s&grant_type=authorization_code&component_appid=%s&component_access_token=%s";
-        // 获取toke
-        OAuthTokeVo authToke = new OAuthTokeVo();
-        authToke.setAppid(account.getAppid());
         /**
          * songlin.li
          *  code 在auth2授权后redirect url中返回，要获取授权信息要先调用oauth2(url)
          */
-
-        authToke.setCode(code);
+        Assert.notNull(account, "account为空");
+        Assert.notNull(code, "code 在auth2授权后返回");
+        String url = "https://api.weixin.qq.com/sns/oauth2/component/access_token?appid=%s&code=%s&grant_type=authorization_code&component_appid=%s&component_access_token=%s";
+        // 获取toke
+        OAuthTokeVo authToke = new OAuthTokeVo();
+        authToke.setAppid(account.getAppid());
         // 接收返回json
         url = String.format(url, account.getAppid(), code, OPEN_APPID, getComponentAccessToken());
         // 把json转换成MAP对象
@@ -72,11 +70,12 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
 
     /**
      * 第四步：获取用户基础信息,仅在用户LoginUtil.oauth2(String url, true) scope 为true时有效
-     * @see LoginUtil.oauth2()
-     * @author songlin
+     *
      * @param oauthToken
      * @return
-     * @throws WeChatException 
+     * @throws WeChatException
+     * @author songlin
+     * @see {@link #oauth2(String, String, String, boolean)}}
      */
     public static AuthUserInfoBean getAuthUserInfo(OAuthTokeVo oauthToken) throws WeChatException {
         // 用于抽取微信用户信息
@@ -106,10 +105,11 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
     /**
      * 第三步：刷新access_token（如果需要）
      * 由于access_token拥有较短的有效期，当access_token超时后，可以使用refresh_token进行刷新，refresh_token拥有较长的有效期（7天、30天、60天、90天），当refresh_token失效的后，需要用户重新授权
-     * @author songlin
+     *
      * @param oauthToken
      * @return
-     * @throws WeChatException 
+     * @throws WeChatException
+     * @author songlin
      */
     private static OAuthTokeVo refreshAccessToken(OAuthTokeVo oauthToken) throws WeChatException {
         String url = "https://api.weixin.qq.com/sns/oauth2/component/refresh_token?appid=%s&grant_type=refresh_token&component_appid=%s&component_access_token=%s&refresh_token=%s";
@@ -132,9 +132,10 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
 
     /**
      * 检验授权凭证（access_token）是否有效
-     * @author songlin
+     *
      * @param oauthToken
      * @return
+     * @author songlin
      */
     private static boolean rightAccessToken(OAuthTokeVo oauthToken) {
         String url = "https://api.weixin.qq.com/sns/auth";
@@ -148,17 +149,18 @@ public class ProxyLoginUtil extends ThirdBaseUtil {
         try {
             Map<String, Object> json = post(wxparam);
             return true;
-        }catch (WeChatException e){
+        } catch (WeChatException e) {
             return false;
         }
     }
 
     /**
      * 第一步：微信第三方平台代授权登录返回
-     * @author songlin.li
+     *
      * @param url
      * @param scope true为非静默授权，需要用户确认；false为静默授权
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
+     * @author songlin.li
      */
     public static String oauth2(String appid, String openThirdAppid, String url, boolean scope) throws UnsupportedEncodingException {
         url = URLEncoder.encode(url, "UTF-8");

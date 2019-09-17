@@ -1,11 +1,5 @@
 package cn.wuxia.wechat.oauth.util;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.Map;
-
-import com.google.common.collect.Maps;
-
 import cn.wuxia.common.util.MapUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.util.reflection.BeanUtil;
@@ -17,39 +11,44 @@ import cn.wuxia.wechat.oauth.bean.AuthUserInfoBean;
 import cn.wuxia.wechat.oauth.bean.OAuthTokeVo;
 import cn.wuxia.wechat.oauth.enums.SexEnum;
 import cn.wuxia.wechat.token.util.TokenUtil;
+import com.google.common.collect.Maps;
+import org.springframework.util.Assert;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
 
 /**
- * 
  * [ticket id]
  * 微信授权登录工具类
+ *
  * @author songlin.li
  * @ Version : V<Ver.No> <2015年4月1日>
  */
 public class LoginUtil extends BaseUtil {
 
     /**
-     *  获取用户信息
-     * @author Wind.Zhao
+     * 获取用户信息
+     *
+     * @param account
      * @param code
-     * @param appId
-     * @param appSecret
-     * @param request
      * @return
-     * @throws WeChatException 
+     * @throws WeChatException
+     * @author Wind.Zhao
      */
     public static OAuthTokeVo authUser(BasicAccount account, String code) throws WeChatException {
-        // 第一个URL是用于获取code后，获取access_token 
+        /**
+         * songlin.li
+         *  code 在auth2授权后redirect url中返回，要获取授权信息要先调用oauth2(url)
+         */
+        Assert.notNull(account, "account为空");
+        Assert.notNull(code, "code 在auth2授权后返回");
+        // 第一个URL是用于获取code后，获取access_token
         logger.info("进入请求地址：");
         String url = "https://api.weixin.qq.com/sns/oauth2/access_token";
         // 获取toke
         OAuthTokeVo authToke = new OAuthTokeVo();
         authToke.setAppid(account.getAppid());
-        /**
-         * songlin.li
-         *  code 在auth2授权后redirect url中返回，要获取授权信息要先调用oauth2(url)
-         */
-
-        authToke.setCode(code);
         // 接收返回json
         Map<String, Object> jsonMap = Maps.newHashMap();
         HttpClientRequest wxparam = new HttpClientRequest();
@@ -79,11 +78,12 @@ public class LoginUtil extends BaseUtil {
 
     /**
      * 获取用户基础信息,仅在用户LoginUtil.oauth2(String url, true) scope 为true时有效
-     * @see LoginUtil.oauth2()
-     * @author songlin
+     *
      * @param oauthToken
      * @return
-     * @throws WeChatException 
+     * @throws WeChatException
+     * @author songlin
+     * @see {@link LoginUtil#oauth2(String, String, boolean)} ()}
      */
     public static AuthUserInfoBean getAuthUserInfo(OAuthTokeVo oauthToken) throws WeChatException {
         // 用于抽取微信用户信息
@@ -121,10 +121,11 @@ public class LoginUtil extends BaseUtil {
     /**
      * 刷新access_token（如果需要）
      * 由于access_token拥有较短的有效期，当access_token超时后，可以使用refresh_token进行刷新，refresh_token拥有较长的有效期（7天、30天、60天、90天），当refresh_token失效的后，需要用户重新授权
-     * @author songlin
+     *
      * @param oauthToken
      * @return
-     * @throws WeChatException 
+     * @throws WeChatException
+     * @author songlin
      */
     private static OAuthTokeVo refreshAccessToken(OAuthTokeVo oauthToken) throws WeChatException {
         String url = "https://api.weixin.qq.com/sns/oauth2/refresh_token";
@@ -150,10 +151,11 @@ public class LoginUtil extends BaseUtil {
 
     /**
      * 检验授权凭证（access_token）是否有效
-     * @author songlin
+     *
      * @param oauthToken
      * @return
-     * @throws WeChatException 
+     * @throws WeChatException
+     * @author songlin
      */
     private static boolean rightAccessToken(OAuthTokeVo oauthToken) throws WeChatException {
         String url = "https://api.weixin.qq.com/sns/auth";
@@ -171,11 +173,12 @@ public class LoginUtil extends BaseUtil {
 
     /**
      * 微信授权登录返回
-     * @author songlin.li
+     *
      * @param url
      * @param scope true为非静默授权，需要用户确认；false为静默授权
      * @return
-     * @throws UnsupportedEncodingException 
+     * @throws UnsupportedEncodingException
+     * @author songlin.li
      */
     public static String oauth2(String appid, String url, boolean scope) throws UnsupportedEncodingException {
         url = URLEncoder.encode(url, "UTF-8");
