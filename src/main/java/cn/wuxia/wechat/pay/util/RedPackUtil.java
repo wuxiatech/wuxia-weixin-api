@@ -3,6 +3,7 @@ package cn.wuxia.wechat.pay.util;
 import cn.wuxia.common.exception.ValidateException;
 import cn.wuxia.common.util.*;
 import cn.wuxia.common.util.reflection.BeanUtil;
+import cn.wuxia.common.validator.ValidatorUtil;
 import cn.wuxia.common.web.httpclient.HttpAction;
 import cn.wuxia.common.web.httpclient.HttpClientMethod;
 import cn.wuxia.common.xml.Dom4jXmlUtil;

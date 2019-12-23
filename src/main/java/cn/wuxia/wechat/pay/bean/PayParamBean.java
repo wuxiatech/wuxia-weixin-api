@@ -12,7 +12,7 @@ import java.util.Date;
 
 import org.hibernate.validator.constraints.NotBlank;
 
-import cn.wuxia.common.entity.ValidationEntity;
+import cn.wuxia.common.validator.ValidationEntity;
 
 public class PayParamBean extends ValidationEntity {
     /**
