@@ -10,7 +10,7 @@ package cn.wuxia.wechat.pay.bean;
 
 import java.util.Date;
 
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 
 import cn.wuxia.common.validator.ValidationEntity;
 
