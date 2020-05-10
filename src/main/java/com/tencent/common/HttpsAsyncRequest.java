@@ -8,10 +8,12 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 import javax.net.ssl.SSLContext;
 
+import com.google.common.collect.Maps;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
@@ -22,6 +24,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.ssl.SSLContexts;
+import org.nutz.lang.random.R;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -113,6 +116,7 @@ public class HttpsAsyncRequest extends TokenUtil implements IServiceRequest {
         hasInit = true;
     }
 
+    @Override
     public String sendPost(String url, Object xmlObj)
             throws IOException, KeyStoreException, UnrecoverableKeyException, NoSuchAlgorithmException, KeyManagementException {
         try {
@@ -147,7 +151,7 @@ public class HttpsAsyncRequest extends TokenUtil implements IServiceRequest {
         }
         httpAsyncClient.start();
         List<String> result = Lists.newArrayList();
-        List<Future<HttpResponse>> lists = Lists.newArrayList();
+        Map<String, Future<HttpResponse>> responseMap = Maps.newHashMap();
         XStream xStreamForRequestPostData = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
         for (Object param : xmlObj) {
             final HttpPost httpPost = new HttpPost(url);
@@ -163,28 +167,32 @@ public class HttpsAsyncRequest extends TokenUtil implements IServiceRequest {
             //设置请求器的配置
             httpPost.setConfig(requestConfig);
             Util.log("executing request " + httpPost.getRequestLine());
+
             try {
                 Future<org.apache.http.HttpResponse> future = httpAsyncClient.execute(httpPost, new FutureCallback<org.apache.http.HttpResponse>() {
+                    @Override
                     public void completed(final org.apache.http.HttpResponse response) {
                         logger.info(httpPost.getRequestLine() + "->" + response.getStatusLine());
                     }
 
+                    @Override
                     public void failed(final Exception ex) {
                         logger.warn(httpPost.getRequestLine().toString(), ex);
                     }
 
+                    @Override
                     public void cancelled() {
                         logger.warn(httpPost.getRequestLine().toString() + " cancelled");
                     }
 
                 });
-                lists.add(future);
+                responseMap.put(R.UU16(), future);
             } catch (Exception e) {
                 log.e("http get throw Exception " + e.getMessage());
             } finally {
             }
         }
-        for (Future<HttpResponse> future : lists) {
+        for (Map.Entry<String, Future<HttpResponse>> future : responseMap.entrySet()) {
             HttpClientResponse response = HttpAsyncClientUtil.getResponse(future);
             result.add(new String(response.getByteResult(), "UTF-8"));
         }

@@ -4,6 +4,7 @@ import cn.wuxia.common.util.MapUtil;
 import cn.wuxia.common.util.NumberUtil;
 import cn.wuxia.common.util.StringUtil;
 import cn.wuxia.common.util.SystemUtil;
+import cn.wuxia.common.util.reflection.BeanUtil;
 import cn.wuxia.common.web.httpclient.HttpClientException;
 import cn.wuxia.common.web.httpclient.HttpClientResponse;
 import cn.wuxia.common.web.httpclient.HttpClientUtil;
@@ -11,7 +12,10 @@ import cn.wuxia.common.xml.Dom4jXmlUtil;
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.PayAccount;
 import cn.wuxia.wechat.WeChatException;
+import cn.wuxia.wechat.pay.MyPayConfig;
+import cn.wuxia.wechat.pay.bean.RefundResult;
 import cn.wuxia.wechat.pay.enums.PayTradeType;
+import com.github.wxpay.sdk.WXPay;
 import com.google.common.collect.Maps;
 import org.dom4j.DocumentException;
 import org.springframework.util.Assert;
@@ -19,6 +23,7 @@ import org.springframework.util.Assert;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * [ticket id]
@@ -29,7 +34,8 @@ import java.util.*;
  */
 public class PayUtil extends BaseUtil {
 
-    public final static String unifiedorderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+    private final static String unifiedorderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
 
     private static Map<String, Object> buildPayment(PayAccount account, PayTradeType payTradeType, String orderNo, String productId, String body, String amount, String createIp,
                                                     String openId, String notifyUrl, String attach) throws WeChatException {
@@ -202,7 +208,6 @@ public class PayUtil extends BaseUtil {
      * 微信内支付或小程序支付
      *
      * @param account
-     * @param payTradeType
      * @param orderNo
      * @param body
      * @param amount
@@ -376,6 +381,72 @@ public class PayUtil extends BaseUtil {
             return resultMap;
         } catch (UnsupportedEncodingException | DocumentException e) {
             throw new WeChatException("解析结果失败", e);
+        }
+    }
+
+    /**
+     * 定义全局变量为线性安全的缓存myconfig对象
+     */
+    static Map<String, MyPayConfig> configMap = new ConcurrentHashMap<>();
+
+    /**
+     * 获取微信支付相关配置
+     *
+     * @param payAccount
+     * @return
+     * @throws WeChatException
+     */
+    private static MyPayConfig getPayConfig(PayAccount payAccount) throws WeChatException {
+        MyPayConfig myPayConfig = configMap.get(payAccount.getPartner());
+        if (myPayConfig == null) {
+            try {
+                myPayConfig = new MyPayConfig(payAccount);
+            } catch (Exception e) {
+                logger.error("", e);
+                throw new WeChatException("无法获取配置");
+            }
+            configMap.put(payAccount.getPartner(), myPayConfig);
+        }
+        return myPayConfig;
+    }
+
+
+    /**
+     * <xml>
+     * <appid>wx2421b1c4370ec43b</appid>
+     * <mch_id>10000100</mch_id>
+     * <nonce_str>6cefdb308e1e2e8aabd48cf79e546a02</nonce_str>
+     * <out_refund_no>1415701182</out_refund_no>
+     * <out_trade_no>1415757673</out_trade_no>
+     * <refund_fee>1</refund_fee>
+     * <total_fee>1</total_fee>
+     * <transaction_id>4006252001201705123297353072</transaction_id>
+     * <sign>FE56DD4AA85C0EECA82C35595A69E153</sign>
+     * </xml>
+     *
+     * @param payAccount
+     * @throws Exception
+     */
+    public static RefundResult refund(PayAccount payAccount, String refundNo, String orderNo, String refundAmount, String orderAmount, String remark, String nodifyUrl) throws WeChatException {
+        WXPay wxpay = null;
+        try {
+            wxpay = new WXPay(getPayConfig(payAccount));
+        } catch (Exception e) {
+            throw new WeChatException("初始化账号出错", e);
+        }
+        Map<String, String> data = new HashMap<String, String>();
+        data.put("out_refund_no", refundNo);
+        data.put("out_trade_no", orderNo);
+        data.put("refund_fee", changeY2F(refundAmount));
+        data.put("total_fee", changeY2F(orderAmount));
+        data.put("refund_desc", remark);
+        data.put("notify_url", nodifyUrl);
+
+        try {
+            Map<String, String> resp = wxpay.refund(data);
+            return BeanUtil.mapToBean(resp, RefundResult.class);
+        } catch (Exception e) {
+            throw new WeChatException(e);
         }
     }
 

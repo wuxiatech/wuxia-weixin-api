@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.wuxia.common.web.httpclient.*;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.util.Assert;
 
@@ -20,10 +21,6 @@ import com.google.common.collect.Lists;
 
 import cn.wuxia.common.util.JsonUtil;
 import cn.wuxia.common.util.StringUtil;
-import cn.wuxia.common.web.httpclient.HttpAsyncClientUtil;
-import cn.wuxia.common.web.httpclient.HttpClientException;
-import cn.wuxia.common.web.httpclient.HttpClientRequest;
-import cn.wuxia.common.web.httpclient.HttpClientResponse;
 import cn.wuxia.wechat.BaseUtil;
 import cn.wuxia.wechat.BasicAccount;
 import cn.wuxia.wechat.WeChatException;
@@ -73,14 +70,14 @@ public class UserUtil extends BaseUtil {
         String url = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + access_token + "&openid=%s&lang=zh_CN";
         HttpClientRequest param = new HttpClientRequest();
         param.setUrl(url);
-        HttpClientRequest[] requests = new HttpClientRequest[openid.length];
+        HttpAsyncClientRequest[] requests = new HttpAsyncClientRequest[openid.length];
         int i = 0;
         for (String openid_ : openid) {
             String url_ = String.format(url, openid_);
-            requests[i] =  HttpClientRequest.get(url_);
+            requests[i] =  new HttpAsyncClientRequest(HttpClientRequest.get(url_));
             i++;
         }
-        List<HttpClientResponse> respone;
+        List<HttpAsyncClientResponse> respone;
         try {
             respone = HttpAsyncClientUtil.call(requests);
         } catch (HttpClientException e1) {

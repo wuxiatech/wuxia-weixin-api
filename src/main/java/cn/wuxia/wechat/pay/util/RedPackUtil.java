@@ -25,13 +25,13 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class RedPackUtil extends BaseUtil {
-    private final static HttpAction sendRedpackUrl = HttpAction.Action("https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack",
+    private final static HttpAction sendRedpackUrl = HttpAction.action("https://api.mch.weixin.qq.com/mmpaymkttransfers/sendredpack",
             HttpClientMethod.POST);
 
-    private final static HttpAction sendGroupRedpackUrl = HttpAction.Action("https://api.mch.weixin.qq.com/mmpaymkttransfers/sendgroupredpack",
+    private final static HttpAction sendGroupRedpackUrl = HttpAction.action("https://api.mch.weixin.qq.com/mmpaymkttransfers/sendgroupredpack",
             HttpClientMethod.POST);
 
-    private final static HttpAction getRedpackInfoUrl = HttpAction.Action("https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo",
+    private final static HttpAction getRedpackInfoUrl = HttpAction.action("https://api.mch.weixin.qq.com/mmpaymkttransfers/gethbinfo",
             HttpClientMethod.POST);
 
     public static SendRedPackResult send(PayAccount payAccount, RedPackBean redPack) throws WeChatException {

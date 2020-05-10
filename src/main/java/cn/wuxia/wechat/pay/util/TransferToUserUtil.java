@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class TransferToUserUtil extends BaseUtil {
-    private final static HttpAction transfersUrl = HttpAction.Action("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers",
+    private final static HttpAction transfersUrl = HttpAction.action("https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers",
             HttpClientMethod.POST);
 
     /**

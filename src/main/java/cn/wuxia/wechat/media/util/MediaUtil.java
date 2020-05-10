@@ -32,7 +32,7 @@ import cn.wuxia.wechat.WechatHttpRequest;
  */
 public class MediaUtil extends BaseUtil {
 
-    private final static HttpAction IMAGE_UPLOAD = HttpAction.Action("https://api.weixin.qq.com/cgi-bin/media/uploadimg", HttpClientMethod.POST);
+    private final static HttpAction IMAGE_UPLOAD = HttpAction.action("https://api.weixin.qq.com/cgi-bin/media/uploadimg", HttpClientMethod.POST);
 
     /**
      * 获取多媒体资源

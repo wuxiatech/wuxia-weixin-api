@@ -49,14 +49,14 @@ import cn.wuxia.wechat.token.util.TokenUtil;
  */
 public class MaterialMediaUtil extends BaseUtil {
 
-    private static HttpAction MEDIA_UPLOAD = HttpAction.Action("https://api.weixin.qq.com/cgi-bin/material/add_material", HttpClientMethod.POST);
+    private static HttpAction MEDIA_UPLOAD = HttpAction.action("https://api.weixin.qq.com/cgi-bin/material/add_material", HttpClientMethod.POST);
 
-    private static HttpAction MEDIA_GET = HttpAction.Action("https://api.weixin.qq.com/cgi-bin/material/get_material", HttpClientMethod.POST);
+    private static HttpAction MEDIA_GET = HttpAction.action("https://api.weixin.qq.com/cgi-bin/material/get_material", HttpClientMethod.POST);
 
-    private static HttpAction MEDIA_BATCHGET = HttpAction.Action("https://api.weixin.qq.com/cgi-bin/material/batchget_material",
+    private static HttpAction MEDIA_BATCHGET = HttpAction.action("https://api.weixin.qq.com/cgi-bin/material/batchget_material",
             HttpClientMethod.POST);
 
-    private static HttpAction NEWS_ADD = HttpAction.Action("https://api.weixin.qq.com/cgi-bin/material/add_news", HttpClientMethod.POST);
+    private static HttpAction NEWS_ADD = HttpAction.action("https://api.weixin.qq.com/cgi-bin/material/add_news", HttpClientMethod.POST);
 
     /**
      * 上传多媒体资源
@@ -170,7 +170,7 @@ public class MaterialMediaUtil extends BaseUtil {
      * @author songlin
      */
     public static void updateNews(@NotNull BasicAccount account, @NotNull String mediaId, Article article, int index) throws WeChatException {
-        final HttpAction UPDATE_NEWS = HttpAction.Action("https://api.weixin.qq.com/cgi-bin/material/update_news", HttpClientMethod.POST);
+        final HttpAction UPDATE_NEWS = HttpAction.action("https://api.weixin.qq.com/cgi-bin/material/update_news", HttpClientMethod.POST);
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("media_id", mediaId);
         map.put("index", index);
