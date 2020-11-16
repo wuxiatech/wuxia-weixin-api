@@ -10,9 +10,12 @@ import jdk.nashorn.internal.runtime.regexp.joni.Regex;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.junit.Test;
 import org.nutz.json.Json;
+import org.springframework.core.task.AsyncTaskExecutor;
 
 import javax.xml.bind.JAXBException;
+import java.nio.channels.AsynchronousSocketChannel;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -43,7 +46,38 @@ public class MainTest {
 
     }
 
+    @Test
+    public void test(){
+      new  Thread(()->{
+          Test1.getToken("abc", "11111");
+      }).start();
+        new  Thread(()->{
+            Test1.getToken("abc", "222222");
+        }).start();
+
+        try {
+            Thread.sleep(30000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
 
+
+    public static class Test1{
+
+
+        public synchronized static String getToken(String appid, String content){
+//            synchronized (appid){
+                System.out.println(content);
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                return "";
+//            }
+        }
+    }
 
 }
